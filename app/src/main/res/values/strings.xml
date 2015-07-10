@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Barzellette a Caso</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="button_next_text">Next</string>
+    <string name="title_activity_favorite">FavoriteActivity</string>
+</resources>
