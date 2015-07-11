@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
@@ -18,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,8 +30,9 @@ import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
 import com.matteobucci.barzelletteacaso.model.Libro;
 import com.matteobucci.barzelletteacaso.model.database.BarzelletteManager;
+import com.matteobucci.barzelletteacaso.view.ColorList;
 
-public class MainBarzellette extends AppCompatActivity implements FragmentMain.OnFragmentInteractionListener {
+public class MainBarzellette extends AppCompatActivity implements FragmentMain.OnFragmentInteractionListener, ColorListener{
 
 
 
@@ -34,14 +40,8 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
-    private TextView textView;
-    private Button nextButton;
-    private ImageButton favoriteButton;
-    private Button cliccami;
-
-
-
-
+    private ActionBarDrawerToggle drawerToggle;
+    private LinearLayout header;
 
 
     @Override
@@ -56,55 +56,43 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = setupDrawerToggle();
 
+        // Tie DrawerLayout events to the ActionBarToggle
+        mDrawer.setDrawerListener(drawerToggle);
 
         // Set the menu icon instead of the launcher icon.
-        final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        ab.setDisplayHomeAsUpEnabled(true);
 
         // Setup drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         setupDrawerContent(nvDrawer);
 
-
+        //Inizializza il primo fragment all'avvio dell'applicazione
         FragmentManager fragmentManager = this.getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, FragmentMain.newInstance(this)).commit();
 
+        header = (LinearLayout) findViewById(R.id.header);
 
     }
-
-
-    private void setUIVar() {
-        textView = (TextView) findViewById(R.id.textView);
-        textView.setMovementMethod(new ScrollingMovementMethod());
-        nextButton = (Button) findViewById(R.id.nextButton);
-        favoriteButton = (ImageButton) findViewById(R.id.favoriteButton);
-        cliccami = (Button) findViewById(R.id.cliccami);
-    }
-
-
-
-    public void onPause() {
-        super.onPause();
-
-    }
-
-    public void onResume() {
-        super.onResume();
-
-    }
-
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
+
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawer.openDrawer(GravityCompat.START);
                 return true;
         }
+
+
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -112,6 +100,7 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -157,6 +146,7 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
         }
 
         // Insert the fragment by replacing any existing fragment
+
         FragmentManager fragmentManager = this.getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
@@ -170,5 +160,24 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+    }
+
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggles
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onChangeColor(int color) {
+        toolbar.setBackgroundColor(color);
+        header.setBackgroundColor(color-100);
     }
 }
