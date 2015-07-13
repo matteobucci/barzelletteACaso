@@ -37,6 +37,10 @@ public class Libro {
             mappa.put(attuale.getID(), attuale);
             }
 
+        if(mappa.isEmpty()){
+            mappa.put(-1, new Barzelletta(-1, "Non ci sono ancora barzellette in questa categoria"));
+        }
+
         keys = new ArrayList<>(mappa.keySet());
         size = keys.size();
         Log.i(TAG, "Libro creato con " + size + " barzellette.");

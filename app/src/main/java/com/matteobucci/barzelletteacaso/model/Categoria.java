@@ -5,9 +5,15 @@ package com.matteobucci.barzelletteacaso.model;
  */
 public enum Categoria {
     UNDEFINED(0),
-    FREDDURE(1),
-    SPORCHE(2),
-    ALTRO(3);
+    ANIMALI(1),
+    CARABINIERI(2),
+    DOTTORI(3),
+    TECNOLOGIA(4),
+    INDOVINELLI(5),
+    FREDDURE(6),
+    UOMINI(7),
+    DONNE(8),
+    VARIE(9);
 
     private int ID;
 
@@ -21,14 +27,33 @@ public enum Categoria {
             return Categoria.UNDEFINED;
         }
         else if(id == 1){
-            return Categoria.FREDDURE;
+            return Categoria.ANIMALI;
         }
         else if(id == 2){
-            return Categoria.SPORCHE;
+            return Categoria.CARABINIERI;
         }
         else if(id == 3){
-            return Categoria.ALTRO;
+            return Categoria.DOTTORI;
         }
+        else if(id == 4){
+            return Categoria.TECNOLOGIA;
+        }
+        else if(id == 5){
+            return Categoria.INDOVINELLI;
+        }
+        else if(id == 6){
+            return Categoria.FREDDURE;
+        }
+        else if(id == 7){
+            return Categoria.UOMINI;
+        }
+        else if(id == 8){
+            return Categoria.DONNE;
+        }
+        else if(id == 9){
+            return Categoria.VARIE;
+        }
+
         else {
             return Categoria.UNDEFINED;
         }

@@ -2,12 +2,9 @@ package com.matteobucci.barzelletteacaso;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.NavigationView;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +37,7 @@ public class FragmentMain extends Fragment {
     private Button nextButton;
     private ImageButton favoriteButton;
     private RelativeLayout layoutBarzellette;
+   // Button shareButton;
 
     //Variabili del model
     private BarzelletteManager manager;
@@ -54,9 +52,10 @@ public class FragmentMain extends Fragment {
     private boolean isActualFavorite;
 
     Context context;
+    Categoria categoria;
 
     private OnFragmentInteractionListener mListener;
-    private ColorListener colorListener;
+    private BarzellettaListener colorListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -66,10 +65,11 @@ public class FragmentMain extends Fragment {
      * @return A new instance of fragment BlankFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentMain newInstance(Context context) {
+    public static FragmentMain newInstance(Context context, Categoria categoria) {
 
         FragmentMain fragment = new FragmentMain();
         fragment.context = context;
+        fragment.categoria = categoria;
         return fragment;
     }
     public FragmentMain() {
@@ -89,9 +89,15 @@ public class FragmentMain extends Fragment {
         setUIVar(myInflatedView);
         setListeners();
         manager = new BarzelletteManager(context);
-        lista = new Libro(manager.getBarzellettaByCategoria(Categoria.FREDDURE));
+        if(categoria == null){
+            lista= new Libro(manager.getAllBarzellette());
+        }
+        else {
+            lista = new Libro(manager.getBarzellettaByCategoria(categoria));
+        }
         favoriti = Favorite.getInstance(context);
         favoriti.loadFavorite();
+        setBarzelletta();
 
         return myInflatedView;
     }
@@ -103,12 +109,15 @@ public class FragmentMain extends Fragment {
         }
     }
 
+
+
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
-            colorListener = (ColorListener) activity;
+            colorListener = (BarzellettaListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -148,6 +157,7 @@ public class FragmentMain extends Fragment {
         layoutBarzellette = (RelativeLayout) w.findViewById(R.id.layoutBarzellette);
         colors = new ColorList();
         setColor();
+        //shareButton = (Button) w.findViewById(R.id.action_share);
     }
 
     private void setListeners() {
@@ -156,7 +166,7 @@ public class FragmentMain extends Fragment {
             @Override
             public void onClick(View v) {
                 setBarzelletta();
-                textView.setText(barzellettaAttuale.toString() + " " + barzellettaAttuale.getID());
+
 
             }
         });
@@ -180,24 +190,26 @@ public class FragmentMain extends Fragment {
 
 
 
+
     }
 
     private void setColor() {
         int color = colors.getColor();
         layoutBarzellette.setBackgroundColor(color);
-        colorListener.onChangeColor(color);
+        colorListener.onChangeBarzelletta(color, colors.getAssociateColor(), barzellettaAttuale);
         nextButton.setTextColor(color);
     }
 
     private void setBarzelletta() {
         barzellettaAttuale = lista.getRandom();
         isActualFavorite = favoriti.contains(barzellettaAttuale);
+        textView.setText(barzellettaAttuale.toString() + " " + barzellettaAttuale.getID());
         setColor();
         checkBarzelletta();
     }
 
     private void checkBarzelletta() {
-        if (favoriti.contains(barzellettaAttuale)) {
+        if (!favoriti.contains(barzellettaAttuale)) {
             favoriteButton.setColorFilter(android.graphics.Color.parseColor("#741f14"));
         } else {
             favoriteButton.setColorFilter(null);

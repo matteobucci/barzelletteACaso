@@ -4,6 +4,8 @@ package com.matteobucci.barzelletteacaso.view;
  * Created by Matti on 11/07/2015.
  */
 
+import android.graphics.Color;
+
 import java.util.Random;
 
 
@@ -14,6 +16,7 @@ public class ColorList {
     }
 
     private Random gen;
+    private int currentColorIndex = -1;
 
     public String[] mColors = {
             "#39add1", // light blue
@@ -31,8 +34,35 @@ public class ColorList {
             "#b7c0c7"  // light gray
     };
 
+    public String[] associateColors = {
+            "#067A9E", // light blue
+            "#004678", // dark blue
+            "#8F2642", // mauve
+            "#AE1F25", // red
+            "#C65128", // orange
+            "#505994", // lavender
+            "#4A336B", // purple
+            "#208881", // aqua
+            "#1E813A", // green
+            "#AD7800", // mustard
+            "#30475E", // dark gray
+            "#BD5F7D", // pink
+            "#848D94"  // light gray
+    };
+
+
+
+
     public int getColor(){
-        return android.graphics.Color.parseColor(mColors[gen.nextInt(mColors.length)]);
+        currentColorIndex = gen.nextInt(mColors.length);
+        return android.graphics.Color.parseColor(mColors[currentColorIndex]);
+    }
+
+    public int getAssociateColor(){
+        if (currentColorIndex == -1){
+            return Color.BLACK;
+        }
+        else return Color.parseColor(associateColors[currentColorIndex]);
     }
 
 }

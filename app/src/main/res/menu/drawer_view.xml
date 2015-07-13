@@ -3,16 +3,72 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_first_fragment"
-            android:icon="@drawable/ic_one"
-            android:title="First" />
+            android:id="@+id/tutte_barzellette"
+            android:icon="@drawable/ic_action_ic_subject_white_48dp"
+            android:title="Tutte le barzellette" />
+
         <item
-            android:id="@+id/nav_second_fragment"
-            android:icon="@drawable/ic_two"
-            android:title="Second" />
+            android:id="@+id/lista_preferiti"
+            android:icon="@drawable/ic_action_favorite_star"
+            android:title="Preferiti" />
+
+
+        <item android:title="Categorie">
+            <menu>
+
+            </menu>
+        </item>
+
+        <!-- Lista delle categorie usate:
+        0:Non definita
+        1:Animali
+        2:Carabinieri
+        3:Dottori
+        4:Tecnologia
+        5:Indovinelli
+        6:Freddure
+        7:Uomini
+        8:Donne
+        9:Varie
+
+
+        -->
+
+        <item
+            android:id="@+id/categoria_1"
+            android:title="Animali" />
+        <item
+            android:id="@+id/categoria_2"
+            android:title="Carabinieri" />
+        <item
+            android:id="@+id/categoria_3"
+            android:title="Dottori" />
+        <item
+            android:id="@+id/categoria_4"
+            android:title="Tecnologia" />
+        <item
+            android:id="@+id/categoria_5"
+            android:title="Indovinelli" />
+        <item
+            android:id="@+id/categoria_6"
+            android:title="Freddure" />
+        <item
+            android:id="@+id/categoria_7"
+            android:title="Uomini" />
+        <item
+            android:id="@+id/categoria_8"
+            android:title="Donne" />
+        <item
+            android:id="@+id/categoria_9"
+            android:title="Varie" />
+
+
         <item
             android:id="@+id/nav_third_fragment"
-            android:icon="@drawable/ic_three"
-            android:title="Third" />
+            android:icon="@drawable/ic_action_ic_settings_black_48dp"
+            android:title="Impostazioni" />
+
     </group>
+
+
 </menu>
