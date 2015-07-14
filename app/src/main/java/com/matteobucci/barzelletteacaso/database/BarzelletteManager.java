@@ -65,50 +65,50 @@ public class BarzelletteManager {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         boolean adultiPref = sharedPref.getBoolean(SettingsActivity.adultiString, false);
 
-
-
-        Cursor cursor = db.query(DatabaseGetter.TABLE_NAME,
-                new String[]{DatabaseGetter.COLUMN_ID, DatabaseGetter.COLUMN_TESTO, DatabaseGetter.COLUMN_CATEGORIA, DatabaseGetter.COLUMN_ADULTI},
-                null,
-                null,
-                null,
-                null,
-                null);
-
         List<Barzelletta> result = new ArrayList<>();
 
-        int id;
-        String testo;
-        Categoria categoria;
-        boolean adulti;
-
-        cursor.moveToFirst();
-
-        while ( !cursor.isAfterLast()) {
-            id = cursor.getInt(cursor.getColumnIndex(DatabaseGetter.COLUMN_ID));
-            testo = cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_TESTO));
-            try {
-                categoria = Categoria.getCategoria(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_CATEGORIA))));
-            } catch (NumberFormatException e) {
-                categoria = Categoria.UNDEFINED;
-            }
-
-            adulti = (!cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_ADULTI)).equals("0"));
+        if(db!=null) {
+            Cursor cursor = db.query(DatabaseGetter.TABLE_NAME,
+                    new String[]{DatabaseGetter.COLUMN_ID, DatabaseGetter.COLUMN_TESTO, DatabaseGetter.COLUMN_CATEGORIA, DatabaseGetter.COLUMN_ADULTI},
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
 
 
+            int id;
+            String testo;
+            Categoria categoria;
+            boolean adulti;
 
-            if (!adultiPref) { //Se adulti è uguale falso le aggiunge tutte
-                result.add(new Barzelletta(id, testo, adulti, categoria));
-            } else {
-                if (!adulti) //Se è uguale a vero le aggiunge solo se sono per adulti, in questo caso
+            cursor.moveToFirst();
+
+            while (!cursor.isAfterLast()) {
+                id = cursor.getInt(cursor.getColumnIndex(DatabaseGetter.COLUMN_ID));
+                testo = cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_TESTO));
+                try {
+                    categoria = Categoria.getCategoria(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_CATEGORIA))));
+                } catch (NumberFormatException e) {
+                    categoria = Categoria.UNDEFINED;
+                }
+
+                adulti = (!cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_ADULTI)).equals("0"));
+
+
+                if (!adultiPref) { //Se adulti è uguale falso le aggiunge tutte
                     result.add(new Barzelletta(id, testo, adulti, categoria));
+                } else {
+                    if (!adulti) //Se è uguale a vero le aggiunge solo se sono per adulti, in questo caso
+                        result.add(new Barzelletta(id, testo, adulti, categoria));
+                }
+
+                cursor.moveToNext();
+
             }
-
-            cursor.moveToNext();
-
+            this.close();
         }
 
-         this.close();
 
         return result;
     }

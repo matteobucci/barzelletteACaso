@@ -46,11 +46,9 @@ public class DatabaseGetter extends SQLiteOpenHelper {
      * @param context
      */
     public DatabaseGetter(Context context) {
-
-
-
         super(context, DB_NAME, null, 1);
         this.myContext = context;
+
     }
 
     /**
@@ -77,6 +75,8 @@ public class DatabaseGetter extends SQLiteOpenHelper {
 
                 throw new Error("Error copying database");
 
+            }finally {
+                this.close();
             }
         }
 
@@ -100,7 +100,7 @@ public class DatabaseGetter extends SQLiteOpenHelper {
 
         try{
             String myPath = DB_PATH + DB_NAME;
-            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.CREATE_IF_NECESSARY);
 
         }catch(SQLiteException e){
 
@@ -159,8 +159,8 @@ public class DatabaseGetter extends SQLiteOpenHelper {
 
         //Open the database
         String myPath = DB_PATH + DB_NAME;
-        myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-
+       // myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+        myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.CREATE_IF_NECESSARY);
     }
 
     @Override

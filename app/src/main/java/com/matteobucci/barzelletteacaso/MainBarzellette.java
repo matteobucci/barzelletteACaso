@@ -23,9 +23,7 @@ import com.matteobucci.barzelletteacaso.view.FavoriteFragment;
 import com.matteobucci.barzelletteacaso.view.FragmentMain;
 import com.matteobucci.barzelletteacaso.view.SettingsActivity;
 
-public class MainBarzellette extends AppCompatActivity implements FragmentMain.OnFragmentInteractionListener, BarzellettaListener {
-
-
+public class MainBarzellette extends AppCompatActivity implements BarzellettaListener {
 
     //Variabili della UI
     private DrawerLayout mDrawer;
@@ -36,7 +34,6 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
     Fragment fragment = null;
     Barzelletta barzellettaToShare;
     boolean shareButtonEnabled = true;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,19 +64,15 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
 
         header = (LinearLayout) findViewById(R.id.header);
 
-
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
 
-
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
 
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -90,9 +83,6 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
                 return true;
 
         }
-
-
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -105,8 +95,6 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
         //shareItem = menu.findItem(R.id.action_share);
         return true;
     }
-
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -229,16 +217,9 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
     }
 
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
     }
-
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

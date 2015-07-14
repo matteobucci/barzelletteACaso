@@ -23,50 +23,22 @@ import com.matteobucci.barzelletteacaso.model.Libro;
 import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentMain.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentMain#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentMain extends Fragment {
-
 
     private TextView textView;
     private Button nextButton;
     private ImageButton favoriteButton;
     private RelativeLayout layoutBarzellette;
-   // Button shareButton;
-
-    //Variabili del model
     private BarzelletteManager manager;
     private Libro lista;
-
-    //Variabili che servono a gestire il programma
-    Barzelletta barzellettaAttuale = null;
-    Favorite favoriti;
-    ColorList colors;
-
-    //La barzelleta attuale è favorita?
+    private Barzelletta barzellettaAttuale = null;
+    private Favorite favoriti;
+    private ColorList colors;
     private boolean isActualFavorite;
-
-    Context context;
-    Categoria categoria;
-
-    private OnFragmentInteractionListener mListener;
+    private Context context;
+    private Categoria categoria;
     private BarzellettaListener colorListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-
-     * @return A new instance of fragment BlankFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static FragmentMain newInstance(Context context, Categoria categoria) {
 
         FragmentMain fragment = new FragmentMain();
@@ -74,6 +46,7 @@ public class FragmentMain extends Fragment {
         fragment.categoria = categoria;
         return fragment;
     }
+
     public FragmentMain() {
         // Required empty public constructor
     }
@@ -104,21 +77,10 @@ public class FragmentMain extends Fragment {
         return myInflatedView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
             colorListener = (BarzellettaListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
@@ -130,25 +92,9 @@ public class FragmentMain extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
         if(favoriti != null){
             favoriti.saveFavorite();
         }
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
     }
 
     private void setUIVar(View w) {
@@ -159,7 +105,6 @@ public class FragmentMain extends Fragment {
         layoutBarzellette = (RelativeLayout) w.findViewById(R.id.layoutBarzellette);
         colors = new ColorList();
         setColor();
-        //shareButton = (Button) w.findViewById(R.id.action_share);
     }
 
     private void setListeners() {
@@ -168,11 +113,8 @@ public class FragmentMain extends Fragment {
             @Override
             public void onClick(View v) {
                 setBarzelletta();
-
-
             }
         });
-
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,9 +131,6 @@ public class FragmentMain extends Fragment {
                 }
             }
         });
-
-
-
 
     }
 

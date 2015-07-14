@@ -20,13 +20,13 @@
 
             <ImageView
             android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:id="@+id/imageView"
             android:src="@mipmap/ic_launcher"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:paddingTop="50dp"
-            android:contentDescription="@string/app_icon_description" />
+                android:contentDescription="@string/app_icon_description"
+                android:layout_marginTop="30dp" />
 
             <TextView
                 android:layout_width="wrap_content"
