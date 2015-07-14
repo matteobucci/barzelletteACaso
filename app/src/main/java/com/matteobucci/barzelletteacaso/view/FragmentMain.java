@@ -1,4 +1,4 @@
-package com.matteobucci.barzelletteacaso;
+package com.matteobucci.barzelletteacaso.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,11 +15,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.matteobucci.barzelletteacaso.model.Favorite;
+import com.matteobucci.barzelletteacaso.R;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
 import com.matteobucci.barzelletteacaso.model.Libro;
-import com.matteobucci.barzelletteacaso.model.database.BarzelletteManager;
-import com.matteobucci.barzelletteacaso.view.ColorList;
+import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
+import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 
 
 /**
@@ -203,7 +205,7 @@ public class FragmentMain extends Fragment {
     private void setBarzelletta() {
         barzellettaAttuale = lista.getRandom();
         isActualFavorite = favoriti.contains(barzellettaAttuale);
-        textView.setText(barzellettaAttuale.toString() + " " + barzellettaAttuale.getID());
+        textView.setText(barzellettaAttuale.toString());
         setColor();
         checkBarzelletta();
     }

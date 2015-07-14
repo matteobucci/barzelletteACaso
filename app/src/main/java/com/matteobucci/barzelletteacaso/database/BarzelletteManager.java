@@ -1,16 +1,18 @@
-package com.matteobucci.barzelletteacaso.model.database;
+package com.matteobucci.barzelletteacaso.database;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
+import com.matteobucci.barzelletteacaso.view.SettingsActivity;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,9 @@ public class BarzelletteManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        catch (NullPointerException e){
+            Log.e("ERRORE", "Errore tipico del database");
+        }
     }
 
     public void close(){
@@ -57,6 +62,9 @@ public class BarzelletteManager {
 
     public List<Barzelletta> getAllBarzellette(){
         this.open();
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean adultiPref = sharedPref.getBoolean(SettingsActivity.adultiString, false);
+
 
 
         Cursor cursor = db.query(DatabaseGetter.TABLE_NAME,
@@ -79,19 +87,25 @@ public class BarzelletteManager {
         while ( !cursor.isAfterLast()) {
             id = cursor.getInt(cursor.getColumnIndex(DatabaseGetter.COLUMN_ID));
             testo = cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_TESTO));
-            try{
+            try {
                 categoria = Categoria.getCategoria(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_CATEGORIA))));
-            }
-            catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 categoria = Categoria.UNDEFINED;
             }
 
-            if (!cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_ADULTI)).equals("0"))
-                adulti = true;
-            else adulti = false;
+            adulti = (!cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_ADULTI)).equals("0"));
 
-            result.add(new Barzelletta(id, testo, adulti, categoria));
+
+
+            if (!adultiPref) { //Se adulti è uguale falso le aggiunge tutte
+                result.add(new Barzelletta(id, testo, adulti, categoria));
+            } else {
+                if (!adulti) //Se è uguale a vero le aggiunge solo se sono per adulti, in questo caso
+                    result.add(new Barzelletta(id, testo, adulti, categoria));
+            }
+
             cursor.moveToNext();
+
         }
 
          this.close();

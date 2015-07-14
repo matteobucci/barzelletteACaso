@@ -1,4 +1,4 @@
-package com.matteobucci.barzelletteacaso;
+package com.matteobucci.barzelletteacaso.model.listener;
 
 import android.graphics.Color;
 

@@ -1,4 +1,4 @@
-package com.matteobucci.barzelletteacaso;
+package com.matteobucci.barzelletteacaso.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,15 +12,15 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.matteobucci.barzelletteacaso.model.Favorite;
+import com.matteobucci.barzelletteacaso.R;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
-import com.matteobucci.barzelletteacaso.view.SwipeDismissListViewTouchListener;
-import com.matteobucci.barzelletteacaso.view.SwipeDismissTouchListener;
+import com.matteobucci.barzelletteacaso.model.listener.SwipeDismissListViewTouchListener;
 
 import java.util.List;
 
@@ -68,10 +68,8 @@ public class FavoriteFragment extends Fragment implements AbsListView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         favoriti = Favorite.getInstance(context);
-        Log.i("CONTEXT", context.toString());
         favoriti.loadFavorite();
         listaBarzellettePreferite = favoriti.getFavoriteList();
-        // TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<Barzelletta>(getActivity(),
         android.R.layout.simple_list_item_1, android.R.id.text1, listaBarzellettePreferite);
     }
@@ -90,7 +88,6 @@ public class FavoriteFragment extends Fragment implements AbsListView.OnItemClic
 
             public boolean onItemLongClick(AdapterView<?> arg0, View v,
                                            int index, long arg3) {
-                // TODO Auto-generated method stub
                 Intent i = new Intent(android.content.Intent.ACTION_SEND);
                 i.setType("text/plain");
                 i.putExtra(android.content.Intent.EXTRA_TEXT, mListView.getItemAtPosition(index).toString());

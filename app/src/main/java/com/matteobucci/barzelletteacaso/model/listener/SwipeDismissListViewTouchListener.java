@@ -1,4 +1,4 @@
-package com.matteobucci.barzelletteacaso.view;
+package com.matteobucci.barzelletteacaso.model.listener;
 
 /*
  * Copyright 2013 Google Inc.
@@ -20,8 +20,7 @@ import android.animation.ValueAnimator;
 
         import android.animation.Animator;
         import android.animation.AnimatorListenerAdapter;
-        import android.animation.ValueAnimator;
-        import android.graphics.Rect;
+import android.graphics.Rect;
         import android.os.SystemClock;
         import android.view.MotionEvent;
         import android.view.VelocityTracker;

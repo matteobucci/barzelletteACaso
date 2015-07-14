@@ -14,12 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
+import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
+import com.matteobucci.barzelletteacaso.view.FavoriteFragment;
+import com.matteobucci.barzelletteacaso.view.FragmentMain;
+import com.matteobucci.barzelletteacaso.view.SettingsActivity;
 
 public class MainBarzellette extends AppCompatActivity implements FragmentMain.OnFragmentInteractionListener, BarzellettaListener {
 
@@ -28,7 +30,6 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
     //Variabili della UI
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
-    private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     private LinearLayout header;
     private Categoria categoriaSelezionata = null;
@@ -57,7 +58,7 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
         // Set the menu icon instead of the launcher icon.
 
         // Setup drawer view
-        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        NavigationView nvDrawer = (NavigationView) findViewById(R.id.nvView);
         setupDrawerContent(nvDrawer);
 
         //Inizializza il primo fragment all'avvio dell'applicazione
@@ -128,7 +129,12 @@ public class MainBarzellette extends AppCompatActivity implements FragmentMain.O
     public void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the planet to show based on
         // position
-        if(!menuItem.isChecked()) {
+        if(menuItem.getItemId() == R.id.item_impostazioni){
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        }
+
+        else if(!menuItem.isChecked()) {
 
             fragment = null;
             Class fragmentClass;

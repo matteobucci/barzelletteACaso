@@ -1,0 +1,16 @@
+<resources>
+    <string name="title_activity_settings">Impostazioni</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_title_disabilita_adulti">Disabilita barzellette per adulti</string>
+    <string name="pref_description_disabilita_adulti">Evita di mostrare le barzellette per adulti nella visualizzazione casuale. Non funziona con i preferiti.
+    </string>
+    <string name="valuta_string">Se hai qualche consiglio, vuoi proporre qualche barzelletta oppure segnalare un problema non esitare a contattarmi!</string>
+    <string name="valuta_title">Valuta l\'applicazione</string>
+    <string name="info_string">Scopri i dettagli su di me, e su questa applicazione</string>
+    <string name="info_title">Riguardo Barzellette a Caso</string>
+
+
+</resources>

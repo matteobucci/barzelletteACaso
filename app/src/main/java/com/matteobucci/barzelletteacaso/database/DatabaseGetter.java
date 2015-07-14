@@ -1,10 +1,14 @@
-package com.matteobucci.barzelletteacaso.model.database;
+package com.matteobucci.barzelletteacaso.database;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.matteobucci.barzelletteacaso.R;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +19,9 @@ import java.io.OutputStream;
  * Created by Matti on 07/07/2015.
  */
 public class DatabaseGetter extends SQLiteOpenHelper {
+
+
+    private static final int DB_VERSION = 2 ;
 
     //The Android's default system path of your application database.
     private static String DB_PATH = "/data/data/com.matteobucci.barzelletteacaso/databases/";
@@ -39,6 +46,8 @@ public class DatabaseGetter extends SQLiteOpenHelper {
      * @param context
      */
     public DatabaseGetter(Context context) {
+
+
 
         super(context, DB_NAME, null, 1);
         this.myContext = context;
@@ -80,6 +89,14 @@ public class DatabaseGetter extends SQLiteOpenHelper {
     private boolean checkDataBase(){
 
         SQLiteDatabase checkDB = null;
+        boolean isToUpgrade = true;
+
+
+
+        SharedPreferences sharedPref = myContext.getSharedPreferences("db_version", Context.MODE_PRIVATE);
+        int versionRead = sharedPref.getInt("version", 0);
+        isToUpgrade = (versionRead==DB_VERSION);
+
 
         try{
             String myPath = DB_PATH + DB_NAME;
@@ -97,7 +114,7 @@ public class DatabaseGetter extends SQLiteOpenHelper {
 
         }
 
-        return checkDB != null ? true : false;
+       return (isToUpgrade) && (checkDB != null ? true : false);
     }
 
     /**
@@ -127,6 +144,14 @@ public class DatabaseGetter extends SQLiteOpenHelper {
         myOutput.flush();
         myOutput.close();
         myInput.close();
+
+        SharedPreferences sharedPref = myContext.getSharedPreferences("db_version", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("version", DB_VERSION);
+        editor.commit();
+
+        Log.i("DATABASE", "DATABASE AGGIORNATO");
+
 
     }
 
@@ -161,4 +186,9 @@ public class DatabaseGetter extends SQLiteOpenHelper {
     // Add your public helper methods to access and get content from the database.
     // You could return cursors by doing "return myDataBase.query(....)" so it'd be easy
     // to you to create adapters for your views.
+
+
+
+
+
 }

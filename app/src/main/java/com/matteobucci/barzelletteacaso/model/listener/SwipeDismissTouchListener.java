@@ -1,4 +1,4 @@
-package com.matteobucci.barzelletteacaso.view;
+package com.matteobucci.barzelletteacaso.model.listener;
 
 /*
  * Copyright 2013 Google Inc.
@@ -23,7 +23,6 @@ package com.matteobucci.barzelletteacaso.view;
         import android.app.ListActivity;
         import android.app.ListFragment;
         import android.view.MotionEvent;
-        import android.view.VelocityTracker;
         import android.view.View;
         import android.view.ViewConfiguration;
         import android.view.ViewGroup;

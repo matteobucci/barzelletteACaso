@@ -74,7 +74,6 @@ public class Libro {
         }
     }
 
-
     public int size(){
         return size;
     }

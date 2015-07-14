@@ -4,7 +4,7 @@
 
 
 
-    <item android:id="@+id/action_share" android:title="Condividi"
+    <item android:id="@+id/action_share" android:title="@string/label_condividi"
         android:icon="@drawable/ic_action_share_image"
         android:orderInCategory="100" app:showAsAction="always" />
 

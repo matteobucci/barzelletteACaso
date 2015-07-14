@@ -2,6 +2,7 @@ package com.matteobucci.barzelletteacaso.view;
 
 /**
  * Created by Matti on 11/07/2015.
+ * Lista di colori utilizzati nell'applicazione. Sono disponibili anche i colori più scuri per poter avere un UI più gradevole.
  */
 
 import android.graphics.Color;

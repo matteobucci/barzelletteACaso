@@ -5,19 +5,14 @@
         <item
             android:id="@+id/tutte_barzellette"
             android:icon="@drawable/ic_action_ic_subject_white_48dp"
-            android:title="Tutte le barzellette" />
+            android:title="@string/label_tutte_le_barzellette" />
 
         <item
             android:id="@+id/lista_preferiti"
             android:icon="@drawable/ic_action_favorite_star"
-            android:title="Preferiti" />
+            android:title="@string/label_preferiti" />
 
 
-        <item android:title="Categorie">
-            <menu>
-
-            </menu>
-        </item>
 
         <!-- Lista delle categorie usate:
         0:Non definita
@@ -30,43 +25,40 @@
         7:Uomini
         8:Donne
         9:Varie
-
-
         -->
 
         <item
             android:id="@+id/categoria_1"
-            android:title="Animali" />
+            android:title="@string/categoria_animali" />
         <item
             android:id="@+id/categoria_2"
-            android:title="Carabinieri" />
+            android:title="@string/categoria_carabinieri" />
         <item
             android:id="@+id/categoria_3"
-            android:title="Dottori" />
+            android:title="@string/categoria_dottori" />
         <item
             android:id="@+id/categoria_4"
-            android:title="Tecnologia" />
+            android:title="@string/categoria_tecnologia" />
         <item
             android:id="@+id/categoria_5"
-            android:title="Indovinelli" />
+            android:title="@string/categoria_indovinelli" />
         <item
             android:id="@+id/categoria_6"
-            android:title="Freddure" />
+            android:title="@string/categoria_freddure" />
         <item
             android:id="@+id/categoria_7"
-            android:title="Uomini" />
+            android:title="@string/categoria_uomini" />
         <item
             android:id="@+id/categoria_8"
-            android:title="Donne" />
+            android:title="@string/categoria_donne" />
         <item
             android:id="@+id/categoria_9"
-            android:title="Varie" />
-
+            android:title="@string/categoria_varie" />
 
         <item
-            android:id="@+id/nav_third_fragment"
+            android:id="@+id/item_impostazioni"
             android:icon="@drawable/ic_action_ic_settings_black_48dp"
-            android:title="Impostazioni" />
+            android:title="@string/label_impostazioni" />
 
     </group>
 

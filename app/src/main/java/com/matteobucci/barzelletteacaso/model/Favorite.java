@@ -1,13 +1,8 @@
-package com.matteobucci.barzelletteacaso;
+package com.matteobucci.barzelletteacaso.model;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.matteobucci.barzelletteacaso.model.Barzelletta;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

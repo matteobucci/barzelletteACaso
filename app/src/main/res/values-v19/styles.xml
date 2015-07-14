@@ -8,4 +8,13 @@
         <item name="colorAccent">#FF4081</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
+
+    <style name="MySettingTheme" parent="Theme.AppCompat.Light">
+
+        <item name="colorPrimary">#000000</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorAccent">#000000</item>
+
+
+    </style>
 </resources>

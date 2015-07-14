@@ -1,0 +1,27 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="adulti_checkbox"
+        android:title="@string/pref_title_disabilita_adulti"
+        android:summary="@string/pref_description_disabilita_adulti"
+        android:defaultValue="false" />
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+
+    <Preference
+        android:key="valuta_pref"
+        android:summary="@string/valuta_string"
+        android:title="@string/valuta_title" >
+    </Preference>
+
+    <Preference
+        android:key="info_pref"
+        android:summary="@string/info_string"
+        android:title="@string/info_title" >
+    </Preference>
+
+
+
+
+</PreferenceScreen>
