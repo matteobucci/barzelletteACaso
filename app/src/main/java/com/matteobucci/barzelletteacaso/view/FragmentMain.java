@@ -2,7 +2,6 @@ package com.matteobucci.barzelletteacaso.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
@@ -14,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.matteobucci.barzelletteacaso.model.Favorite;
 import com.matteobucci.barzelletteacaso.R;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
@@ -39,10 +37,9 @@ public class FragmentMain extends Fragment {
     private Categoria categoria;
     private BarzellettaListener colorListener;
 
-    public static FragmentMain newInstance(Context context, Categoria categoria) {
+    public static FragmentMain newInstance(Categoria categoria) {
 
         FragmentMain fragment = new FragmentMain();
-        fragment.context = context;
         fragment.categoria = categoria;
         return fragment;
     }
@@ -54,15 +51,6 @@ public class FragmentMain extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View myInflatedView = inflater.inflate(R.layout.fragment_main, container, false);
-        setUIVar(myInflatedView);
-        setListeners();
         manager = new BarzelletteManager(context);
         if(categoria == null){
             lista= new Libro(manager.getAllBarzellette());
@@ -72,14 +60,25 @@ public class FragmentMain extends Fragment {
         }
         favoriti = Favorite.getInstance(context);
         favoriti.loadFavorite();
-        setBarzelletta();
 
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View myInflatedView = inflater.inflate(R.layout.fragment_main, container, false);
+        setUIVar(myInflatedView);
+        setListeners();
+        setBarzelletta();
         return myInflatedView;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        context = activity;
         try {
             colorListener = (BarzellettaListener) activity;
         } catch (ClassCastException e) {
@@ -95,7 +94,10 @@ public class FragmentMain extends Fragment {
         if(favoriti != null){
             favoriti.saveFavorite();
         }
+        manager.close();
     }
+
+
 
     private void setUIVar(View w) {
         textView = (TextView) w.findViewById(R.id.textView);
@@ -146,11 +148,19 @@ public class FragmentMain extends Fragment {
         isActualFavorite = favoriti.contains(barzellettaAttuale);
         textView.setText(barzellettaAttuale.toString());
         setColor();
+        textView.post(new Runnable(){
+
+            @Override
+            public void run()
+            {
+                textView.scrollTo(0, 0);
+            }
+        });
         checkBarzelletta();
     }
 
     private void checkBarzelletta() {
-        if (!favoriti.contains(barzellettaAttuale)) {
+        if (!isActualFavorite) {
             favoriteButton.setColorFilter(android.graphics.Color.parseColor("#741f14"));
         } else {
             favoriteButton.setColorFilter(null);

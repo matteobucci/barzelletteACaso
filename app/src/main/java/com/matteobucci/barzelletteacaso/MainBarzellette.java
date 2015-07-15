@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
@@ -60,7 +58,7 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
 
         //Inizializza il primo fragment all'avvio dell'applicazione
         FragmentManager fragmentManager = this.getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, FragmentMain.newInstance(this, categoriaSelezionata)).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, FragmentMain.newInstance(categoriaSelezionata)).commit();
 
         header = (LinearLayout) findViewById(R.id.header);
 
@@ -177,7 +175,7 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
 
             try {
                 if (fragmentClass.equals(FragmentMain.class)) {
-                    fragment = FragmentMain.newInstance(this, categoriaSelezionata);
+                    fragment = FragmentMain.newInstance(categoriaSelezionata);
                     shareButtonEnabled = true;
                     invalidateOptionsMenu();
                 }

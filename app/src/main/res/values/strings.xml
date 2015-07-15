@@ -8,7 +8,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="descrizione_finale">Spero proprio che l\'applicazione vi piaccia. Se avete qualche idea, suggerimento o critica non esitate a contattarmi via email e cercherò di accontentarvi. \n matteo.bucci.1995@gmail.com \n L\'icona dell\'app è stata ispirata da un set di emoticons trovato sul sito http://mooxidesign.com/ \n</string>
-    <string name="application_version">v 1.0</string>
+    <string name="application_version">v 1.1</string>
     <string name="created_by">Creata da Matteo Bucci</string>
     <string name="app_icon_description">L\'icona dell\'applicazione</string>
     <string name="preferite_introduction">Ecco la lista delle tue barzellette preferite. Trascinale a destra o a sinistra per cancellarle, oppure clicca a lungo per condividerle con i tuoi amici!</string>
@@ -27,7 +27,7 @@
     <string name="label_preferiti">Preferiti</string>
     <string name="label_tutte_le_barzellette">Tutte le barzellette</string>
     <string name="label_condividi">Condividi</string>
-    <string name="url_app_playstore">https://play.google.com/store/apps/details?id=com.buccimatteo.adsensecalculator</string>
+    <string name="url_app_playstore">https://play.google.com/store/apps/details?id=com.matteobucci.barzelletteacaso</string>
 
 
 </resources>
