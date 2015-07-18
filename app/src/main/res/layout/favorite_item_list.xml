@@ -19,15 +19,17 @@
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp" />
 
-        <ListView android:id="@android:id/list" android:layout_width="match_parent"
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/cardList"
             android:layout_below="@+id/textViewPreferiti" />
 
 
     </RelativeLayout>
 
     <TextView android:id="@+id/emptyListError" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:gravity="center"
+        android:layout_height="fill_parent" android:gravity="center"
         android:text=""
         android:padding="40dp"
         />

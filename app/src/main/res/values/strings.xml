@@ -30,4 +30,10 @@
     <string name="url_app_playstore">https://play.google.com/store/apps/details?id=com.matteobucci.barzelletteacaso</string>
 
 
+    <string name="list_view">List View</string>
+    <string name="recycler_view">Recycler View</string>
+    <string name="deleted">Deleted</string>
+    <string name="undo">UNDO</string>
+
+
 </resources>

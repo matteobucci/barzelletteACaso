@@ -160,7 +160,9 @@ public class FragmentMain extends Fragment {
     }
 
     private void checkBarzelletta() {
-        if (!isActualFavorite) {
+        isActualFavorite=!favoriti.contains(barzellettaAttuale);
+
+        if (isActualFavorite) {
             favoriteButton.setColorFilter(android.graphics.Color.parseColor("#741f14"));
         } else {
             favoriteButton.setColorFilter(null);

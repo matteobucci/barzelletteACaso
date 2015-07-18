@@ -180,7 +180,7 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
                     invalidateOptionsMenu();
                 }
                 else if(fragmentClass.equals(FavoriteFragment.class)) {
-                    fragment = FavoriteFragment.newInstance(this);
+                    fragment = FavoriteFragment.newInstance();
                     shareButtonEnabled = false;
                     invalidateOptionsMenu();
                 }
