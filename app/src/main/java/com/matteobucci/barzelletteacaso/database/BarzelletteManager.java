@@ -64,12 +64,13 @@ public class BarzelletteManager {
         this.open();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         boolean adultiPref = sharedPref.getBoolean(SettingsActivity.adultiString, false);
+        boolean lungaPref = sharedPref.getBoolean(SettingsActivity.lungheString, false);
 
         List<Barzelletta> result = new ArrayList<>();
 
         if(db!=null) {
             Cursor cursor = db.query(DatabaseGetter.TABLE_NAME,
-                    new String[]{DatabaseGetter.COLUMN_ID, DatabaseGetter.COLUMN_TESTO, DatabaseGetter.COLUMN_CATEGORIA, DatabaseGetter.COLUMN_ADULTI},
+                    new String[]{DatabaseGetter.COLUMN_ID, DatabaseGetter.COLUMN_TESTO, DatabaseGetter.COLUMN_CATEGORIA, DatabaseGetter.COLUMN_ADULTI, DatabaseGetter.COLUMN_LUNGA},
                     null,
                     null,
                     null,
@@ -81,6 +82,7 @@ public class BarzelletteManager {
             String testo;
             Categoria categoria;
             boolean adulti;
+            boolean lunga;
 
             cursor.moveToFirst();
 
@@ -94,13 +96,12 @@ public class BarzelletteManager {
                 }
 
                 adulti = (!cursor.getString(cursor.getColumnIndex(DatabaseGetter.COLUMN_ADULTI)).equals("0"));
+                lunga = (cursor.getInt(cursor.getColumnIndex(DatabaseGetter.COLUMN_LUNGA)) != 0);
 
+                boolean isToAdd = (   !(lungaPref&&lunga)&&!(adultiPref&&adulti) );
+                if(isToAdd){
+                    result.add(new Barzelletta(id, testo, adulti, categoria, lunga));
 
-                if (!adultiPref) { //Se adulti è uguale falso le aggiunge tutte
-                    result.add(new Barzelletta(id, testo, adulti, categoria));
-                } else {
-                    if (!adulti) //Se è uguale a vero le aggiunge solo se sono per adulti, in questo caso
-                        result.add(new Barzelletta(id, testo, adulti, categoria));
                 }
 
                 cursor.moveToNext();

@@ -102,6 +102,17 @@ public class Libro {
         return new Libro(result);
     }
 
+    public boolean esisteBarzellettaPrima(){
+        return ultimiIndici.size()>1;
+    }
+
+    public Barzelletta getBarzellettaPrima(){
+        int last = ultimiIndici.get(ultimiIndici.size()-2);
+        ultimiIndici.removeLast();
+        return mappa.get(keys.get(last));
+
+    }
+
 
 
 

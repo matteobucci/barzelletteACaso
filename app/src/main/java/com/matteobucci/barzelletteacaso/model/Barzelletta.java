@@ -11,18 +11,20 @@ public class Barzelletta implements Serializable, Comparable{
     private String testo;
     private boolean adulti;
     private Categoria categoria;
+    private boolean lunga;
 
 
-    public Barzelletta(int ID, String testo, boolean adulti, Categoria categoria){
+    public Barzelletta(int ID, String testo, boolean adulti, Categoria categoria, boolean lunga){
         this.ID = ID;
         this.testo = testo;
         this.adulti = adulti;
         this.categoria = categoria;
+        this.lunga = lunga;
     }
 
     //Costruttore da usare nel caso non si ha voglia di catalogare
     public Barzelletta(int ID, String testo){
-        this(ID, testo, false, Categoria.UNDEFINED);//categoria.UNDEFINED);
+        this(ID, testo, false, Categoria.UNDEFINED, false);//categoria.UNDEFINED);
     }
 
     public String toString(){
@@ -39,6 +41,10 @@ public class Barzelletta implements Serializable, Comparable{
 
     public Categoria getCategoria(){
         return categoria;
+    }
+
+    public boolean isLunga() {
+        return lunga;
     }
 
     public boolean equals(Object another){

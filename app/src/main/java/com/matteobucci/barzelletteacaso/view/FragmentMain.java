@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ public class FragmentMain extends Fragment {
 
     private TextView textView;
     private Button nextButton;
+    private Button precedenteButton;
     private ImageButton favoriteButton;
     private RelativeLayout layoutBarzellette;
     private BarzelletteManager manager;
@@ -36,6 +38,7 @@ public class FragmentMain extends Fragment {
     private Context context;
     private Categoria categoria;
     private BarzellettaListener colorListener;
+    private boolean versionePro;
 
     public static FragmentMain newInstance(Categoria categoria) {
 
@@ -51,6 +54,7 @@ public class FragmentMain extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        versionePro = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("versione_pro", false);
         manager = new BarzelletteManager(context);
         if(categoria == null){
             lista= new Libro(manager.getAllBarzellette());
@@ -97,12 +101,18 @@ public class FragmentMain extends Fragment {
         manager.close();
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        abilitaPro();
+    }
 
 
     private void setUIVar(View w) {
         textView = (TextView) w.findViewById(R.id.textView);
         textView.setMovementMethod(new ScrollingMovementMethod());
         nextButton = (Button) w.findViewById(R.id.nextButton);
+        precedenteButton = (Button) w.findViewById(R.id.buttonPrecedente);
         favoriteButton = (ImageButton) w.findViewById(R.id.favoriteButton);
         layoutBarzellette = (RelativeLayout) w.findViewById(R.id.layoutBarzellette);
         colors = new ColorList();
@@ -134,6 +144,30 @@ public class FragmentMain extends Fragment {
             }
         });
 
+        precedenteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setBarzellettaPrecendete();
+            }
+        });
+
+
+    }
+
+    private void setBarzellettaPrecendete() {
+        barzellettaAttuale = lista.getBarzellettaPrima();
+        isActualFavorite = favoriti.contains(barzellettaAttuale);
+        textView.setText(barzellettaAttuale.toString());
+        setColor();
+        textView.post(new Runnable(){
+
+            @Override
+            public void run()
+            {
+                textView.scrollTo(0, 0);
+            }
+        });
+        checkBarzelletta();
     }
 
     private void setColor() {
@@ -167,6 +201,26 @@ public class FragmentMain extends Fragment {
         } else {
             favoriteButton.setColorFilter(null);
         }
+
+        if(!lastIsPresent()){
+            precedenteButton.setEnabled(false);
+        }
+        else{
+            precedenteButton.setEnabled(true);
+        }
     }
+
+    private boolean lastIsPresent(){
+        return lista.esisteBarzellettaPrima();
+    }
+
+    private void abilitaPro(){
+        if(versionePro){
+            precedenteButton.setVisibility(View.VISIBLE);
+            precedenteButton.setEnabled(lista.esisteBarzellettaPrima());
+        }
+    }
+
+
 
 }

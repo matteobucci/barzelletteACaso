@@ -34,6 +34,10 @@
     <string name="recycler_view">Recycler View</string>
     <string name="deleted">Deleted</string>
     <string name="undo">UNDO</string>
+    <string name="pref_title_disabilita_lunghe">Disabilita barzellettelunghe</string>
+    <string name="pref_description_disabilita_lunghe">Togli di mezzo tutte le barzellette leggermente più lughe del normale. \n ATTENZIONE: togliendo tutte le barzellette lunghe il numero di barzellette totali diminuisce sensibilimente.</string>
+    <string name="descrizione_pro">Con la versione PRO oltre ad eliminare completamente le pubblicità avrai a disposizione il pulsante indietro!</string>
+    <string name="button_precedente"><![CDATA[<--]]></string>
 
 
 </resources>

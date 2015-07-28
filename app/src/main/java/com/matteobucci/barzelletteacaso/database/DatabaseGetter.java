@@ -21,7 +21,7 @@ import java.io.OutputStream;
 public class DatabaseGetter extends SQLiteOpenHelper {
 
 
-    private static final int DB_VERSION = 3 ;
+    private static final int DB_VERSION = 11 ;
 
     //The Android's default system path of your application database.
     private static String DB_PATH = "/data/data/com.matteobucci.barzelletteacaso/databases/";
@@ -39,6 +39,7 @@ public class DatabaseGetter extends SQLiteOpenHelper {
     public static final String COLUMN_TESTO = "TESTO";
     public static final String COLUMN_CATEGORIA = "CATEGORIA";
     public static final String COLUMN_ADULTI = "ADULTI";
+    public static final String COLUMN_LUNGA = "LUNGA";
 
     /**
      * Constructor

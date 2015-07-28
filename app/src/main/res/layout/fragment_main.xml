@@ -35,6 +35,17 @@
                 android:contentDescription="@string/button_favorite_description" />
 
             <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_precedente"
+                android:id="@+id/buttonPrecedente"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:visibility="gone" />
+
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/button_next_text"

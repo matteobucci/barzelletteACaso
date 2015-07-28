@@ -6,6 +6,18 @@
         android:summary="@string/pref_description_disabilita_adulti"
         android:defaultValue="false" />
 
+    <CheckBoxPreference
+        android:key="lunghe_checkbox"
+        android:title="@string/pref_title_disabilita_lunghe"
+        android:summary="@string/pref_description_disabilita_lunghe"
+        android:defaultValue="false" />
+
+    <CheckBoxPreference
+        android:key="versione_pro"
+        android:title="@string/versione_pro_abilita"
+        android:summary="@string/descrizione_pro"
+        android:defaultValue="false" />
+
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
 

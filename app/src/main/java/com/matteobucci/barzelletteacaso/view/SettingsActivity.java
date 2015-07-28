@@ -24,6 +24,7 @@ import com.matteobucci.barzelletteacaso.R;
 public class SettingsActivity extends Activity {
 
     public static final String adultiString="adulti_checkbox";
+    public static final String lungheString="lunghe_checkbox";
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
