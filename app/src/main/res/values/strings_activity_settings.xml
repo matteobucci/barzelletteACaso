@@ -12,6 +12,7 @@
     <string name="info_string">Scopri i dettagli su di me, e su questa applicazione</string>
     <string name="info_title">Riguardo Barzellette a Caso</string>
     <string name="versione_pro_abilita">Abilita versione PRO</string>
+    <string name="settings_cambio_barzelletta">Swipe per cambio barzelletta</string>
 
 
 </resources>

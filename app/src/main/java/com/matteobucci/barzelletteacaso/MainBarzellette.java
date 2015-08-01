@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -62,12 +63,13 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
         setupDrawerContent(nvDrawer);
 
         //Inizializza il primo fragment all'avvio dell'applicazione
-        FragmentManager fragmentManager = this.getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, FragmentMain.newInstance(categoriaSelezionata)).commit();
+
 
         header = (LinearLayout) findViewById(R.id.header);
 
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -276,4 +278,14 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
         colorAnimation.start();
 
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        FragmentManager fragmentManager = this.getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, FragmentMain.newInstance(categoriaSelezionata)).commit();
+
+    }
+
 }

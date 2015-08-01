@@ -14,11 +14,18 @@
 
 
 
-<CheckBoxPreference
+    <CheckBoxPreference
     android:key="versione_pro"
         android:title="@string/versione_pro_abilita"
         android:summary="@string/descrizione_pro"
         android:defaultValue="false" />
+
+    <CheckBoxPreference
+        android:key="swipe_checkbox"
+        android:title="@string/settings_cambio_barzelletta"
+        android:summary="Cambia la barzelletta corrente con uno swipe in avanti per la successiva o in indietro per la precedente. La precedente è abilitata solo se si possiede la versione PRO."
+        android:defaultValue="true" />
+
 
 
 
