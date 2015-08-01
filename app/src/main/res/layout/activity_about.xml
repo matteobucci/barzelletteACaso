@@ -57,6 +57,14 @@
                 android:text="@string/descrizione_finale"
                 android:id="@+id/textView5"
                 android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/textViewInfoCategorie"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="30dp" />
         </LinearLayout>
 
 </ScrollView>

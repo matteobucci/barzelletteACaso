@@ -7,8 +7,9 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="title_activity_about">AboutActivity</string>
-    <string name="descrizione_finale">Spero proprio che l\'applicazione vi piaccia. Se avete qualche idea, suggerimento o critica non esitate a contattarmi via email e cercherò di accontentarvi. \n matteo.bucci.1995@gmail.com \n L\'icona dell\'app è stata ispirata da un set di emoticons trovato sul sito http://mooxidesign.com/ \n</string>
-    <string name="application_version">v 1.1</string>
+    <string name="descrizione_finale">Spero proprio che l\'applicazione vi piaccia. Se avete qualche idea, suggerimento o critica non esitate a contattarmi via email e cercherò di accontentarvi. \n matteo.bucci.1995@gmail.com \n L\'icona dell\'app è stata ispirata da un set di emoticons trovato sul sito http://mooxidesign.com/ \n
+    Novità della versione 1.2.1: \n-Migliorata decisamente la visualizzazione dei preferiti\n-Sistemato il bug dei cuoricini.\n-Aggiunta la pubblicità</string>
+    <string name="application_version">v 1.2.1</string>
     <string name="created_by">Creata da Matteo Bucci</string>
     <string name="app_icon_description">L\'icona dell\'applicazione</string>
     <string name="preferite_introduction">Ecco la lista delle tue barzellette preferite. Trascinale a destra o a sinistra per cancellarle, oppure clicca a lungo per condividerle con i tuoi amici!</string>
@@ -34,10 +35,11 @@
     <string name="recycler_view">Recycler View</string>
     <string name="deleted">Deleted</string>
     <string name="undo">UNDO</string>
-    <string name="pref_title_disabilita_lunghe">Disabilita barzellettelunghe</string>
+
+
+    <string name="pref_title_disabilita_lunghe">Disabilita barzellette lunghe</string>
     <string name="pref_description_disabilita_lunghe">Togli di mezzo tutte le barzellette leggermente più lughe del normale. \n ATTENZIONE: togliendo tutte le barzellette lunghe il numero di barzellette totali diminuisce sensibilimente.</string>
     <string name="descrizione_pro">Con la versione PRO oltre ad eliminare completamente le pubblicità avrai a disposizione il pulsante indietro!</string>
-    <string name="button_precedente"><![CDATA[<--]]></string>
-
+    <string name="button_precedente"><![CDATA[<—]]></string>
 
 </resources>

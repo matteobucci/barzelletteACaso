@@ -21,7 +21,7 @@ import java.io.OutputStream;
 public class DatabaseGetter extends SQLiteOpenHelper {
 
 
-    private static final int DB_VERSION = 11 ;
+    private static final int DB_VERSION = 12 ;
 
     //The Android's default system path of your application database.
     private static String DB_PATH = "/data/data/com.matteobucci.barzelletteacaso/databases/";

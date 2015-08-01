@@ -25,3 +25,4 @@ proguard/
 
 # Log Files
 *.log
+app/src/main/res/values/codici_privati.xml

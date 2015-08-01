@@ -1,7 +1,12 @@
 package com.matteobucci.barzelletteacaso.view;
 
+import android.animation.Animator;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
@@ -9,8 +14,10 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,10 +28,12 @@ import com.matteobucci.barzelletteacaso.model.Categoria;
 import com.matteobucci.barzelletteacaso.model.Libro;
 import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class FragmentMain extends Fragment {
 
-    private TextView textView;
+    private TextView  textView;
     private Button nextButton;
     private Button precedenteButton;
     private ImageButton favoriteButton;
@@ -39,6 +48,10 @@ public class FragmentMain extends Fragment {
     private Categoria categoria;
     private BarzellettaListener colorListener;
     private boolean versionePro;
+    private AdView mAdView;
+    private AdRequest adRequest;
+    private LinearLayout layoutInferiore;
+
 
     public static FragmentMain newInstance(Categoria categoria) {
 
@@ -115,6 +128,10 @@ public class FragmentMain extends Fragment {
         precedenteButton = (Button) w.findViewById(R.id.buttonPrecedente);
         favoriteButton = (ImageButton) w.findViewById(R.id.favoriteButton);
         layoutBarzellette = (RelativeLayout) w.findViewById(R.id.layoutBarzellette);
+        layoutInferiore = (LinearLayout) w.findViewById(R.id.layoutInferiore);
+        //ZONA PUBBLICITA
+        mAdView = (AdView) w.findViewById(R.id.adView);
+        //FINE ZONA
         colors = new ColorList();
         setColor();
     }
@@ -171,10 +188,52 @@ public class FragmentMain extends Fragment {
     }
 
     private void setColor() {
-        int color = colors.getColor();
-        layoutBarzellette.setBackgroundColor(color);
+
+        final int color = colors.getColor();
         colorListener.onChangeBarzelletta(color, colors.getAssociateColor(), barzellettaAttuale);
-        nextButton.setTextColor(color);
+        Integer colorFrom;
+        Drawable background = ((Drawable) layoutBarzellette.getBackground());
+        if (background instanceof ColorDrawable)
+            colorFrom = ((ColorDrawable) background).getColor();
+        else colorFrom = 0;
+
+        Integer colorTo = color;
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                layoutBarzellette.setBackgroundColor((Integer) animator.getAnimatedValue());
+                nextButton.setTextColor((Integer)animator.getAnimatedValue());
+                precedenteButton.setTextColor((Integer)animator.getAnimatedValue());
+            }
+
+        });
+
+        colorAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        colorAnimation.start();
+
     }
 
     private void setBarzelletta() {
@@ -219,8 +278,25 @@ public class FragmentMain extends Fragment {
             precedenteButton.setVisibility(View.VISIBLE);
             precedenteButton.setEnabled(lista.esisteBarzellettaPrima());
         }
+        else{
+            setAds();
+        }
     }
 
+    private void setAds(){
 
+        adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)layoutInferiore.getLayoutParams();
+        params.addRule(RelativeLayout.ABOVE, R.id.adView);
+        params.setMargins(0,0,0,0);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+        mAdView.setVisibility(View.VISIBLE);
+        layoutInferiore.setLayoutParams(params);
+    }
+
+    private void animateBackground(int color){
+
+    }
 
 }

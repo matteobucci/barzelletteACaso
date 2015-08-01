@@ -1,9 +1,14 @@
 package com.matteobucci.barzelletteacaso;
 
+import android.animation.Animator;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -228,8 +233,47 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
 
     @Override
     public void onChangeBarzelletta(int color, int darkerColor, Barzelletta barzelletta) {
-        toolbar.setBackgroundColor(color);
         header.setBackgroundColor(darkerColor);
         barzellettaToShare = barzelletta;
+
+        Integer colorFrom;
+        Drawable background = ((Drawable) toolbar.getBackground());
+        if (background instanceof ColorDrawable)
+            colorFrom = ((ColorDrawable) background).getColor();
+        else colorFrom = 0;
+
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, color);
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                toolbar.setBackgroundColor((Integer) animator.getAnimatedValue());
+            }
+
+        });
+
+        colorAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        colorAnimation.start();
+
     }
 }

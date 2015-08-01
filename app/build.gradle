@@ -8,14 +8,17 @@ android {
         applicationId "com.matteobucci.barzelletteacaso"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 2
-        versionName "1.1"
+        versionCode 4
+        versionName "1.2.1"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+
     }
 }
 
@@ -26,5 +29,6 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
     compile 'com.android.support:cardview-v7:22.2.0'
+    compile 'com.google.android.gms:play-services-ads:7.5.0'
 
 }

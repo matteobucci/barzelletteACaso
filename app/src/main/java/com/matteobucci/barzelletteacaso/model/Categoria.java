@@ -21,6 +21,10 @@ public enum Categoria {
         this.ID = ID;
     }
 
+    public int getID(){
+        return ID;
+    }
+
 
     public static Categoria getCategoria(int id){
         if(id == 0){
