@@ -14,11 +14,14 @@
 
 
 
-    <CheckBoxPreference
+  <!--  <CheckBoxPreference
     android:key="versione_pro"
         android:title="@string/versione_pro_abilita"
         android:summary="@string/descrizione_pro"
         android:defaultValue="false" />
+
+
+-->
 
     <CheckBoxPreference
         android:key="swipe_checkbox"

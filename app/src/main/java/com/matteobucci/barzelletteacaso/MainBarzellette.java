@@ -38,12 +38,16 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
     Fragment fragment = null;
     Barzelletta barzellettaToShare;
     boolean shareButtonEnabled = true;
+    private NavigationView nvDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main_barzellette);
+
+        FragmentManager fragmentManager = this.getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, FragmentMain.newInstance(categoriaSelezionata)).commit();
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -59,7 +63,7 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
         // Set the menu icon instead of the launcher icon.
 
         // Setup drawer view
-        NavigationView nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
         setupDrawerContent(nvDrawer);
 
         //Inizializza il primo fragment all'avvio dell'applicazione
@@ -283,8 +287,14 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
     public void onResume(){
         super.onResume();
 
+
         FragmentManager fragmentManager = this.getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, FragmentMain.newInstance(categoriaSelezionata)).commit();
+
+
+        if(nvDrawer.getMenu().getItem(1).isChecked()){
+            fragmentManager.beginTransaction().replace(R.id.flContent, FavoriteFragment.newInstance()).commit();
+        }
+
 
     }
 

@@ -362,7 +362,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
                         setBarzelletta();
             }
             else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
-                if(lastIsPresent() && versionePro)
+                if(lastIsPresent())
                     setBarzellettaPrecendete();
             }
         }

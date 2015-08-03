@@ -45,7 +45,7 @@
                 android:id="@+id/buttonPrecedente"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <Button
                 android:layout_width="match_parent"
