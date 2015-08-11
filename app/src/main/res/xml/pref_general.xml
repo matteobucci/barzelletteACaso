@@ -12,16 +12,11 @@
         android:summary="@string/pref_description_disabilita_lunghe"
         android:defaultValue="false" />
 
-
-
   <!--  <CheckBoxPreference
     android:key="versione_pro"
         android:title="@string/versione_pro_abilita"
         android:summary="@string/descrizione_pro"
-        android:defaultValue="false" />
-
-
--->
+        android:defaultValue="false" />-->
 
     <CheckBoxPreference
         android:key="swipe_checkbox"
@@ -29,12 +24,14 @@
         android:summary="Cambia la barzelletta corrente con uno swipe in avanti per la successiva o in indietro per la precedente. La precedente è abilitata solo se si possiede la versione PRO."
         android:defaultValue="true" />
 
-
-
-
-
-    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
-    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <com.matteobucci.barzelletteacaso.view.SliderDialog
+        android:defaultValue="10"
+        android:dialogMessage="@string/settings_dialog_message"
+        android:key="SEEKBAR_VALUE"
+        android:max="40"
+        android:summary="@string/settings_summary"
+        android:text="@string/settings_unit"
+        android:title="@string/settings_title" />
 
     <Preference
         android:key="valuta_pref"
@@ -47,8 +44,5 @@
         android:summary="@string/info_string"
         android:title="@string/info_title" >
     </Preference>
-
-
-
 
 </PreferenceScreen>

@@ -90,6 +90,7 @@ public class FavoriteFragment extends Fragment{
         checkIfIsVuota();
 
 
+
         return view;
     }
 

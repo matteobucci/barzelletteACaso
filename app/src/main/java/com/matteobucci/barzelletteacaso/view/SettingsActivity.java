@@ -2,11 +2,15 @@ package com.matteobucci.barzelletteacaso.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
+
 import com.matteobucci.barzelletteacaso.R;
 
 
@@ -27,6 +31,7 @@ public class SettingsActivity extends Activity {
     public static final String lungheString="lunghe_checkbox";
     public static final String swipeString="swipe_checkbox";
 
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -37,7 +42,10 @@ public class SettingsActivity extends Activity {
 
         }
 
-        public static class PrefsFragment extends PreferenceFragment {
+        public static class PrefsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+            private SliderDialog _seekBarPref;
+            protected Activity mActivity;
 
             @Override
             public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +81,34 @@ public class SettingsActivity extends Activity {
                         return true;
                     }
                 });
+
+                // Get widgets :
+                _seekBarPref = (SliderDialog) this.findPreference("SEEKBAR_VALUE");
+
+                // Set listener :
+                getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+
+                // Set seekbar summary :
+                int radius = PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getInt("SEEKBAR_VALUE", 10)+10;
+                _seekBarPref.setSummary(this.getString(R.string.settings_summary).replace("$1", ""+radius));
+
+            }
+
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+                // Set seekbar summary :
+                if(isAdded()) {
+                    int radius = PreferenceManager.getDefaultSharedPreferences(mActivity).getInt("SEEKBAR_VALUE", 10) + 10;
+                    _seekBarPref.setSummary(this.getString(R.string.settings_summary).replace("$1", "" + radius));
+                }
+            }
+
+
+            @Override
+            public void onAttach(Activity activity) {
+                super.onAttach(activity);
+                mActivity = activity;
             }
         }
 

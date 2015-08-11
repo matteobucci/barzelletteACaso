@@ -14,5 +14,9 @@
     <string name="versione_pro_abilita">Abilita versione PRO</string>
     <string name="settings_cambio_barzelletta">Swipe per cambio barzelletta</string>
 
+    <string name="settings_dialog_message">20 è la dimensione standard. Regolala come meglio credi.</string>
+    <string name="settings_summary">La dimensione attuale è $1</string>
+    <string name="settings_unit"></string>
+    <string name="settings_title">Cambia la dimensione del testo</string>
 
 </resources>

@@ -58,10 +58,13 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
     private LinearLayout layoutInferiore;
     private GestureDetector myGestDetector;
     private boolean swipeEnabled;
+    private boolean appenaAvviata=true;
 
     static final int SWIPE_MIN_DISTANCE = 120;
     static final int SWIPE_MAX_OFF_PATH = 250;
     static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+    private int textSize;
 
     public static FragmentMain newInstance(Categoria categoria) {
 
@@ -77,8 +80,9 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         versionePro = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("versione_pro", false);
-        swipeEnabled = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SettingsActivity.swipeString, true);
+
         manager = new BarzelletteManager(context);
         if(categoria == null){
             lista= new Libro(manager.getAllBarzellette());
@@ -128,8 +132,12 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
     @Override
     public void onStart(){
         super.onStart();
+        swipeEnabled = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SettingsActivity.swipeString, true);
+        textSize =  PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getInt("SEEKBAR_VALUE", 10)+10;
+        textView.setTextSize(textSize);
         abilitaPro();
     }
+
 
 
     private void setUIVar(View w) {
@@ -144,6 +152,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         mAdView = (AdView) w.findViewById(R.id.adView);
         //FINE ZONA
         colors = new ColorList();
+        textView.setTextSize(textSize);
         setColor();
     }
 
@@ -213,49 +222,60 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
     private void setColor() {
 
         final int color = colors.getColor();
-        colorListener.onChangeBarzelletta(color, colors.getAssociateColor(), barzellettaAttuale);
-        Integer colorFrom;
-        Drawable background = ((Drawable) layoutBarzellette.getBackground());
-        if (background instanceof ColorDrawable)
-            colorFrom = ((ColorDrawable) background).getColor();
-        else colorFrom = 0;
 
-        Integer colorTo = color;
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        if(appenaAvviata){
+            appenaAvviata=false;
+            layoutBarzellette.setBackgroundColor(color);
+            nextButton.setTextColor(color);
+            precedenteButton.setTextColor(color);
+        }
+        else {
 
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                layoutBarzellette.setBackgroundColor((Integer) animator.getAnimatedValue());
-                nextButton.setTextColor((Integer)animator.getAnimatedValue());
-                precedenteButton.setTextColor((Integer)animator.getAnimatedValue());
-            }
+            colorListener.onChangeBarzelletta(color, colors.getAssociateColor(), barzellettaAttuale);
+            Integer colorFrom;
+            Drawable background = ((Drawable) layoutBarzellette.getBackground());
+            if (background instanceof ColorDrawable)
+                colorFrom = ((ColorDrawable) background).getColor();
+            else colorFrom = 0;
 
-        });
+            Integer colorTo = color;
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
-        colorAnimation.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    layoutBarzellette.setBackgroundColor((Integer) animator.getAnimatedValue());
+                    nextButton.setTextColor((Integer) animator.getAnimatedValue());
+                    precedenteButton.setTextColor((Integer) animator.getAnimatedValue());
+                }
 
-            }
+            });
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
+            colorAnimation.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
 
 
-            }
+                }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-            }
-        });
-        colorAnimation.start();
+                }
+            });
+            colorAnimation.start();
+
+        }
 
     }
 
@@ -307,7 +327,6 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
     }
 
     private void setAds(){
-
         adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)layoutInferiore.getLayoutParams();
@@ -317,11 +336,6 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         mAdView.setVisibility(View.VISIBLE);
         layoutInferiore.setLayoutParams(params);
     }
-
-    private void animateBackground(int color){
-
-    }
-
 
     @Override
     public boolean onDown(MotionEvent e) {
@@ -350,7 +364,6 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
 
         if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) {
            //Do nothing, vertical swipe

@@ -6,7 +6,6 @@ import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -39,6 +38,7 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
     Barzelletta barzellettaToShare;
     boolean shareButtonEnabled = true;
     private NavigationView nvDrawer;
+    private boolean firstAvvioFragment=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +67,6 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
         setupDrawerContent(nvDrawer);
 
         //Inizializza il primo fragment all'avvio dell'applicazione
-
-
         header = (LinearLayout) findViewById(R.id.header);
 
     }
@@ -98,10 +96,8 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_barzellette, menu);
         menu.findItem(R.id.action_share).setVisible(shareButtonEnabled);
-        //shareItem = menu.findItem(R.id.action_share);
         return true;
     }
 
@@ -132,7 +128,7 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
         }
 
         else if(!menuItem.isChecked()) {
-
+            firstAvvioFragment=true;
             fragment = null;
             Class fragmentClass;
             switch (menuItem.getItemId()) {
@@ -222,7 +218,7 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
             Intent i = new Intent(android.content.Intent.ACTION_SEND);
             i.setType("text/plain");
             i.putExtra(android.content.Intent.EXTRA_TEXT, barzellettaToShare.toString());
-            startActivity(Intent.createChooser(i, "Condividi con"));
+            startActivity(Intent.createChooser(i, getString(R.string.condividi_con)));
     }
 
 
@@ -233,54 +229,60 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public void onChangeBarzelletta(int color, int darkerColor, Barzelletta barzelletta) {
+
         header.setBackgroundColor(darkerColor);
         barzellettaToShare = barzelletta;
 
-        Integer colorFrom;
-        Drawable background = ((Drawable) toolbar.getBackground());
-        if (background instanceof ColorDrawable)
-            colorFrom = ((ColorDrawable) background).getColor();
-        else colorFrom = 0;
+        if(firstAvvioFragment){
+            firstAvvioFragment=false;
+            toolbar.setBackgroundColor(color);
+        }
+        else {
 
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, color);
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            Integer colorFrom;
+            Drawable background = toolbar.getBackground();
+            if (background instanceof ColorDrawable)
+                colorFrom = ((ColorDrawable) background).getColor();
+            else colorFrom = 0;
 
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                toolbar.setBackgroundColor((Integer) animator.getAnimatedValue());
-            }
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, color);
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
-        });
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    toolbar.setBackgroundColor((Integer) animator.getAnimatedValue());
+                }
 
-        colorAnimation.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+            });
 
-            }
+            colorAnimation.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
+                }
 
-            }
+                @Override
+                public void onAnimationEnd(Animator animation) {
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                }
 
-            }
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                }
 
-            }
-        });
-        colorAnimation.start();
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
+                }
+            });
+            colorAnimation.start();
+        }
     }
 
     @Override
