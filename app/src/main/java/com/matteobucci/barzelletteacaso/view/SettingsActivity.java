@@ -30,6 +30,7 @@ public class SettingsActivity extends Activity {
     public static final String adultiString="adulti_checkbox";
     public static final String lungheString="lunghe_checkbox";
     public static final String swipeString="swipe_checkbox";
+    public static final String sfondoChiaro="sfondo_chiaro_checkbox";
 
 
         @Override

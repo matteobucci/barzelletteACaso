@@ -217,7 +217,7 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
     private void share() {
             Intent i = new Intent(android.content.Intent.ACTION_SEND);
             i.setType("text/plain");
-            i.putExtra(android.content.Intent.EXTRA_TEXT, barzellettaToShare.toString());
+            i.putExtra(android.content.Intent.EXTRA_TEXT, barzellettaToShare.toString() + "\n\n Presa da Barzellette a caso, scarica l'applicazione! " + this.getResources().getString(R.string.url_app_playstore));
             startActivity(Intent.createChooser(i, getString(R.string.condividi_con)));
     }
 

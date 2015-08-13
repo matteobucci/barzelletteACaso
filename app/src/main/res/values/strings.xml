@@ -45,5 +45,10 @@
     <string name="descrizione_pro">Con la versione PRO oltre ad eliminare completamente le pubblicità avrai a disposizione il pulsante indietro!</string>
     <string name="button_precedente"><![CDATA[<—]]></string>
     <string name="condividi_con">Condividi con</string>
+    <string name="rate_title">Valuta l\'applicazione</string>
+    <string name="rate_message">Se l\'applicazione ti è piaciuta o ti ha fatto ridere almeno una volta, perchè non la valuti nel Play Store?</string>
+    <string name="rate_remind_later">Più tardi</string>
+    <string name="rate_positive">Va bene!</string>
+    <string name="rate_never">No, grazie</string>
 
 </resources>

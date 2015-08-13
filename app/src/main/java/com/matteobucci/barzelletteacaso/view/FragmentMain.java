@@ -5,13 +5,16 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.gesture.GestureOverlayView;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -59,7 +62,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
     private GestureDetector myGestDetector;
     private boolean swipeEnabled;
     private boolean appenaAvviata=true;
-
+    boolean sfondoChiaro = false;
     static final int SWIPE_MIN_DISTANCE = 120;
     static final int SWIPE_MAX_OFF_PATH = 250;
     static final int SWIPE_THRESHOLD_VELOCITY = 200;
@@ -92,7 +95,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         }
         favoriti = Favorite.getInstance(context);
         favoriti.loadFavorite();
-
+        AppRater.show(context, getFragmentManager());
 
     }
 
@@ -134,7 +137,13 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         super.onStart();
         swipeEnabled = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SettingsActivity.swipeString, true);
         textSize =  PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getInt("SEEKBAR_VALUE", 10)+10;
+        sfondoChiaro =  PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getBoolean(SettingsActivity.sfondoChiaro, false);
         textView.setTextSize(textSize);
+        if(sfondoChiaro){
+            textView.setBackgroundColor(Color.parseColor("#32ffffff"));
+        }
+        else
+            textView.setBackgroundColor(Color.TRANSPARENT);
         abilitaPro();
     }
 
@@ -359,7 +368,25 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
 
     @Override
     public void onLongPress(MotionEvent e) {
-
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Informazioni sulla barzelletta:");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Categoria : " + barzellettaAttuale.getCategoria().toString().toLowerCase() + "\n");
+        if(barzellettaAttuale.isVM()){
+            sb.append("E' per adulti\n");
+        }
+        else{
+            sb.append("E' per tutti\n");
+        }
+        if(barzellettaAttuale.isLunga()){
+            sb.append("E' lunga\nID: ");
+        }
+        else{
+            sb.append("E' breve\nID: ");
+        }
+        sb.append(barzellettaAttuale.getID());
+        alertDialog.setMessage(sb.toString());
+        alertDialog.show();
     }
 
     @Override

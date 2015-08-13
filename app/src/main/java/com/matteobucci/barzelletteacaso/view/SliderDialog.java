@@ -27,7 +27,7 @@ public class SliderDialog extends DialogPreference implements SeekBar.OnSeekBarC
         private Context mContext;
 
         private String mDialogMessage, mSuffix;
-        private int mDefault, mMax, mValue = 0;
+        private int mDefault, mMax, mValue = 20;
         private int actualValue;
         // ------------------------------------------------------------------------------------------
 

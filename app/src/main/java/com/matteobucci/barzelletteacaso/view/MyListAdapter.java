@@ -38,7 +38,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.Barzellett
             @Override
             public boolean onLongClick(View v) {
 
-                share(vh.testoBarzelletta.getText().toString());
+                share(vh.testoBarzelletta.getText().toString() + "\n\n Presa da Barzellette a caso. Scarica l'applicazione! " + context.getResources().getString(R.string.url_app_playstore));
                 return true;
             }
         });
