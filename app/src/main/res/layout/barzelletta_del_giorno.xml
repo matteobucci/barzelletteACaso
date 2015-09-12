@@ -24,34 +24,23 @@
             android:id="@+id/layoutInferiore"
 
             android:layout_alignParentBottom="true"
-            android:layout_above="@+id/adView"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp">
-
-            <ImageButton
-                android:layout_width="63dp"
-                android:layout_height="63dp"
-                android:id="@+id/favoriteButton"
-                android:src="@drawable/favorite"
-                android:adjustViewBounds="true"
-                android:background="#00ffffff"
-                android:scaleType="fitXY"
-                android:contentDescription="@string/button_favorite_description" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_precedente"
-                android:id="@+id/buttonPrecedente"
+                android:id="@+id/preferitiButton"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:text="Aggiungi ai preferiti" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/button_next_text"
-                android:id="@+id/nextButton"
+                android:text="Condividi"
+                android:id="@+id/condividiButton"
                 android:padding="20dp" />
 
 
@@ -70,18 +59,7 @@
             android:nestedScrollingEnabled="false"
             android:textSize="20sp"
             android:text=""
-            android:autoText="false"
-            android:textColor="@color/abc_secondary_text_material_light" />
-
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true">
-        </com.google.android.gms.ads.AdView>
+            android:autoText="false" />
 
 
     </RelativeLayout>

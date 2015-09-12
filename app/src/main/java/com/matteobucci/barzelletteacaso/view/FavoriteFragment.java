@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.matteobucci.barzelletteacaso.R;
@@ -17,15 +21,6 @@ import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Favorite;
 
 import java.util.List;
-
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p/>
- */
-
 
 public class FavoriteFragment extends Fragment{
 
@@ -59,13 +54,33 @@ public class FavoriteFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.favorite_fragment, container, false);
+        final View view = inflater.inflate(R.layout.favorite_fragment, container, false);
         emptyView = (TextView) view.findViewById(R.id.emptyListError);
         recList = (RecyclerView) view.findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
+
+
         LinearLayoutManager llm = new LinearLayoutManager(context);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
+
+
+        //TODO:Migliorare la visualizzazione di colonne
+    /*
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager) context.getSystemService(
+                Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(metrics);
+        int colums = metrics.widthPixels/380;
+        if(colums==0) colums = 1;
+
+        GridLayoutManager glm = new GridLayoutManager(context, colums);
+
+        */
+
         recList.setLayoutManager(llm);
+
+
         final MyListAdapter adapter = new MyListAdapter(listaBarzellettePreferite, context);
         recList.setAdapter(adapter);
 
@@ -81,6 +96,11 @@ public class FavoriteFragment extends Fragment{
                 listaBarzellettePreferite.remove(viewHolder.getAdapterPosition());
                 adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                 checkIfIsVuota();
+                final View coordinatorLayoutView = view.findViewById(R.id.snackbarPosition);
+
+                Snackbar
+                        .make(coordinatorLayoutView, R.string.snackbar_text, Snackbar.LENGTH_LONG)
+                        .show();
             }
         };
 
@@ -93,6 +113,7 @@ public class FavoriteFragment extends Fragment{
 
         return view;
     }
+
 
     @Override
     public void onAttach(Activity activity) {

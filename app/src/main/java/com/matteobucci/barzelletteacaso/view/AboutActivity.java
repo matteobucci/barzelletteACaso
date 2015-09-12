@@ -21,7 +21,7 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         BarzelletteManager  manager = new BarzelletteManager(this);
-        List<Barzelletta> lista =manager.getAllBarzellette();
+        List<Barzelletta> lista = manager.getAllBarzellette();
         Categoria[] categorie = Categoria.values();
         int[] numOfBarze = new int[categorie.length];
 

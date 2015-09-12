@@ -13,25 +13,13 @@ import android.support.v4.app.FragmentActivity;
 
 import com.matteobucci.barzelletteacaso.R;
 
-
-/**
- * A {@link PreferenceActivity} that presents a set of application settings. On
- * handset devices, settings are presented as a single list. On tablets,
- * settings are split by category, with category headers shown to the left of
- * the list of settings.
- * <p/>
- * See <a href="http://developer.android.com/design/patterns/settings.html">
- * Android Design: Settings</a> for design guidelines and the <a
- * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
- * API Guide</a> for more information on developing a Settings UI.
- */
 public class SettingsActivity extends Activity {
 
     public static final String adultiString="adulti_checkbox";
     public static final String lungheString="lunghe_checkbox";
     public static final String swipeString="swipe_checkbox";
     public static final String sfondoChiaro="sfondo_chiaro_checkbox";
-
+    public static final String isChangedString ="setting_changed";
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -103,15 +91,28 @@ public class SettingsActivity extends Activity {
                     int radius = PreferenceManager.getDefaultSharedPreferences(mActivity).getInt("SEEKBAR_VALUE", 10) + 10;
                     _seekBarPref.setSummary(this.getString(R.string.settings_summary).replace("$1", "" + radius));
                 }
-            }
 
+                if(key.equals(SettingsActivity.adultiString) || key.equals(SettingsActivity.lungheString)){
+                    notifyChange();
+                }
+
+
+
+            }
 
             @Override
             public void onAttach(Activity activity) {
                 super.onAttach(activity);
                 mActivity = activity;
             }
-        }
 
+
+            private void notifyChange(){
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mActivity).edit();
+                editor.putBoolean(SettingsActivity.isChangedString , true);
+                editor.apply();
+            }
+
+        }
 
 }

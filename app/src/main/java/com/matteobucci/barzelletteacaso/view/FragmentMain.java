@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -39,6 +40,9 @@ import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FragmentMain extends Fragment implements GestureDetector.OnGestureListener {
 
     private TextView  textView;
@@ -46,7 +50,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
     private Button precedenteButton;
     private ImageButton favoriteButton;
     private RelativeLayout layoutBarzellette;
-    private BarzelletteManager manager;
+ //   private BarzelletteManager manager;
     private Libro lista;
     private Barzelletta barzellettaAttuale = null;
     private Favorite favoriti;
@@ -69,10 +73,11 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
 
     private int textSize;
 
-    public static FragmentMain newInstance(Categoria categoria) {
+    public static FragmentMain newInstance(List<Barzelletta> lista, Categoria categoria) {
 
         FragmentMain fragment = new FragmentMain();
         fragment.categoria = categoria;
+        fragment.lista = FragmentMain.filtra(lista, categoria);
         return fragment;
     }
 
@@ -86,13 +91,6 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
 
         versionePro = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("versione_pro", false);
 
-        manager = new BarzelletteManager(context);
-        if(categoria == null){
-            lista= new Libro(manager.getAllBarzellette());
-        }
-        else {
-            lista = new Libro(manager.getBarzellettaByCategoria(categoria));
-        }
         favoriti = Favorite.getInstance(context);
         favoriti.loadFavorite();
         AppRater.show(context, getFragmentManager());
@@ -117,8 +115,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         try {
             colorListener = (BarzellettaListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString());
         }
 
     }
@@ -129,7 +126,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         if(favoriti != null){
             favoriti.saveFavorite();
         }
-        manager.close();
+     //   manager.close();
     }
 
     @Override
@@ -141,9 +138,13 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         textView.setTextSize(textSize);
         if(sfondoChiaro){
             textView.setBackgroundColor(Color.parseColor("#32ffffff"));
+            textView.setTextColor(Color.parseColor("#FF000000"));
         }
-        else
+        else {
             textView.setBackgroundColor(Color.TRANSPARENT);
+          //  textView.setTextColor(Color.parseColor("#ff757575"));
+            textView.setTextColor(getResources().getColor(R.color.abc_secondary_text_material_light));
+        }
         abilitaPro();
     }
 
@@ -162,7 +163,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         //FINE ZONA
         colors = new ColorList();
         textView.setTextSize(textSize);
-        setColor();
+      //  setColor();
     }
 
     private void setListeners() {
@@ -202,7 +203,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         textView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(swipeEnabled) {
+                if (swipeEnabled) {
                     myGestDetector.onTouchEvent(event);
                 }
                 return false;
@@ -237,6 +238,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
             layoutBarzellette.setBackgroundColor(color);
             nextButton.setTextColor(color);
             precedenteButton.setTextColor(color);
+            colorListener.onChangeBarzelletta(color, colors.getAssociateColor(), barzellettaAttuale);
         }
         else {
 
@@ -283,6 +285,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
                 }
             });
             colorAnimation.start();
+
 
         }
 
@@ -407,6 +410,20 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
             }
         }
         return false;
+    }
+
+    public static Libro filtra(List<Barzelletta> lista, Categoria categoria){
+        if(categoria == null)
+            return new Libro (lista);
+
+        List<Barzelletta> result = new ArrayList<>();
+        for (Barzelletta attuale : lista){
+            if(attuale.getCategoria().equals(categoria))
+                result.add(attuale);
+        }
+
+        return new Libro(result);
+
     }
 
 }

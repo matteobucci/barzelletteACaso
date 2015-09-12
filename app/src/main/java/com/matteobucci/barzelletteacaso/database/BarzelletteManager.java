@@ -52,6 +52,10 @@ public class BarzelletteManager {
 
     public void close(){
         if (db.isOpen()){
+            if(db.inTransaction()) {
+                Log.e("BOH", "ANCORA IN TRANSICTION?");
+                db.endTransaction();
+            }
             db.close();
             Log.i("DATABASE", "Database chiuso");
         }

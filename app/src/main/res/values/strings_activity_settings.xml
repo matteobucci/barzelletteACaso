@@ -18,7 +18,7 @@
     <string name="settings_summary">La dimensione attuale è $1</string>
     <string name="settings_unit"></string>
     <string name="settings_title">Cambia la dimensione del testo</string>
-    <string name="descrizione_cambio_barzelletta">Cambia la barzelletta corrente con uno swipe in avanti per la successiva o in indietro per la precedente. La precedente è abilitata solo se si possiede la versione PRO.</string>
+    <string name="descrizione_cambio_barzelletta">Cambia la barzelletta corrente con uno swipe in avanti per la successiva o in indietro per la precedente.</string>
     <string name="title_sfondo_chiaro">Rendi più visibile il testo</string>
     <string name="description_sfondo_chiaro">Rende più chiaro lo sfondo della barzelletta per renderla più leggibile.</string>
 

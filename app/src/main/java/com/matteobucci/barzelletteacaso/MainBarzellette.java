@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,12 +20,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
+import com.matteobucci.barzelletteacaso.model.Libro;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.matteobucci.barzelletteacaso.view.FavoriteFragment;
 import com.matteobucci.barzelletteacaso.view.FragmentMain;
 import com.matteobucci.barzelletteacaso.view.SettingsActivity;
+
+import java.util.List;
 
 public class MainBarzellette extends AppCompatActivity implements BarzellettaListener {
 
@@ -39,6 +46,8 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
     boolean shareButtonEnabled = true;
     private NavigationView nvDrawer;
     private boolean firstAvvioFragment=true;
+    private BarzelletteManager manager;
+    private List<Barzelletta> tutteLeBarzellette;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +55,13 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
 
         setContentView(R.layout.activity_main_barzellette);
 
+
+        manager = new BarzelletteManager(this);
+            tutteLeBarzellette = manager.getAllBarzellette();
+
+
         FragmentManager fragmentManager = this.getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, FragmentMain.newInstance(categoriaSelezionata)).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, FragmentMain.newInstance(tutteLeBarzellette, categoriaSelezionata)).commit();
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -182,7 +196,7 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
 
             try {
                 if (fragmentClass.equals(FragmentMain.class)) {
-                    fragment = FragmentMain.newInstance(categoriaSelezionata);
+                    fragment = FragmentMain.newInstance(tutteLeBarzellette, categoriaSelezionata);
                     shareButtonEnabled = true;
                     invalidateOptionsMenu();
                 }
@@ -289,6 +303,14 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
     public void onResume(){
         super.onResume();
 
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsActivity.isChangedString, false)){
+        //    Toast.makeText(this, "Preferenze cambiate, si consiglia di riavviare l'applicazione", Toast.LENGTH_LONG).show();
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(SettingsActivity.isChangedString, false).apply();
+            tutteLeBarzellette = manager.getAllBarzellette();
+            applyChange();
+
+        }
+
 
         FragmentManager fragmentManager = this.getFragmentManager();
 
@@ -299,5 +321,21 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
 
 
     }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(SettingsActivity.isChangedString, false).apply();
+    }
+
+    private void applyChange(){
+        nvDrawer.getMenu().getItem(0).setChecked(true);
+        setTitle(nvDrawer.getMenu().getItem(0).getTitle());
+        categoriaSelezionata = null;
+        fragment = FragmentMain.newInstance(tutteLeBarzellette, categoriaSelezionata);
+        FragmentManager fragmentManager = this.getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+    }
+
 
 }

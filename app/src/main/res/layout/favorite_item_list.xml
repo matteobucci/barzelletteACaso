@@ -25,6 +25,13 @@
             android:id="@+id/cardList"
             android:layout_below="@+id/textViewPreferiti" />
 
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/snackbarPosition">
+        </android.support.design.widget.CoordinatorLayout>
 
     </RelativeLayout>
 
@@ -33,5 +40,7 @@
         android:text=""
         android:padding="40dp"
         />
+
+
 
 </FrameLayout>

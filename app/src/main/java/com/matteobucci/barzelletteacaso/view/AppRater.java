@@ -52,10 +52,10 @@ public class AppRater extends DialogFragment {
         }
 
         if (shouldShow) {
-            editor.putInt(LAUNCHES, 0).putLong(LAST_PROMPT, System.currentTimeMillis()).commit();
+            editor.putInt(LAUNCHES, 0).putLong(LAST_PROMPT, System.currentTimeMillis()).apply();
             new AppRater().show(fragmentManager, null);
         } else {
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -71,7 +71,7 @@ public class AppRater extends DialogFragment {
                 .setPositiveButton(R.string.rate_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(R.string.url_app_playstore + getActivity().getPackageName())));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_app_playstore))));
                         getSharedPreferences(getActivity()).edit().putBoolean(DISABLED, true).commit();
                         dismiss();
                     }
