@@ -1,4 +1,4 @@
-package com.matteobucci.barzelletteacaso.view;
+package com.matteobucci.barzelletteacaso.view.support;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -10,10 +10,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.matteobucci.barzelletteacaso.R;
 

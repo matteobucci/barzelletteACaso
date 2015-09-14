@@ -30,7 +30,7 @@
         android:summary="@string/description_sfondo_chiaro"
         android:defaultValue="false" />
 
-    <com.matteobucci.barzelletteacaso.view.SliderDialog
+    <com.matteobucci.barzelletteacaso.view.support.SliderDialog
         android:defaultValue="10"
         android:dialogMessage="@string/settings_dialog_message"
         android:key="SEEKBAR_VALUE"

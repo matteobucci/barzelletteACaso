@@ -20,32 +20,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
-import com.matteobucci.barzelletteacaso.model.Libro;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.matteobucci.barzelletteacaso.view.FavoriteFragment;
-import com.matteobucci.barzelletteacaso.view.FragmentMain;
+import com.matteobucci.barzelletteacaso.view.MainFragment;
 import com.matteobucci.barzelletteacaso.view.SettingsActivity;
 
 import java.util.List;
 
-public class MainBarzellette extends AppCompatActivity implements BarzellettaListener {
+public class MainActivity extends AppCompatActivity implements BarzellettaListener {
 
-    //Variabili della UI
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
     private LinearLayout header;
-    private Categoria categoriaSelezionata = null;
-    Fragment fragment = null;
-    Barzelletta barzellettaToShare;
-    boolean shareButtonEnabled = true;
     private NavigationView nvDrawer;
-    private boolean firstAvvioFragment=true;
+
+    private Categoria categoriaSelezionata;
+    private Fragment fragment;
+    private boolean firstAvvioFragment = true;
+
+    private Barzelletta barzellettaToShare;
+    private boolean shareButtonEnabled = true;
+
     private BarzelletteManager manager;
     private List<Barzelletta> tutteLeBarzellette;
 
@@ -61,7 +60,7 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
 
 
         FragmentManager fragmentManager = this.getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, FragmentMain.newInstance(tutteLeBarzellette, categoriaSelezionata)).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, MainFragment.newInstance(tutteLeBarzellette, categoriaSelezionata)).commit();
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -84,8 +83,6 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
         header = (LinearLayout) findViewById(R.id.header);
 
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -148,55 +145,59 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
             switch (menuItem.getItemId()) {
                 case R.id.tutte_barzellette:
                     categoriaSelezionata = null;
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
                     break;
                 case R.id.categoria_1:
                     categoriaSelezionata = Categoria.getCategoria(1);
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
                     break;
                 case R.id.categoria_2:
                     categoriaSelezionata = Categoria.getCategoria(2);
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
                     break;
                 case R.id.categoria_3:
                     categoriaSelezionata = Categoria.getCategoria(3);
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
                     break;
                 case R.id.categoria_4:
                     categoriaSelezionata = Categoria.getCategoria(4);
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
                     break;
                 case R.id.categoria_5:
                     categoriaSelezionata = Categoria.getCategoria(5);
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
                     break;
                 case R.id.categoria_6:
                     categoriaSelezionata = Categoria.getCategoria(6);
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
                     break;
                 case R.id.categoria_7:
                     categoriaSelezionata = Categoria.getCategoria(7);
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
                     break;
                 case R.id.categoria_8:
                     categoriaSelezionata = Categoria.getCategoria(8);
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
                     break;
                 case R.id.categoria_9:
                     categoriaSelezionata = Categoria.getCategoria(9);
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
+                    break;
+                case R.id.categoria_10:
+                    categoriaSelezionata = Categoria.getCategoria(10);
+                    fragmentClass = MainFragment.class;
                     break;
                 case R.id.lista_preferiti:
                     categoriaSelezionata = null;
                     fragmentClass = FavoriteFragment.class;
                     break;
                 default:
-                    fragmentClass = FragmentMain.class;
+                    fragmentClass = MainFragment.class;
             }
 
             try {
-                if (fragmentClass.equals(FragmentMain.class)) {
-                    fragment = FragmentMain.newInstance(tutteLeBarzellette, categoriaSelezionata);
+                if (fragmentClass.equals(MainFragment.class)) {
+                    fragment = MainFragment.newInstance(tutteLeBarzellette, categoriaSelezionata);
                     shareButtonEnabled = true;
                     invalidateOptionsMenu();
                 }
@@ -234,7 +235,6 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
             i.putExtra(android.content.Intent.EXTRA_TEXT, barzellettaToShare.toString() + "\n\n Presa da Barzellette a caso, scarica l'applicazione! " + this.getResources().getString(R.string.url_app_playstore));
             startActivity(Intent.createChooser(i, getString(R.string.condividi_con)));
     }
-
 
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
@@ -332,10 +332,9 @@ public class MainBarzellette extends AppCompatActivity implements BarzellettaLis
         nvDrawer.getMenu().getItem(0).setChecked(true);
         setTitle(nvDrawer.getMenu().getItem(0).getTitle());
         categoriaSelezionata = null;
-        fragment = FragmentMain.newInstance(tutteLeBarzellette, categoriaSelezionata);
+        fragment = MainFragment.newInstance(tutteLeBarzellette, categoriaSelezionata);
         FragmentManager fragmentManager = this.getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
-
 
 }

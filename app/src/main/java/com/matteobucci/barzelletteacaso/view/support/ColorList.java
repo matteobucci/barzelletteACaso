@@ -1,4 +1,4 @@
-package com.matteobucci.barzelletteacaso.view;
+package com.matteobucci.barzelletteacaso.view.support;
 
 /**
  * Created by Matti on 11/07/2015.

@@ -25,6 +25,7 @@
         7:Uomini
         8:Donne
         9:Varie
+        10:Bambini
         -->
 
         <item
@@ -51,6 +52,9 @@
         <item
             android:id="@+id/categoria_8"
             android:title="@string/categoria_donne" />
+        <item
+            android:id="@+id/categoria_10"
+            android:title="@string/categoria_bambini" />
         <item
             android:id="@+id/categoria_9"
             android:title="@string/categoria_varie" />

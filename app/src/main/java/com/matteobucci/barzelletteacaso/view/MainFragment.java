@@ -5,25 +5,20 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.ColorStateList;
-import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
-import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
 import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -35,15 +30,16 @@ import com.matteobucci.barzelletteacaso.R;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
 import com.matteobucci.barzelletteacaso.model.Libro;
-import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.matteobucci.barzelletteacaso.view.support.AppRater;
+import com.matteobucci.barzelletteacaso.view.support.ColorList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentMain extends Fragment implements GestureDetector.OnGestureListener {
+public class MainFragment extends Fragment implements GestureDetector.OnGestureListener {
 
     private TextView  textView;
     private Button nextButton;
@@ -73,15 +69,15 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
 
     private int textSize;
 
-    public static FragmentMain newInstance(List<Barzelletta> lista, Categoria categoria) {
+    public static MainFragment newInstance(List<Barzelletta> lista, Categoria categoria) {
 
-        FragmentMain fragment = new FragmentMain();
+        MainFragment fragment = new MainFragment();
         fragment.categoria = categoria;
-        fragment.lista = FragmentMain.filtra(lista, categoria);
+        fragment.lista = MainFragment.filtra(lista, categoria);
         return fragment;
     }
 
-    public FragmentMain() {
+    public MainFragment() {
         // Required empty public constructor
     }
 
@@ -292,7 +288,12 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
     }
 
     private void setBarzelletta() {
-        barzellettaAttuale = lista.getRandom();
+        if(lista!=null) {
+            barzellettaAttuale = lista.getRandom();
+        }
+        else{
+            barzellettaAttuale = new Barzelletta(-1, "Impossibile caricare barzellette, prova a riavviare l'app", false, Categoria.UNDEFINED, false);
+        }
         isActualFavorite = favoriti.contains(barzellettaAttuale);
         textView.setText(barzellettaAttuale.toString());
         setColor();
@@ -311,9 +312,11 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         isActualFavorite=!favoriti.contains(barzellettaAttuale);
 
         if (isActualFavorite) {
-            favoriteButton.setColorFilter(android.graphics.Color.parseColor("#741f14"));
+        //    favoriteButton.setColorFilter(android.graphics.Color.parseColor("#741f14"));
+            favoriteButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.favorite_heart_disabled));
         } else {
-            favoriteButton.setColorFilter(null);
+     //       favoriteButton.setColorFilter(null);
+            favoriteButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.favorite_heart_enabled));
         }
 
         if(!lastIsPresent()){
@@ -412,7 +415,7 @@ public class FragmentMain extends Fragment implements GestureDetector.OnGestureL
         return false;
     }
 
-    public static Libro filtra(List<Barzelletta> lista, Categoria categoria){
+    private static Libro filtra(List<Barzelletta> lista, Categoria categoria){
         if(categoria == null)
             return new Libro (lista);
 

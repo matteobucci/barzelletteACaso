@@ -1,4 +1,4 @@
-package com.matteobucci.barzelletteacaso.view;
+package com.matteobucci.barzelletteacaso.view.support;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.matteobucci.barzelletteacaso.view;
+package com.matteobucci.barzelletteacaso.view.support;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +29,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.Barzellett
     @Override
     public BarzellettaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view_layout, parent, false);
+                .inflate(R.layout.favorite_card_view_layout, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
         final BarzellettaViewHolder vh = new BarzellettaViewHolder(v);

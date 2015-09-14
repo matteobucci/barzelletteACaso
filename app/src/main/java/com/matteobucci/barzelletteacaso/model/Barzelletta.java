@@ -1,11 +1,14 @@
 package com.matteobucci.barzelletteacaso.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by Matti on 23/06/2015.
  */
-public class Barzelletta implements Serializable, Comparable{
+public class Barzelletta implements Serializable, Comparable, Parcelable {
 
     private int ID;
     private String testo;
@@ -21,6 +24,41 @@ public class Barzelletta implements Serializable, Comparable{
         this.categoria = categoria;
         this.lunga = lunga;
     }
+
+    public static final Parcelable.Creator<Barzelletta> CREATOR =
+            new Parcelable.Creator<Barzelletta>() {
+
+                @Override
+                public Barzelletta createFromParcel(Parcel source) {
+                    return new Barzelletta(source);
+                }
+
+                @Override
+                public Barzelletta[] newArray(int size) {
+                    return new Barzelletta[0];
+                }
+            };
+
+    public Barzelletta(Parcel in){
+        ID = in.readInt();
+        testo = in.readString();
+
+        if(in.readByte() == 1){
+            adulti = true;
+        }
+        else{
+            adulti = false;
+        }
+        categoria = Categoria.getCategoria(in.readInt());
+
+        if(in.readByte() == 1){
+            lunga = true;
+        }
+        else{
+            lunga = false;
+        }
+    }
+
 
     //Costruttore da usare nel caso non si ha voglia di catalogare
     public Barzelletta(int ID, String testo){
@@ -63,5 +101,19 @@ public class Barzelletta implements Serializable, Comparable{
         else {
             return 0;
         }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.getID());
+        dest.writeString(this.toString());
+        dest.writeByte((byte) (this.isVM() ? 1 : 0));
+        dest.writeInt(this.getCategoria().getID());
+        dest.writeByte((byte)(this.isLunga()? 1:0));
     }
 }

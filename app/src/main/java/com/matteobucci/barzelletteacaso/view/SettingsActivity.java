@@ -6,12 +6,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 
 import com.matteobucci.barzelletteacaso.R;
+import com.matteobucci.barzelletteacaso.view.support.SliderDialog;
 
 public class SettingsActivity extends Activity {
 
