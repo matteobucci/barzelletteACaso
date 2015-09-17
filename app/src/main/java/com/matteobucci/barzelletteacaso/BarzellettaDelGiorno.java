@@ -2,6 +2,7 @@ package com.matteobucci.barzelletteacaso;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
 import com.matteobucci.barzelletteacaso.model.Favorite;
@@ -149,6 +151,7 @@ public class BarzellettaDelGiorno extends AppCompatActivity {
         } else {
             //       favoriteButton.setColorFilter(null);
             favoriteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.favorite_heart_enabled));
+
         }
     }
 
