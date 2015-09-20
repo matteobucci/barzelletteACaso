@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
 import com.matteobucci.barzelletteacaso.model.Favorite;
 import com.matteobucci.barzelletteacaso.R;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
@@ -41,6 +44,7 @@ import java.util.List;
 
 public class MainFragment extends Fragment implements GestureDetector.OnGestureListener {
 
+    private final String TAG = this.getClass().getSimpleName();
     private TextView  textView;
     private Button nextButton;
     private Button precedenteButton;
@@ -67,6 +71,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     static final int SWIPE_MAX_OFF_PATH = 250;
     static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
+
     private int textSize;
 
     public static MainFragment newInstance(List<Barzelletta> lista, Categoria categoria) {
@@ -90,6 +95,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         favoriti = Favorite.getInstance(context);
         favoriti.loadFavorite();
         AppRater.show(context, getFragmentManager());
+
 
     }
 
@@ -142,6 +148,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
             textView.setTextColor(getResources().getColor(R.color.abc_secondary_text_material_light));
         }
         abilitaPro();
+
     }
 
 
@@ -306,6 +313,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
             }
         });
         checkBarzelletta();
+
     }
 
     private void checkBarzelletta() {

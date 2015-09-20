@@ -55,7 +55,15 @@
     <string name="title_activity_main">MainActivity</string>
 
     <string name="title_activity_barzelletta_del_giorno">Barzelletta Del Giorno</string>
-
+    <string name="title_activity_debug">DebugActivity</string>
+    <string name="hint_barzelletta">Inserisci il testo della barzelletta</string>
+    <string name="hint_recapito">Inserisci un recapito (opzionale)</string>
+    <string name="proponi">Proponi</string>
+    <string name="cancel">Annulla</string>
+    <string name="hint_id">Inserisci l\'ID della barzelletta</string>
+    <string name="hint_motivo">Inserisci la motivazione</string>
+    <string name="descrizione_segnalazione_text">Inserisci l\'ID della barzelletta che intendi segnalare, una motivazione e il tuo recapito in modo che se necessario possiamo contattarti. L\'ID della barzelletta si trova tenendo premuto a lungo nella barzelletta: apparirà una finestrella con i dettagli della barzelletta.</string>
+    <string name="segnala">Segnala</string>
 
 
 </resources>

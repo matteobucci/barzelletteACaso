@@ -27,6 +27,8 @@ import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.matteobucci.barzelletteacaso.view.FavoriteFragment;
 import com.matteobucci.barzelletteacaso.view.MainFragment;
 import com.matteobucci.barzelletteacaso.view.SettingsActivity;
+import com.parse.Parse;
+import com.parse.ParseInstallation;
 
 import java.util.List;
 
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main_barzellette);
-
 
         manager = new BarzelletteManager(this);
             tutteLeBarzellette = manager.getAllBarzellette();
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
             startActivity(intent);
         }
 
-        else if(!menuItem.isChecked()) {
+        else if(menuItem.isChecked()) {
             firstAvvioFragment=true;
             fragment = null;
             Class fragmentClass;
