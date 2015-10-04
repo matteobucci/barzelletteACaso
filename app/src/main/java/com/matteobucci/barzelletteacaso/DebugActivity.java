@@ -42,7 +42,6 @@ public class DebugActivity extends AppCompatActivity {
             }
         });
 
-
         segnalaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

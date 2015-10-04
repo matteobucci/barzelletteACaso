@@ -14,7 +14,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,7 +35,7 @@ import com.matteobucci.barzelletteacaso.model.Libro;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.matteobucci.barzelletteacaso.view.support.AppRater;
+import com.matteobucci.barzelletteacaso.view.dialog.AppRater;
 import com.matteobucci.barzelletteacaso.view.support.ColorList;
 
 import java.util.ArrayList;

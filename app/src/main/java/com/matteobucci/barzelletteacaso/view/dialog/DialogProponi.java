@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.matteobucci.barzelletteacaso.R;
+import com.parse.ParseObject;
 
 /**
  * Created by Matti on 21/09/2015.
@@ -19,6 +20,12 @@ public class DialogProponi extends DialogFragment {
 
     private EditText editTextTestoBarzelletta;
     private EditText editTextRecapito;
+
+    private static final String PROPONI_OBJECT_KEY = "BarzelletteProposte";
+    private static final String TESTO_KEY = "testo";
+    private static final String RECAPITO_KEY= "recapito";
+    private static final String VERSIONE_KEY = "versione" ;
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -38,6 +45,11 @@ public class DialogProponi extends DialogFragment {
                 String versione = getActivity().getString(R.string.application_version);
 
                 Log.i("PROPOSTA", testo + "\n" + recapito + "\n" + versione);
+                ParseObject richiesta = ParseObject.create(PROPONI_OBJECT_KEY);
+                richiesta.put(TESTO_KEY, testo);
+                richiesta.put(RECAPITO_KEY, recapito);
+                richiesta.put(VERSIONE_KEY, versione);
+                richiesta.saveInBackground();
 
 
 

@@ -1,4 +1,4 @@
-package com.matteobucci.barzelletteacaso.view.support;
+package com.matteobucci.barzelletteacaso.view.dialog;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -62,9 +62,9 @@ public class AppRater extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.rate_title)
-                .setMessage(R.string.rate_message)
-                .setPositiveButton(R.string.rate_positive, new DialogInterface.OnClickListener() {
+                .setTitle(R.string.ti_piace_applicazione)
+                .setMessage(R.string.ti_piace_message)
+                .setPositiveButton(R.string.ti_piace_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_app_playstore))));
@@ -72,14 +72,7 @@ public class AppRater extends DialogFragment {
                         dismiss();
                     }
                 })
-                .setNeutralButton(R.string.rate_remind_later, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dismiss();
-                    }
-                })
-                .setNegativeButton(R.string.rate_never, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.non_mi_piace, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         getSharedPreferences(getActivity()).edit().putBoolean(DISABLED, true).commit();
