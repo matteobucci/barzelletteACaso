@@ -1,6 +1,7 @@
 package com.matteobucci.barzelletteacaso.view;
 
 import com.parse.Parse;
+import com.parse.ParseAnalytics;
 import com.parse.ParseInstallation;
 
 /**
@@ -24,6 +25,8 @@ public class Application  extends android.app.Application {
      //   Parse.enableLocalDatastore(this);
 
         Parse.initialize(getApplicationContext(), "bOaWgp9vs9LqO1EieOBHwo6wKSHKO01WNUvgLsRW", "1AahIK8ikqCBmfQvouxyfzQrOeU05mu4eGWfkI0M");
+
+
 
         ParseInstallation.getCurrentInstallation().saveInBackground();
 

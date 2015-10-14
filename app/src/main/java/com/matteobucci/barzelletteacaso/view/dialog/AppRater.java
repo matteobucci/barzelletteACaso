@@ -1,5 +1,6 @@
 package com.matteobucci.barzelletteacaso.view.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
@@ -67,9 +68,10 @@ public class AppRater extends DialogFragment {
                 .setPositiveButton(R.string.ti_piace_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_app_playstore))));
-                        getSharedPreferences(getActivity()).edit().putBoolean(DISABLED, true).commit();
+                        valutazione_positiva(getActivity(), getActivity());
                         dismiss();
+
+
                     }
                 })
                 .setNegativeButton(R.string.non_mi_piace, new DialogInterface.OnClickListener() {
@@ -77,7 +79,51 @@ public class AppRater extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         getSharedPreferences(getActivity()).edit().putBoolean(DISABLED, true).commit();
                         dismiss();
+                        suggerimento();
+
+
                     }
                 }).create();
     }
+
+    private void suggerimento(){
+        DialogSuggerimento dialogSuggerimento = new DialogSuggerimento();
+        dialogSuggerimento.show(getFragmentManager(), "");
+    }
+
+
+    private void valutazione_positiva(Context context, final Activity activity){
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
+        builder.setTitle("Valutaci nel Play Store")
+                .setMessage("Siamo felici che l'applicazione ti piaccia. Perchè non ci lasci una valutazione positiva nel Play Store?")
+                .setPositiveButton("Va bene", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getSharedPreferences(activity).edit().putBoolean(DISABLED, true).commit();
+                        goToPlayStore(activity);
+                        dismiss();
+                    }
+                })
+                .setNegativeButton("No, grazie.", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getSharedPreferences(activity).edit().putBoolean(DISABLED, true).commit();
+                        dismiss();
+
+                    }
+                })
+                .setNeutralButton("Più tardi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getSharedPreferences(activity).edit().putLong(LAUNCHES, 0).commit();
+                    }
+                }).show();
+
+    }
+
+    private void goToPlayStore(Activity activity) {
+        activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(activity.getString(R.string.url_app_playstore))));
+    }
+
+
 }

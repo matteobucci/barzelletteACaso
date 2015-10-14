@@ -2,6 +2,9 @@ package com.matteobucci.barzelletteacaso.model;
 
 import android.util.Log;
 
+import com.parse.ParseAnalytics;
+import com.parse.ParseObject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,6 +19,10 @@ import java.util.Random;
 public class Libro {
 
     static final String TAG = Libro.class.getSimpleName();
+    private static final String SESSIONE_BARZELLETTE_OBJECT_KEY = "SessioneBarzellette";
+    private static final String NUMERO_BARZELLETTE_KEY = "numeroBarzellette";
+    private static final String CATEGORIA_KEY = "categoriaSessione";
+    private static final String TUTTE_LE_CATEGORIE = "tutte";
 
     private Map<Integer, Barzelletta> mappa; //Dovrebbe rendere più veloce il recuperare barzellette
     private List<Integer> keys;
@@ -24,6 +31,7 @@ public class Libro {
     private int size;
     private static int BARZELLETTE_LASCIATE = 5;
     private int lastIndex;
+    private int barzelletteLette = 0;
 
     public Libro(){
         mappa = new HashMap<>();
@@ -53,7 +61,7 @@ public class Libro {
 
     public Barzelletta getRandom(){
         int numero;
-
+        barzelletteLette++;
         do {
             numero = random.nextInt(size);
         }while(!checkLast(numero));
@@ -111,6 +119,23 @@ public class Libro {
         ultimiIndici.removeLast();
         return mappa.get(keys.get(last));
 
+    }
+
+    private int getBarzelletteLette(){
+        return barzelletteLette;
+    }
+
+    public void resetBarzelletteLette(Categoria categoria){
+        ParseObject richiesta = ParseObject.create(SESSIONE_BARZELLETTE_OBJECT_KEY);
+        richiesta.put(NUMERO_BARZELLETTE_KEY, Integer.toString(barzelletteLette));
+        if(categoria != null) {
+            richiesta.put(CATEGORIA_KEY, categoria.toString());
+        }
+        else {
+            richiesta.put(CATEGORIA_KEY, TUTTE_LE_CATEGORIE);
+        }
+        richiesta.saveInBackground();
+        barzelletteLette = 0;
     }
 
 

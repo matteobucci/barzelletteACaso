@@ -16,6 +16,9 @@ import android.support.v7.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,10 +39,16 @@ import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.matteobucci.barzelletteacaso.view.dialog.AppRater;
+import com.matteobucci.barzelletteacaso.view.dialog.DialogProponi;
+import com.matteobucci.barzelletteacaso.view.dialog.DialogSegnala;
+import com.matteobucci.barzelletteacaso.view.dialog.DialogSuggerimento;
 import com.matteobucci.barzelletteacaso.view.support.ColorList;
+import com.parse.ParseAnalytics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainFragment extends Fragment implements GestureDetector.OnGestureListener {
 
@@ -49,7 +58,6 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     private Button precedenteButton;
     private ImageButton favoriteButton;
     private RelativeLayout layoutBarzellette;
- //   private BarzelletteManager manager;
     private Libro lista;
     private Barzelletta barzellettaAttuale = null;
     private Favorite favoriti;
@@ -88,7 +96,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         versionePro = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("versione_pro", false);
 
         favoriti = Favorite.getInstance(context);
@@ -96,6 +104,26 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         AppRater.show(context, getFragmentManager());
 
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.action_segnala){
+            segnala();
+            return true;
+        }
+        else if(id == R.id.action_proponi){
+            proproni();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -108,6 +136,8 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         setBarzelletta();
         return myInflatedView;
     }
+
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -126,6 +156,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         super.onDetach();
         if(favoriti != null){
             favoriti.saveFavorite();
+            lista.resetBarzelletteLette(categoria);
         }
      //   manager.close();
     }
@@ -335,7 +366,10 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     }
 
     private boolean lastIsPresent(){
-        return lista.esisteBarzellettaPrima();
+        if(lista!=null)
+          return lista.esisteBarzellettaPrima();
+        else
+            return false;
     }
 
     private void abilitaPro(){
@@ -435,5 +469,18 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         return new Libro(result);
 
     }
+
+    private void segnala() {
+        DialogSegnala dialogSegnala = new DialogSegnala();
+        dialogSegnala.show(getFragmentManager(), "");
+    }
+
+    private void proproni() {
+        DialogProponi dialogProponi = new DialogProponi();
+        dialogProponi.show(getFragmentManager(), "");
+
+    }
+
+
 
 }

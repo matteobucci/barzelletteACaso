@@ -155,6 +155,15 @@ public class BarzellettaDelGiorno extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+            if(favorite != null){
+                favorite.saveFavorite();
+            }
+
+    }
+
 
 }
 

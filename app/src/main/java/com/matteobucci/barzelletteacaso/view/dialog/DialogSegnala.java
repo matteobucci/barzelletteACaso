@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.matteobucci.barzelletteacaso.R;
 import com.parse.ParseObject;
@@ -58,6 +59,8 @@ public class DialogSegnala extends DialogFragment {
                 richiesta.put(RECAPITO_KEY, recapito);
                 richiesta.put(VERSIONE_KEY, versione);
                 richiesta.saveInBackground();
+
+                Toast.makeText(getActivity(), "Barzelletta segnalata", Toast.LENGTH_SHORT).show();
 
 
             }

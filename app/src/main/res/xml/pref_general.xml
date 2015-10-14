@@ -40,6 +40,12 @@
         android:title="@string/settings_title" />
 
     <Preference
+        android:key="commenta_pref"
+        android:summary="@string/commenta_string"
+        android:title="@string/commenta_title" >
+    </Preference>
+
+    <Preference
         android:key="valuta_pref"
         android:summary="@string/valuta_string"
         android:title="@string/valuta_title" >

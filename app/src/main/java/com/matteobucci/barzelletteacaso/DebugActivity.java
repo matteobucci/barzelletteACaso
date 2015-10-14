@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.matteobucci.barzelletteacaso.view.dialog.DialogProponi;
 import com.matteobucci.barzelletteacaso.view.dialog.DialogSegnala;
+import com.matteobucci.barzelletteacaso.view.dialog.DialogSuggerimento;
 
 public class DebugActivity extends AppCompatActivity {
 
@@ -54,16 +55,7 @@ public class DebugActivity extends AppCompatActivity {
 
     }
 
-    private void segnala() {
-        DialogSegnala dialogSegnala = new DialogSegnala();
-        dialogSegnala.show(getFragmentManager(), "");
-    }
 
-    private void proproni() {
-        DialogProponi dialogProponi = new DialogProponi();
-        dialogProponi.show(getFragmentManager(), "");
-
-    }
 
     private void valuta() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -71,8 +63,23 @@ public class DebugActivity extends AppCompatActivity {
                 .setPositiveButton("Mi piace!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                        valutazione_positiva();
 
-                     /*   AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                    }
+                })
+                .setNegativeButton("Si può far di meglio!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                        suggerimento();
+                    }
+                }).show();
+    }
+
+
+    private void valutazione_positiva(){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("Valutaci nel Play Store")
                                 .setMessage("Siamo felici che l'applicazione ti piaccia. Perchè non ci lasci una valutazione positiva nel Play Store?")
                                 .setPositiveButton("Va bene", new DialogInterface.OnClickListener() {
@@ -94,19 +101,24 @@ public class DebugActivity extends AppCompatActivity {
                                     }
                                 }).show();
 
-*/
-                    }
-                })
-                .setNegativeButton("Si può far di meglio!", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                }).show();
     }
 
 
+    private void segnala() {
+        DialogSegnala dialogSegnala = new DialogSegnala();
+        dialogSegnala.show(getFragmentManager(), "");
+    }
 
+    private void proproni() {
+        DialogProponi dialogProponi = new DialogProponi();
+        dialogProponi.show(getFragmentManager(), "");
+
+    }
+
+    private void suggerimento(){
+        DialogSuggerimento dialogSuggerimento = new DialogSuggerimento();
+        dialogSuggerimento.show(getFragmentManager(), "");
+    }
 
 
 }

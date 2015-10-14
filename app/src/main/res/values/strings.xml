@@ -47,8 +47,9 @@
     Novità della versione 1.2.1: \n-Migliorata decisamente la visualizzazione dei preferiti\n-Sistemato il bug dei cuoricini.\n-Aggiunta la pubblicità\n
     Novità della versione 1.3:\n-Aggiunta una transizione leggera tra i colori\n-Aggiunto il tasto indietro\n-Aggiunti gli swipe per cambiare barzelletta\n-Ora la rotazione non fa cambiare la barzelletta\n
     Novità della versione 1.4:\n-Aggiunta l\'opzione per regolare la dimensione del testo e rendere più chiaro lo sfondo\n-Un long click permette di avere dettagli sulla barzelletta\n-Bugfix e miglioramenti\n
-    Novità della versione 1.5:\nNuova categoira:Bambini!\nWidget con barzelletta del giorno!\nMigliorate le prestazioni.\nPiccoli miglioramenti vari.</string>
-    <string name="application_version">v 1.5</string>
+    Novità della versione 1.5:\nNuova categoira:Bambini!\nWidget con barzelletta del giorno!\nMigliorate le prestazioni.\nPiccoli miglioramenti vari.
+    Novità della versione 1.6:\nAggiunta la possibilità di segnalare o proporre una barzelletta.\nCambiato il metodo in cui veniva richiesta la valutazione.\nAltri aggiustamenti vari</string>
+    <string name="application_version">v 1.6</string>
     <string name="created_by">Creata da Matteo Bucci</string>
     <string name="appwidget_text">...</string>
     <string name="add_widget">Aggiugi widget</string>
@@ -68,6 +69,11 @@
     <string name="ti_piace_message">Ti sta piacendo l\'applicazione? Faccelo sapere!</string>
     <string name="ti_piace_positive">Mi piace!</string>
     <string name="non_mi_piace">Potete fare di meglio!</string>
+    <string name="label_proponi">Proponi una barzellettta</string>
+    <string name="label_segnala">Segnala una barzelletta</string>
+    <string name="hint_suggerimento">Inserisci un suggerimento</string>
+    <string name="commenta_title">Facci sapere la tua!</string>
+    <string name="commenta_string">Se hai un qualsiasi consiglio su come migliorare l\'applicazione, non esitare nel contattarci</string>
 
 
 </resources>

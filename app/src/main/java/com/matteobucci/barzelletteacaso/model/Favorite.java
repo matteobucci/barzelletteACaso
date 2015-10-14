@@ -3,11 +3,15 @@ package com.matteobucci.barzelletteacaso.model;
 import android.content.Context;
 import android.util.Log;
 
+import com.parse.ParseAnalytics;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Matti on 23/06/2015.
@@ -72,6 +76,7 @@ public class Favorite {
     public boolean saveFavorite(){
 
         try {
+
             ObjectOutputStream oip = new ObjectOutputStream(context.openFileOutput(FAVORITE_FILENAME, Context.MODE_PRIVATE));
             oip.writeObject(favoriteList);
             oip.close();
@@ -90,6 +95,9 @@ public class Favorite {
 
     public void add(Barzelletta questa){
         favoriteList.add(questa);
+        Map<String, String> dimensions = new HashMap<String, String>();
+        dimensions.put("id_barzelletta", Integer.toString(questa.getID()));
+        ParseAnalytics.trackEventInBackground("favorite", dimensions);
         Log.i("Favorite", "Barzelletta aggiunta");
     }
 

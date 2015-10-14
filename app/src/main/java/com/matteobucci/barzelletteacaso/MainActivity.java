@@ -28,9 +28,12 @@ import com.matteobucci.barzelletteacaso.view.FavoriteFragment;
 import com.matteobucci.barzelletteacaso.view.MainFragment;
 import com.matteobucci.barzelletteacaso.view.SettingsActivity;
 import com.parse.Parse;
+import com.parse.ParseAnalytics;
 import com.parse.ParseInstallation;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements BarzellettaListener {
 
@@ -82,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
 
         //Inizializza il primo fragment all'avvio dell'applicazione
         header = (LinearLayout) findViewById(R.id.header);
+
+        //Segnala a parse l'avvenuta apertura dell'applicazione
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
     }
 
@@ -233,6 +239,12 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
     private void share() {
             Intent i = new Intent(android.content.Intent.ACTION_SEND);
             i.setType("text/plain");
+
+        Map<String, String> dimensions = new HashMap<String, String>();
+        dimensions.put("id_barzelletta", Integer.toString(barzellettaToShare.getID()));
+        ParseAnalytics.trackEventInBackground("barzelletta_condivisa", dimensions);
+
+        
             i.putExtra(android.content.Intent.EXTRA_TEXT, barzellettaToShare.toString() + "\n\n Presa da Barzellette a caso, scarica l'applicazione! " + this.getResources().getString(R.string.url_app_playstore));
             startActivity(Intent.createChooser(i, getString(R.string.condividi_con)));
     }
