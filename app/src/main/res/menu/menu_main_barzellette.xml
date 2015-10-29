@@ -8,6 +8,9 @@
         android:icon="@drawable/ic_action_share_image"
         android:orderInCategory="100" app:showAsAction="always" />
 
-
+    <!--
+    <item android:id="@+id/action_consiglia" android:title="Proproni o segnala una barzelletta"
+        android:orderInCategory="100" app:showAsAction="never"/>
+    -->
 
 </menu>

@@ -13,7 +13,8 @@ public enum Categoria {
     FREDDURE(6),
     UOMINI(7),
     DONNE(8),
-    VARIE(9);
+    VARIE(9),
+    BAMBINI(10);
 
     private int ID;
 
@@ -56,6 +57,9 @@ public enum Categoria {
         }
         else if(id == 9){
             return Categoria.VARIE;
+        }
+        else if(id==10){
+            return Categoria.BAMBINI;
         }
 
         else {

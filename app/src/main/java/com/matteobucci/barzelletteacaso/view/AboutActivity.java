@@ -14,7 +14,7 @@ import com.matteobucci.barzelletteacaso.model.Libro;
 
 import java.util.List;
 
-public class AboutActivity extends AppCompatActivity {
+public class    AboutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

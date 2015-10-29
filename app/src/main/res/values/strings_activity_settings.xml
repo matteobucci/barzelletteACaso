@@ -1,13 +1,11 @@
 <resources>
     <string name="title_activity_settings">Impostazioni</string>
 
-    <!-- Strings related to Settings -->
 
-    <!-- Example General settings -->
     <string name="pref_title_disabilita_adulti">Disabilita barzellette per adulti</string>
     <string name="pref_description_disabilita_adulti">Evita di mostrare le barzellette per adulti nella visualizzazione casuale. Non funziona con i preferiti.
     </string>
-    <string name="valuta_string">Se hai qualche consiglio, vuoi proporre qualche barzelletta oppure segnalare un problema non esitare a contattarmi!</string>
+    <string name="valuta_string">Aiuta l\'applicazione con una valutazione positiva!</string>
     <string name="valuta_title">Valuta l\'applicazione</string>
     <string name="info_string">Scopri i dettagli su di me, e su questa applicazione</string>
     <string name="info_title">Riguardo Barzellette a Caso</string>
@@ -16,10 +14,15 @@
 
     <string name="settings_dialog_message">20 è la dimensione standard. Regolala come meglio credi.</string>
     <string name="settings_summary">La dimensione attuale è $1</string>
-    <string name="settings_unit"></string>
+    <string name="settings_unit"> </string>
     <string name="settings_title">Cambia la dimensione del testo</string>
     <string name="descrizione_cambio_barzelletta">Cambia la barzelletta corrente con uno swipe in avanti per la successiva o in indietro per la precedente.</string>
     <string name="title_sfondo_chiaro">Rendi più visibile il testo</string>
     <string name="description_sfondo_chiaro">Rende più chiaro lo sfondo della barzelletta per renderla più leggibile.</string>
+    <string name="pref_title_disabilita_lunghe">Disabilita barzellette lunghe</string>
+    <string name="pref_description_disabilita_lunghe">Togli di mezzo tutte le barzellette leggermente più lughe del normale. \n ATTENZIONE: togliendo tutte le barzellette lunghe il numero di barzellette totali diminuisce sensibilimente.</string>
+    <string name="descrizione_pro">Con la versione PRO oltre ad eliminare completamente le pubblicità avrai a disposizione il pulsante indietro!</string>
+    <string name="button_precedente"><![CDATA[<—]]></string>
+
 
 </resources>
