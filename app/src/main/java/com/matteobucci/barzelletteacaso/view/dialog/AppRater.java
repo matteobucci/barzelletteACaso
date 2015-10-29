@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
 import com.matteobucci.barzelletteacaso.R;
+import com.parse.ParseObject;
 
 /**
  * Created by Matti on 12/08/2015.
@@ -21,7 +22,7 @@ import com.matteobucci.barzelletteacaso.R;
 public class AppRater extends DialogFragment {
     private static final int LAUNCHES_UNTIL_PROMPT =2;
     private static final int DAYS_UNTIL_PROMPT = 1;
-    private static final int MILLIS_UNTIL_PROMPT = DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000;
+    private static final long MILLIS_UNTIL_PROMPT = DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000;
     private static final String PREF_NAME = "APP_RATER";
     private static final String LAST_PROMPT = "LAST_PROMPT";
     private static final String LAUNCHES = "LAUNCHES";
@@ -39,7 +40,18 @@ public class AppRater extends DialogFragment {
         }
 
         if (!sharedPreferences.getBoolean(DISABLED, false)) {
-            int launches = sharedPreferences.getInt(LAUNCHES, 0) + 1;
+           int launches;
+            try {
+                launches = sharedPreferences.getInt(LAUNCHES, 0) + 1;
+            }
+            catch(ClassCastException e){
+                ParseObject richiesta = ParseObject.create("ClassCastException");
+                richiesta.put("versione", context.getResources().getString(R.string.application_version));
+                richiesta.saveInBackground();
+                launches = 0;
+
+            }
+
             if (launches > LAUNCHES_UNTIL_PROMPT) {
                 if (currentTime > lastPromptTime + MILLIS_UNTIL_PROMPT) {
                     shouldShow = true;

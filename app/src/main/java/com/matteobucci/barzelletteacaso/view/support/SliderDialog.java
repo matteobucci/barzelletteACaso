@@ -31,9 +31,6 @@ public class SliderDialog extends DialogPreference implements SeekBar.OnSeekBarC
         private int actualValue;
         // ------------------------------------------------------------------------------------------
 
-
-
-        // ------------------------------------------------------------------------------------------
         // Constructor :
         public SliderDialog(Context context, AttributeSet attrs) {
 

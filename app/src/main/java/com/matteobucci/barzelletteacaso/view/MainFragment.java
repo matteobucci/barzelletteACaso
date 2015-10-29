@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.matteo.rippleanimation.RippleBackground;
 import com.matteobucci.barzelletteacaso.model.Favorite;
 import com.matteobucci.barzelletteacaso.R;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
@@ -77,6 +78,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     static final int SWIPE_MIN_DISTANCE = 120;
     static final int SWIPE_MAX_OFF_PATH = 250;
     static final int SWIPE_THRESHOLD_VELOCITY = 200;
+    private RippleBackground rippleBackground;
 
 
     private int textSize;
@@ -154,7 +156,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     @Override
     public void onDetach() {
         super.onDetach();
-        if(favoriti != null){
+        if(favoriti != null && lista!=null){
             favoriti.saveFavorite();
             lista.resetBarzelletteLette(categoria);
         }
@@ -191,6 +193,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         favoriteButton = (ImageButton) w.findViewById(R.id.favoriteButton);
         layoutBarzellette = (RelativeLayout) w.findViewById(R.id.layoutBarzellette);
         layoutInferiore = (LinearLayout) w.findViewById(R.id.layoutInferiore);
+        rippleBackground=(RippleBackground)w.findViewById(R.id.content);
         //ZONA PUBBLICITA
         mAdView = (AdView) w.findViewById(R.id.adView);
         //FINE ZONA
@@ -216,6 +219,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
                         favoriti.remove(barzellettaAttuale);
                         Toast.makeText(context, "Preferito rimosso", Toast.LENGTH_SHORT).show();
                     } else {
+                        rippleBackground.startRippleAnimation();
                         favoriti.add(barzellettaAttuale);
                         Toast.makeText(context, "Preferito aggiunto", Toast.LENGTH_SHORT).show();
                     }
@@ -478,7 +482,6 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     private void proproni() {
         DialogProponi dialogProponi = new DialogProponi();
         dialogProponi.show(getFragmentManager(), "");
-
     }
 
 

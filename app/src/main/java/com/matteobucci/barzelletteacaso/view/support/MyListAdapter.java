@@ -30,35 +30,34 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.Barzellett
     public BarzellettaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.favorite_card_view_layout, parent, false);
-        // set the view's size, margins, paddings and layout parameters
 
         final BarzellettaViewHolder vh = new BarzellettaViewHolder(v);
 
         v.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
-                share(vh.testoBarzelletta.getText().toString() + "\n\n Presa da Barzellette a caso. Scarica l'applicazione! " + context.getResources().getString(R.string.url_app_playstore));
+                share(vh.testoBarzelletta.getText().toString() + context.getString(R.string.testo_condivisione) + context.getString(R.string.url_app_playstore));
                 return true;
             }
         });
 
-
         return vh;
     }
 
-    public void share(String testo){
-    Intent i = new Intent(android.content.Intent.ACTION_SEND);
-    i.setType("text/plain");
-    i.putExtra(android.content.Intent.EXTRA_TEXT, testo);
-    context.startActivity(Intent.createChooser(i, "Condividi con"));
 
+    public void share(String testo){
+        Intent i = new Intent(android.content.Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(android.content.Intent.EXTRA_TEXT, testo);
+        context.startActivity(Intent.createChooser(i, "Condividi con"));
     }
+
 
     @Override
     public void onBindViewHolder(BarzellettaViewHolder holder, int position) {
         holder.testoBarzelletta.setText(barzellettaList.get(position).toString());
     }
+
 
     @Override
     public int getItemCount() {
@@ -67,16 +66,15 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.Barzellett
 
 
     public static class BarzellettaViewHolder extends RecyclerView.ViewHolder {
-        protected TextView testoBarzelletta;
 
+        protected TextView testoBarzelletta;
 
         public BarzellettaViewHolder(View v) {
             super(v);
             testoBarzelletta = (TextView) v.findViewById(R.id.text_barzelletta);
-
         }
 
-
     }
+
 
 }

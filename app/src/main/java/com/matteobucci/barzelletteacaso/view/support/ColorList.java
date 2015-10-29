@@ -17,7 +17,7 @@ public class ColorList {
     }
 
     private Random gen;
-    private int currentColorIndex = -1;
+    private int currentColorIndex = -1; //Indice dell'array del colore che è stato dato
 
     public String[] mColors = {
             "#39add1", // light blue
@@ -59,7 +59,7 @@ public class ColorList {
         return android.graphics.Color.parseColor(mColors[currentColorIndex]);
     }
 
-    public int getAssociateColor(){
+    public int getAssociateColor(){  //Restituisce il colore associato con quello che ha appena dato.
         if (currentColorIndex == -1){
             return Color.BLACK;
         }

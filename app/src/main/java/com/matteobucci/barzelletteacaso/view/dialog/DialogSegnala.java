@@ -52,16 +52,19 @@ public class DialogSegnala extends DialogFragment {
                 String versione = getActivity().getString(R.string.application_version);
 
                 Log.i("SEGNALA ", idBarzelletta + "\n" + motivo + "\n" + recapito + "\n" + versione);
+                if(!idBarzelletta.isEmpty()) {
+                    ParseObject richiesta = ParseObject.create(SEGNALA_OBJECT_KEY);
+                    richiesta.put(ID_KEY, idBarzelletta);
+                    richiesta.put(MOTIVO_KEY, motivo);
+                    richiesta.put(RECAPITO_KEY, recapito);
+                    richiesta.put(VERSIONE_KEY, versione);
+                    richiesta.saveInBackground();
 
-                ParseObject richiesta = ParseObject.create(SEGNALA_OBJECT_KEY);
-                richiesta.put(ID_KEY, idBarzelletta);
-                richiesta.put(MOTIVO_KEY, motivo);
-                richiesta.put(RECAPITO_KEY, recapito);
-                richiesta.put(VERSIONE_KEY, versione);
-                richiesta.saveInBackground();
-
-                Toast.makeText(getActivity(), "Barzelletta segnalata", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getActivity(), "Barzelletta segnalata", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getActivity(), "Inserisci un ID per segnalare una barzelletta", Toast.LENGTH_SHORT).show();
+                }
 
             }
         })

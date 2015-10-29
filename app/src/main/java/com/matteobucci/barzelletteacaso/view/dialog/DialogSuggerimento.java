@@ -46,13 +46,19 @@ public class DialogSuggerimento extends DialogFragment {
                 String versione = getActivity().getString(R.string.application_version);
 
                 Log.i("SUGGERIMENTO", testo + "\n" + recapito + "\n" + versione);
-                ParseObject richiesta = ParseObject.create(SUGGERIMENTO_OBJECT_KEY);
-                richiesta.put(TESTO_KEY, testo);
-                richiesta.put(RECAPITO_KEY, recapito);
-                richiesta.put(VERSIONE_KEY, versione);
-                richiesta.saveInBackground();
 
-                Toast.makeText(getActivity(), "Suggerimento inviato. Grazie!", Toast.LENGTH_SHORT).show();
+                if(!testo.isEmpty()) {
+                    ParseObject richiesta = ParseObject.create(SUGGERIMENTO_OBJECT_KEY);
+                    richiesta.put(TESTO_KEY, testo);
+                    richiesta.put(RECAPITO_KEY, recapito);
+                    richiesta.put(VERSIONE_KEY, versione);
+                    richiesta.saveInBackground();
+
+                    Toast.makeText(getActivity(), "Suggerimento inviato. Grazie!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getActivity(), "Scrivi qualcosa per inviare una proposta", Toast.LENGTH_SHORT).show();
+                }
 
 
             }

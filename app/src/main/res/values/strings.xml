@@ -74,6 +74,7 @@
     <string name="hint_suggerimento">Inserisci un suggerimento</string>
     <string name="commenta_title">Facci sapere la tua!</string>
     <string name="commenta_string">Se hai un qualsiasi consiglio su come migliorare l\'applicazione, non esitare nel contattarci</string>
+    <string name="testo_condivisione">"\n\n Presa da Barzellette a caso. Scarica l'applicazione! "</string>
 
 
 </resources>

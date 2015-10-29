@@ -127,7 +127,7 @@ public class Libro {
 
     public void resetBarzelletteLette(Categoria categoria){
         ParseObject richiesta = ParseObject.create(SESSIONE_BARZELLETTE_OBJECT_KEY);
-        richiesta.put(NUMERO_BARZELLETTE_KEY, Integer.toString(barzelletteLette));
+        richiesta.put(NUMERO_BARZELLETTE_KEY, barzelletteLette);
         if(categoria != null) {
             richiesta.put(CATEGORIA_KEY, categoria.toString());
         }

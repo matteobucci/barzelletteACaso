@@ -10,11 +10,26 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_height="match_parent"
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".MainBarzellette"
         android:id="@+id/layoutBarzellette">
+
+        <com.example.matteo.rippleanimation.RippleBackground
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/content"
+            app:rb_color="#cc0000"
+            app:rb_radius="10dp"
+            app:rb_rippleAmount="1"
+            app:rb_duration="500"
+            app:rb_scale="20"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="-155dp"
+            android:layout_marginBottom="-115dp"></com.example.matteo.rippleanimation.RippleBackground>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -22,7 +37,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:id="@+id/layoutInferiore"
-
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:layout_alignParentBottom="true"
             android:layout_above="@+id/adView"
             android:layout_centerHorizontal="true"
@@ -71,6 +87,8 @@
             android:nestedScrollingEnabled="false"
             android:textSize="20sp"
             android:text=""
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:autoText="false"
             android:textColor="@color/abc_secondary_text_material_light" />
 
@@ -79,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id"
+            ads:adUnitId="@string/test_banner_ad_unit_id"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true">
         </com.google.android.gms.ads.AdView>

@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         setupDrawerContent(nvDrawer);
 
         //Inizializza il primo fragment all'avvio dell'applicazione
-        header = (LinearLayout) findViewById(R.id.header);
+        header = (LinearLayout) nvDrawer.findViewById(R.id.header);
 
         //Segnala a parse l'avvenuta apertura dell'applicazione
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
             startActivity(intent);
         }
 
-        else if(menuItem.isChecked()) {
+        else if(!menuItem.isChecked()) {
             firstAvvioFragment=true;
             fragment = null;
             Class fragmentClass;
@@ -262,7 +262,10 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
     @Override
     public void onChangeBarzelletta(int color, int darkerColor, Barzelletta barzelletta) {
 
-        header.setBackgroundColor(darkerColor);
+        if(header!=null) {
+            header.setBackgroundColor(darkerColor);
+        }
+
         barzellettaToShare = barzelletta;
 
         if(firstAvvioFragment){
@@ -293,21 +296,21 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
 
                 }
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
 
-                }
+                    }
 
-                @Override
-                public void onAnimationCancel(Animator animation) {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
 
-                }
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animator animation) {
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
 
-                }
-            });
+                    }
+                });
             colorAnimation.start();
         }
     }

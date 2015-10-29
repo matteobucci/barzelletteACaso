@@ -46,12 +46,17 @@ public class DialogProponi extends DialogFragment {
                 String versione = getActivity().getString(R.string.application_version);
 
                 Log.i("PROPOSTA", testo + "\n" + recapito + "\n" + versione);
-                ParseObject richiesta = ParseObject.create(PROPONI_OBJECT_KEY);
-                richiesta.put(TESTO_KEY, testo);
-                richiesta.put(RECAPITO_KEY, recapito);
-                richiesta.put(VERSIONE_KEY, versione);
-                richiesta.saveInBackground();
-                Toast.makeText(getActivity(), "Proposta inviata", Toast.LENGTH_SHORT).show();
+                if(!testo.isEmpty()) {
+                    ParseObject richiesta = ParseObject.create(PROPONI_OBJECT_KEY);
+                    richiesta.put(TESTO_KEY, testo);
+                    richiesta.put(RECAPITO_KEY, recapito);
+                    richiesta.put(VERSIONE_KEY, versione);
+                    richiesta.saveInBackground();
+                    Toast.makeText(getActivity(), "Proposta inviata", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getActivity(), "Inserisci il testo della barzelletta per proporla", Toast.LENGTH_SHORT).show();
+                }
 
 
 
