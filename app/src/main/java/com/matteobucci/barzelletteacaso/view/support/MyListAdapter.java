@@ -30,7 +30,6 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.Barzellett
     public BarzellettaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.favorite_card_view_layout, parent, false);
-
         final BarzellettaViewHolder vh = new BarzellettaViewHolder(v);
 
         v.setOnLongClickListener(new View.OnLongClickListener() {
