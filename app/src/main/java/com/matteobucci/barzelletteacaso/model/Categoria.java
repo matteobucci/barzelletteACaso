@@ -14,7 +14,10 @@ public enum Categoria {
     UOMINI(7),
     DONNE(8),
     VARIE(9),
-    BAMBINI(10);
+    BAMBINI(10),
+
+    IMMAGINI(-1),
+    CONSIGLIATE(-2);
 
     private int ID;
 
@@ -25,7 +28,6 @@ public enum Categoria {
     public int getID(){
         return ID;
     }
-
 
     public static Categoria getCategoria(int id){
         if(id == 0){
@@ -61,12 +63,20 @@ public enum Categoria {
         else if(id==10){
             return Categoria.BAMBINI;
         }
-
+        else if(id == -1){
+            return Categoria.IMMAGINI;
+        }
+        else if(id==-2){
+            return Categoria.CONSIGLIATE;
+        }
         else {
             return Categoria.UNDEFINED;
         }
 
     }
 
+    public int numeroCategorie(){
+        return 10;
+    }
 
 }

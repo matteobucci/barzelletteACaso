@@ -1,5 +1,6 @@
 package com.matteobucci.barzelletteacaso.view;
 
+import com.matteobucci.barzelletteacaso.R;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseInstallation;
@@ -8,8 +9,9 @@ import com.parse.ParseInstallation;
  * Created by Matti on 20/09/2015.
  */
 public class Application  extends android.app.Application {
+
     // Debugging switch
-    public static final boolean APPDEBUG = true;
+    public static final boolean APPDEBUG = false;
 
     // Debugging tag for the application
     public static final String APPTAG = "BarzelletteACaso";
@@ -20,18 +22,8 @@ public class Application  extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // Enable Local Datastore.
-     //   Parse.enableLocalDatastore(this);
-
-        Parse.initialize(getApplicationContext(), "bOaWgp9vs9LqO1EieOBHwo6wKSHKO01WNUvgLsRW", "1AahIK8ikqCBmfQvouxyfzQrOeU05mu4eGWfkI0M");
-
-
-
+        Parse.initialize(getApplicationContext(), getString(R.string.parse_code1), getString(R.string.parse_code2));
         ParseInstallation.getCurrentInstallation().saveInBackground();
-
-
-
     }
 
 

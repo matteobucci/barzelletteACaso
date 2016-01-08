@@ -13,9 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-/**
- * Created by Matti on 11/08/2015.
- */
 public class SliderDialog extends DialogPreference implements SeekBar.OnSeekBarChangeListener, OnClickListener
     {
         // ------------------------------------------------------------------------------------------
@@ -51,11 +48,7 @@ public class SliderDialog extends DialogPreference implements SeekBar.OnSeekBarC
         mDefault = attrs.getAttributeIntValue(androidns, "defaultValue", 0);
         mMax = attrs.getAttributeIntValue(androidns, "max", 100);
     }
-        // ------------------------------------------------------------------------------------------
 
-
-
-        // ------------------------------------------------------------------------------------------
         // DialogPreference methods :
         @Override
         protected View onCreateDialogView() {
@@ -108,11 +101,7 @@ public class SliderDialog extends DialogPreference implements SeekBar.OnSeekBarC
             else
                 mValue = (Integer)defaultValue;
         }
-        // ------------------------------------------------------------------------------------------
 
-
-
-        // ------------------------------------------------------------------------------------------
         // OnSeekBarChangeListener methods :
         @Override
         public void onProgressChanged(SeekBar seek, int value, boolean fromTouch)
@@ -141,11 +130,7 @@ public class SliderDialog extends DialogPreference implements SeekBar.OnSeekBarC
             mSeekBar.setProgress(progress);
     }
     public int getProgress() { return mValue; }
-    // ------------------------------------------------------------------------------------------
 
-
-
-    // ------------------------------------------------------------------------------------------
     // Set the positive button listener and onClick action :
     @Override
     public void showDialog(Bundle state) {

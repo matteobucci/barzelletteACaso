@@ -58,6 +58,12 @@
         <item
             android:id="@+id/categoria_9"
             android:title="@string/categoria_varie" />
+        <item
+            android:id="@+id/categoria_immagini"
+            android:title="@string/tutte_le_immagini"/>
+        <item
+            android:id="@+id/categoria_consigliate"
+            android:title="@string/proposte_da_voi"/>
 
         <item
             android:id="@+id/item_impostazioni"

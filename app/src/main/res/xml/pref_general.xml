@@ -19,10 +19,17 @@
         android:defaultValue="false" />-->
 
     <CheckBoxPreference
+        android:key="immagini_checkbox"
+        android:title="Visualizza anche le immagini"
+        android:summary="Non limitarti a leggere le barzellette. Visualizza anche le migliori immagini divertenti (richiede una connessione internet)"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
         android:key="swipe_checkbox"
         android:title="@string/settings_cambio_barzelletta"
         android:summary="@string/descrizione_cambio_barzelletta"
         android:defaultValue="true" />
+
 
     <CheckBoxPreference
         android:key="sfondo_chiaro_checkbox"

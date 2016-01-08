@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="valutaci_text">Siamo felici che l\'applicazione ti piaccia. Perchè non ci lasci una valutazione positiva nel Play Store?</string>
+    <string name="va_bene">Va bene</string>
+    <string name="no_grazie">No, grazie.</string>
+    <string name="piu_tardi">Più tardi</string>
+    <string name="proposta_inviata">Proposta inviata</string>
+    <string name="no_testo_in_proposta">Inserisci il testo della barzelletta per proporla</string>
+    <string name="proponi_barzelletta_title">Proponi una barzelletta</string>
+    <string name="segnala_barzelletta_title">Segnala una barzelletta</string>
+    <string name="barzelletta_segnalata">Barzelletta segnalata</string>
+    <string name="no_testo_barzelletta_segnalata">Inserisci un ID per segnalare una barzelletta</string>
+    <string name="suggerimento_title">Suggerimento</string>
+    <string name="suggerimento_inviato">Suggerimento inviato. Grazie!</string>
+    <string name="no_testo_in_suggerimento">Scrivi qualcosa per inviare una proposta</string>
+    <string name="hint_recapito">Inserisci un recapito (opzionale)</string>
+    <string name="proponi">Proponi</string>
+    <string name="cancel">Annulla</string>
+    <string name="hint_id">Inserisci l\'ID della barzelletta</string>
+    <string name="hint_motivo">Inserisci la motivazione</string>
+    <string name="descrizione_segnalazione_text">Inserisci l\'ID della barzelletta che intendi segnalare, una motivazione e il tuo recapito in modo che se necessario possiamo contattarti. L\'ID della barzelletta si trova tenendo premuto a lungo nella barzelletta: apparirà una finestrella con i dettagli della barzelletta.</string>
+    <string name="segnala">Segnala</string>
+    <string name="ti_piace_applicazione">Ti piace l\'applicazione?</string>
+    <string name="ti_piace_message">Ti sta piacendo l\'applicazione? Faccelo sapere!</string>
+    <string name="ti_piace_positive">Mi piace!</string>
+    <string name="non_mi_piace">Potete fare di meglio!</string>
+    <string name="label_proponi">Proponi una barzellettta</string>
+    <string name="label_segnala">Segnala una barzelletta</string>
+    <string name="hint_suggerimento">Inserisci un suggerimento</string>
+    <string name="commenta_title">Facci sapere la tua!</string>
+    <string name="commenta_string">Se hai un qualsiasi consiglio su come migliorare l\'applicazione, non esitare nel contattarci</string>
+</resources>

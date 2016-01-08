@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Libro;
+import com.matteobucci.barzelletteacaso.model.Tipo;
 
 /**
  * Implementation of App Widget functionality.
@@ -95,7 +96,14 @@ public class BarzellettaDelGiornoWidget extends AppWidgetProvider {
     }
 
     private static Barzelletta getBarzelletta(Context context){
-        return new Libro(new BarzelletteManager(context).getAllBarzellette()).getRandom();
+        Libro libro = new Libro(new BarzelletteManager(context).getAllBarzellette());
+
+        Barzelletta barzelletta = libro.getRandom();
+        while(!barzelletta.getTipo().equals(Tipo.TESTO)){
+            barzelletta = libro.getRandom();
+        }
+
+        return barzelletta;
     }
 
     private String[] dividiBarzelletta(Barzelletta barzelletta){

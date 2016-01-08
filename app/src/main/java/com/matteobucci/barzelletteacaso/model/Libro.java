@@ -19,19 +19,23 @@ import java.util.Random;
 public class Libro {
 
     static final String TAG = Libro.class.getSimpleName();
-    private static final String SESSIONE_BARZELLETTE_OBJECT_KEY = "SessioneBarzellette";
+
+    //Variabili per Parse
+    private static final String SESSIONE_BARZELLETTE_OBJECT_KEY = "NuovaSessioneBarzellette";
     private static final String NUMERO_BARZELLETTE_KEY = "numeroBarzellette";
     private static final String CATEGORIA_KEY = "categoriaSessione";
     private static final String TUTTE_LE_CATEGORIE = "tutte";
+    private int barzelletteLette = 0;
 
-    private Map<Integer, Barzelletta> mappa; //Dovrebbe rendere più veloce il recuperare barzellette
+    //Variabili per il funzionamento
+    private Random random;
+    private Map<Integer, Barzelletta> mappa;
     private List<Integer> keys;
     private LinkedList<Integer> ultimiIndici = new LinkedList<Integer>();
-    private Random random;
     private int size;
-    private static int BARZELLETTE_LASCIATE = 5;
-    private int lastIndex;
-    private int barzelletteLette = 0;
+    //private int lastIndex;
+
+    private static int BARZELLETTE_LASCIATE = 5; //Sceglie le barzellette tra quelle che non sono ancora uscite tra tutte quelle che ci sono meno questo numero
 
     public Libro(){
         mappa = new HashMap<>();
@@ -55,7 +59,7 @@ public class Libro {
     }
 
     public Barzelletta getByID(int id){
-        lastIndex = id;
+        //lastIndex = id;
         return mappa.get(id);
     }
 
@@ -66,8 +70,12 @@ public class Libro {
             numero = random.nextInt(size);
         }while(!checkLast(numero));
 
-        Log.i("BARZELLETTA" , numero + "");
+        Log.i(TAG, numero + "");
+
+
+
         return mappa.get(keys.get(numero));
+
     }
 
     private boolean checkLast(int index){

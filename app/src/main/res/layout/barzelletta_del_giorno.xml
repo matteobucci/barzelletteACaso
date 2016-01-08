@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.matteobucci.barzelletteacaso.view.MainFragment">
 
-
-
-
-
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,7 +43,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Aggiungi ai preferiti!"
+                    android:text="@string/aggiungi_ai_preferiti_barzelletta_del_giorno"
                     android:id="@+id/textView6"
                     android:layout_gravity="bottom"
                     android:textSize="22dp"
@@ -88,7 +81,6 @@
                 android:layout_height="100dp"
                 android:id="@+id/imageView2"
                 android:src="@mipmap/freccia_destra"
-                android:layout_weight="0.26"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"

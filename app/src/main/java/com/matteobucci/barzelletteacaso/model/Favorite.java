@@ -16,10 +16,11 @@ import java.util.Map;
 /**
  * Created by Matti on 23/06/2015.
  */
+
 public class Favorite {
 
     private static String FAVORITE_FILENAME = "favoriti.dat";
-
+    private final String TAG = this.getClass().getSimpleName();
 
     private static Favorite instance = null;
 
@@ -30,7 +31,7 @@ public class Favorite {
     private Favorite(Context context){
         this.context = context;
         favoriteList = new ArrayList<>();
-        Log.i("Favorite", "Favoriti creati");
+        Log.i(TAG, "Favoriti creati");
     }
 
     public static Favorite getInstance(Context context){
@@ -59,15 +60,15 @@ public class Favorite {
             oop.close();
 
         }  catch (IOException e) {
-            Log.e("PERSISTENCE", "Errore nella lettura del file in memoria: impossibile leggere il file");
+            Log.e(TAG, "Errore nella lettura del file in memoria: impossibile leggere il file");
             return false;
         } catch (ClassNotFoundException e) {
-            Log.e("PERSISTENCE", "Errore nella lettura del file in memoria: trovata una classe diversa da quella prevista");
+            Log.e(TAG, "Errore nella lettura del file in memoria: trovata una classe diversa da quella prevista");
             return false;
         }
 
         if(favoriteList!= null) {
-            Log.i("PERSISTENCE", "Favoriti caricati, sembra funzionare tutto");
+            Log.i(TAG, "Favoriti caricati, sembra funzionare tutto");
             return true;
         }
         else return false;
@@ -81,11 +82,11 @@ public class Favorite {
             oip.writeObject(favoriteList);
             oip.close();
         } catch (IOException e) {
-            Log.e("PERSISTENCE", "Impossibile aprire o scrivere nel file");
+            Log.e(TAG, "Impossibile aprire o scrivere nel file");
             return false;
         }
 
-        Log.i("PERSISTENCE", "Favoriti salvati, sembra funzionare tutto");
+        Log.i(TAG, "Favoriti salvati, sembra funzionare tutto");
         return true;
     }
 
@@ -93,18 +94,42 @@ public class Favorite {
         return favoriteList;
     }
 
+    public List<Barzelletta> getFavoriteTesto(){
+        List<Barzelletta> result = new ArrayList<>();
+        for(Barzelletta questa: favoriteList){
+            if(questa.getTipo().equals(Tipo.TESTO))
+                result.add(questa);
+        }
+        return result;
+    }
+
+    public List<Barzelletta> getFavoriteImmagine(){
+        List<Barzelletta> result = new ArrayList<>();
+        for(Barzelletta questa: favoriteList){
+            if(questa.getTipo().equals(Tipo.IMMAGINE))
+                result.add(questa);
+        }
+        return result;
+    }
+
+
     public void add(Barzelletta questa){
         favoriteList.add(questa);
+
+        //Segnalo a parse l'aggiunta del preferito
         Map<String, String> dimensions = new HashMap<String, String>();
         dimensions.put("id_barzelletta", Integer.toString(questa.getID()));
         ParseAnalytics.trackEventInBackground("favorite", dimensions);
-        Log.i("Favorite", "Barzelletta aggiunta");
+
+        Log.i(TAG, "Barzelletta aggiunta");
     }
 
     public void remove(Barzelletta questa){
         favoriteList.remove(questa);
-        Log.i("Favorite", "Barzelletta rimossa");
+        Log.i(TAG, "Barzelletta rimossa");
     }
+
+
 
     public boolean contains (Barzelletta questa){
         return favoriteList.contains(questa);
@@ -112,7 +137,21 @@ public class Favorite {
 
 
 
+    public void removeByID(int id){
+        Barzelletta daTrovare = null;
+        for(Barzelletta questa: favoriteList){
+            if(questa.getID() == id){
+                daTrovare = questa;
+            }
+        }
+        if(daTrovare!=null) {
+            this.remove(daTrovare);
+        }
+    }
 
+    public int getNumeroFavoriti(){
+        return favoriteList.size();
+    }
 
 
 }

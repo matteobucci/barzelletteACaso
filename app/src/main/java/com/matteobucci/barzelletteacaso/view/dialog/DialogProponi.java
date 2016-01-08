@@ -2,9 +2,9 @@ package com.matteobucci.barzelletteacaso.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,8 @@ import com.parse.ParseObject;
  * Created by Matti on 21/09/2015.
  */
 public class DialogProponi extends DialogFragment {
+
+    private final String TAG = this.getClass().getSimpleName();
 
     private EditText editTextTestoBarzelletta;
     private EditText editTextRecapito;
@@ -38,37 +40,32 @@ public class DialogProponi extends DialogFragment {
         editTextTestoBarzelletta = (EditText) v.findViewById(R.id.input_barzelletta);
         editTextRecapito = (EditText) v.findViewById(R.id.input_recapito);
 
-        builder.setTitle("Proponi una barzelletta").setPositiveButton(R.string.proponi, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.proponi_barzelletta_title).setPositiveButton(R.string.proponi, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
                 String testo = editTextTestoBarzelletta.getText().toString();
                 String recapito = editTextRecapito.getText().toString();
                 String versione = getActivity().getString(R.string.application_version);
 
-                Log.i("PROPOSTA", testo + "\n" + recapito + "\n" + versione);
+                Log.i(TAG, testo + "\n" + recapito + "\n" + versione);
                 if(!testo.isEmpty()) {
                     ParseObject richiesta = ParseObject.create(PROPONI_OBJECT_KEY);
                     richiesta.put(TESTO_KEY, testo);
                     richiesta.put(RECAPITO_KEY, recapito);
                     richiesta.put(VERSIONE_KEY, versione);
                     richiesta.saveInBackground();
-                    Toast.makeText(getActivity(), "Proposta inviata", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.proposta_inviata, Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(getActivity(), "Inserisci il testo della barzelletta per proporla", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.no_testo_in_proposta, Toast.LENGTH_SHORT).show();
                 }
-
-
-
-
             }
         })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
                     }
                 });
-        // Create the AlertDialog object and return it
+
         return builder.create();
     }
 

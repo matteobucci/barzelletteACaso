@@ -20,8 +20,9 @@ import java.io.OutputStream;
  */
 public class DatabaseGetter extends SQLiteOpenHelper {
 
+    private final String TAG = this.getClass().getSimpleName();
 
-    private static final int DB_VERSION = 31;
+    private static final int DB_VERSION = 38;
 
     //The Android's default system path of your application database.
     private static String DB_PATH = "/data/data/com.matteobucci.barzelletteacaso/databases/";
@@ -40,6 +41,8 @@ public class DatabaseGetter extends SQLiteOpenHelper {
     public static final String COLUMN_CATEGORIA = "CATEGORIA";
     public static final String COLUMN_ADULTI = "ADULTI";
     public static final String COLUMN_LUNGA = "LUNGA";
+    public static final String COLUMN_TIPO = "TIPO";
+    public static final String COLUMN_CONSIGLIATA = "CONSIGLIATA";
 
     /**
      * Constructor
@@ -73,7 +76,6 @@ public class DatabaseGetter extends SQLiteOpenHelper {
                 copyDataBase();
 
             } catch (IOException e) {
-
                 throw new Error("Error copying database");
 
             }finally {
@@ -149,15 +151,14 @@ public class DatabaseGetter extends SQLiteOpenHelper {
         SharedPreferences sharedPref = myContext.getSharedPreferences("db_version", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("version", DB_VERSION);
-        editor.commit();
+        editor.apply();
 
-        Log.i("DATABASE", "DATABASE AGGIORNATO");
+        Log.i(TAG, "DATABASE AGGIORNATO");
 
 
     }
 
     public void openDataBase() throws SQLException {
-
         //Open the database
         String myPath = DB_PATH + DB_NAME;
        // myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
@@ -166,12 +167,9 @@ public class DatabaseGetter extends SQLiteOpenHelper {
 
     @Override
     public  void close() {
-
         if(myDataBase != null)
             myDataBase.close();
-
         super.close();
-
     }
 
     @Override
@@ -181,15 +179,7 @@ public class DatabaseGetter extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
-
-    // Add your public helper methods to access and get content from the database.
-    // You could return cursors by doing "return myDataBase.query(....)" so it'd be easy
-    // to you to create adapters for your views.
-
-
-
 
 
 }

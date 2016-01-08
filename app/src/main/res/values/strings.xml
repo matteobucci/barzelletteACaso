@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Barzellette a caso</string>
 
-
     <!--Main Activity-->
     <string name="action_settings">Impostazioni</string>
     <string name="button_next_text">La prossima!</string>
@@ -44,12 +43,11 @@
     <!--About Activity-->
     <string name="title_activity_about">AboutActivity</string>
     <string name="descrizione_finale">Spero proprio che l\'applicazione vi piaccia. Se avete qualche idea, suggerimento o critica non esitate a contattarmi via email e cercherò di accontentarvi. \n matteo.bucci.1995@gmail.com \n L\'icona dell\'app è stata ispirata da un set di emoticons trovato sul sito http://mooxidesign.com/ \n\n
-    Novità della versione 1.2.1: \n-Migliorata decisamente la visualizzazione dei preferiti\n-Sistemato il bug dei cuoricini.\n-Aggiunta la pubblicità\n
-    Novità della versione 1.3:\n-Aggiunta una transizione leggera tra i colori\n-Aggiunto il tasto indietro\n-Aggiunti gli swipe per cambiare barzelletta\n-Ora la rotazione non fa cambiare la barzelletta\n
-    Novità della versione 1.4:\n-Aggiunta l\'opzione per regolare la dimensione del testo e rendere più chiaro lo sfondo\n-Un long click permette di avere dettagli sulla barzelletta\n-Bugfix e miglioramenti\n
     Novità della versione 1.5:\nNuova categoira:Bambini!\nWidget con barzelletta del giorno!\nMigliorate le prestazioni.\nPiccoli miglioramenti vari.
-    Novità della versione 1.6:\nAggiunta la possibilità di segnalare o proporre una barzelletta.\nCambiato il metodo in cui veniva richiesta la valutazione.\nAltri aggiustamenti vari</string>
-    <string name="application_version">v 1.6</string>
+    Novità della versione 1.6:\nAggiunta la possibilità di segnalare o proporre una barzelletta.\nCambiato il metodo in cui veniva richiesta la valutazione.\nAltri aggiustamenti vari\n
+    Novità della versione 1.7:\nUn cuore animato! Ci voleva tanto a farlo?\nNessun più crash all\'avvio\nAnche se non interesserà a nessuno, ho dato una bella sistemata al codice :)
+    Novità della versione 2.0:Incredibile! Delle immagini! Come richiesto da molti infatti, ho aggiunto (per iniziare) un centinaio di immagini divertenti pronte da condividere con tutti i vostri amici!</string>
+    <string name="application_version">v 2.0</string>
     <string name="created_by">Creata da Matteo Bucci</string>
     <string name="appwidget_text">...</string>
     <string name="add_widget">Aggiugi widget</string>
@@ -58,23 +56,17 @@
     <string name="title_activity_barzelletta_del_giorno">Barzelletta Del Giorno</string>
     <string name="title_activity_debug">DebugActivity</string>
     <string name="hint_barzelletta">Inserisci il testo della barzelletta</string>
-    <string name="hint_recapito">Inserisci un recapito (opzionale)</string>
-    <string name="proponi">Proponi</string>
-    <string name="cancel">Annulla</string>
-    <string name="hint_id">Inserisci l\'ID della barzelletta</string>
-    <string name="hint_motivo">Inserisci la motivazione</string>
-    <string name="descrizione_segnalazione_text">Inserisci l\'ID della barzelletta che intendi segnalare, una motivazione e il tuo recapito in modo che se necessario possiamo contattarti. L\'ID della barzelletta si trova tenendo premuto a lungo nella barzelletta: apparirà una finestrella con i dettagli della barzelletta.</string>
-    <string name="segnala">Segnala</string>
-    <string name="ti_piace_applicazione">Ti piace l\'applicazione?</string>
-    <string name="ti_piace_message">Ti sta piacendo l\'applicazione? Faccelo sapere!</string>
-    <string name="ti_piace_positive">Mi piace!</string>
-    <string name="non_mi_piace">Potete fare di meglio!</string>
-    <string name="label_proponi">Proponi una barzellettta</string>
-    <string name="label_segnala">Segnala una barzelletta</string>
-    <string name="hint_suggerimento">Inserisci un suggerimento</string>
-    <string name="commenta_title">Facci sapere la tua!</string>
-    <string name="commenta_string">Se hai un qualsiasi consiglio su come migliorare l\'applicazione, non esitare nel contattarci</string>
+
     <string name="testo_condivisione">"\n\n Presa da Barzellette a caso. Scarica l'applicazione! "</string>
+    <string name="no_favorites_list">Non sono state ancora aggiunte barzellette preferite. Perchè non ne aggiungi qualcuna?</string>
+    <string name="condividi_con_text">Condividi con</string>
+    <string name="valutaci_title">Valutaci nel Play Store</string>
+    <string name="aggiungi_ai_preferiti_barzelletta_del_giorno">Aggiungi ai preferiti!</string>
+    <string name="tutte_le_immagini">Tutte le immagini</string>
+    <string name="proposte_da_voi">Proposte da voi</string>
+
+    <string name="title_activity_image_fullscreen">Visualizza immagine</string>
+
 
 
 </resources>

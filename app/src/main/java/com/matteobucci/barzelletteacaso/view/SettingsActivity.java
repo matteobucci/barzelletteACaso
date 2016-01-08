@@ -16,17 +16,19 @@ import com.matteobucci.barzelletteacaso.view.support.SliderDialog;
 
 public class SettingsActivity extends Activity {
 
+
+    private final String TAG = this.getClass().getSimpleName();
+
     public static final String adultiString="adulti_checkbox";
     public static final String lungheString="lunghe_checkbox";
     public static final String swipeString="swipe_checkbox";
+    public static final String immagineString="immagini_checkbox";
     public static final String sfondoChiaro="sfondo_chiaro_checkbox";
     public static final String isChangedString ="setting_changed";
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
-            // Display the fragment as the main content.
             getFragmentManager().beginTransaction().replace(android.R.id.content,
                     new PrefsFragment()).commit();
 
@@ -64,7 +66,7 @@ public class SettingsActivity extends Activity {
                 commenta_pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        (new DialogSuggerimento()).show(getFragmentManager(), "");
+                 //       (new DialogSuggerimento()).show(FragmentManager(), "");
                         return false;
                     }
                 });
@@ -97,19 +99,15 @@ public class SettingsActivity extends Activity {
 
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
                 // Set seekbar summary :
                 if(isAdded()) {
                     int radius = PreferenceManager.getDefaultSharedPreferences(mActivity).getInt("SEEKBAR_VALUE", 10) + 10;
                     _seekBarPref.setSummary(this.getString(R.string.settings_summary).replace("$1", "" + radius));
                 }
 
-                if(key.equals(SettingsActivity.adultiString) || key.equals(SettingsActivity.lungheString)){
+                if(key.equals(SettingsActivity.adultiString) || key.equals(SettingsActivity.lungheString) || key.equals(SettingsActivity.immagineString)){
                     notifyChange();
                 }
-
-
-
             }
 
             @Override
@@ -117,7 +115,6 @@ public class SettingsActivity extends Activity {
                 super.onAttach(activity);
                 mActivity = activity;
             }
-
 
             private void notifyChange(){
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mActivity).edit();

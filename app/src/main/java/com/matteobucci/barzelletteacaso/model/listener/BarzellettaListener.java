@@ -9,5 +9,4 @@ import com.matteobucci.barzelletteacaso.model.Barzelletta;
  */
 public interface BarzellettaListener {
     public void onChangeBarzelletta(int color, int darkerColor, Barzelletta barzelletta);
-
 }

@@ -21,6 +21,7 @@ import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
 import com.matteobucci.barzelletteacaso.model.Favorite;
+import com.matteobucci.barzelletteacaso.model.Tipo;
 import com.matteobucci.barzelletteacaso.view.SettingsActivity;
 import com.matteobucci.barzelletteacaso.view.support.ColorList;
 
@@ -32,8 +33,7 @@ public class BarzellettaDelGiorno extends AppCompatActivity {
     private Favorite favorite;
     private ImageButton favoriteButton;
     private  Boolean isActualFavorite;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +54,7 @@ public class BarzellettaDelGiorno extends AppCompatActivity {
         (findViewById(R.id.layoutBarzellette)).setBackgroundColor(color);
 
         if(intent==null) {
-            barzellettaDelGiorno = new Barzelletta(-1, "Nessuna barzelletta del giorno", false, Categoria.UNDEFINED, false);
+            barzellettaDelGiorno = new Barzelletta(-1, "Nessuna barzelletta del giorno", false, Categoria.UNDEFINED, false, Tipo.TESTO);
         }
         else{
             barzellettaDelGiorno = intent.getParcelableExtra("barzelletta");

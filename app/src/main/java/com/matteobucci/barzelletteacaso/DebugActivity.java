@@ -106,18 +106,18 @@ public class DebugActivity extends AppCompatActivity {
 
     private void segnala() {
         DialogSegnala dialogSegnala = new DialogSegnala();
-        dialogSegnala.show(getFragmentManager(), "");
+        dialogSegnala.show(getSupportFragmentManager(), "");
     }
 
     private void proproni() {
         DialogProponi dialogProponi = new DialogProponi();
-        dialogProponi.show(getFragmentManager(), "");
+        dialogProponi.show(getSupportFragmentManager(), "");
 
     }
 
     private void suggerimento(){
         DialogSuggerimento dialogSuggerimento = new DialogSuggerimento();
-        dialogSuggerimento.show(getFragmentManager(), "");
+        dialogSuggerimento.show(getSupportFragmentManager(), "");
     }
 
 

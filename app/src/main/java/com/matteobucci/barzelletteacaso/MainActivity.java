@@ -3,15 +3,19 @@ package com.matteobucci.barzelletteacaso;
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.Fragment;
-import android.app.FragmentManager;
+
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,23 +24,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
+import com.matteobucci.barzelletteacaso.model.NewFavoriteFragment;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
-import com.matteobucci.barzelletteacaso.view.FavoriteFragment;
 import com.matteobucci.barzelletteacaso.view.MainFragment;
 import com.matteobucci.barzelletteacaso.view.SettingsActivity;
-import com.parse.Parse;
 import com.parse.ParseAnalytics;
-import com.parse.ParseInstallation;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements BarzellettaListener {
 
+    public static final String NETWORK_AVIABLE_KEY = "network";
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
@@ -59,11 +62,20 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
 
         setContentView(R.layout.activity_main_barzellette);
 
+        if(!isNetworkAvailable(this)){
+            Toast.makeText(this, "La rete non è disponibile, non verranno caricate le immagini", Toast.LENGTH_SHORT).show();
+            this.getSharedPreferences("main", MODE_PRIVATE).edit().putBoolean(NETWORK_AVIABLE_KEY, false).apply();
+        }
+        else{
+            this.getSharedPreferences("main", MODE_PRIVATE).edit().putBoolean(NETWORK_AVIABLE_KEY, true).apply();
+
+        }
+
         manager = new BarzelletteManager(this);
             tutteLeBarzellette = manager.getAllBarzellette();
 
 
-        FragmentManager fragmentManager = this.getFragmentManager();
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, MainFragment.newInstance(tutteLeBarzellette, categoriaSelezionata)).commit();
 
         // Set a Toolbar to replace the ActionBar.
@@ -89,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         //Segnala a parse l'avvenuta apertura dell'applicazione
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
+
+
+
+
     }
 
     @Override
@@ -103,9 +119,7 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
             case android.R.id.home:
                 mDrawer.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.action_share:
-                share();
-                return true;
+
 
         }
 
@@ -115,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main_barzellette, menu);
-        menu.findItem(R.id.action_share).setVisible(shareButtonEnabled);
+//        menu.findItem(R.id.action_share).setVisible(shareButtonEnabled);
         return true;
     }
 
@@ -196,27 +210,41 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
                     break;
                 case R.id.lista_preferiti:
                     categoriaSelezionata = null;
-                    fragmentClass = FavoriteFragment.class;
+                    fragmentClass = NewFavoriteFragment.class;
+                    break;
+                case R.id.categoria_immagini:
+                    categoriaSelezionata = Categoria.getCategoria(-1);
+                    fragmentClass = MainFragment.class;
+                    break;
+                case R.id.categoria_consigliate:
+                    categoriaSelezionata = Categoria.getCategoria(-2);
+                    fragmentClass = MainFragment.class;
                     break;
                 default:
                     fragmentClass = MainFragment.class;
             }
 
             try {
-                if (fragmentClass.equals(MainFragment.class)) {
-                    fragment = MainFragment.newInstance(tutteLeBarzellette, categoriaSelezionata);
-                    shareButtonEnabled = true;
-                    invalidateOptionsMenu();
+                if(categoriaSelezionata != null && categoriaSelezionata.equals(Categoria.IMMAGINI)){
+                    fragment = MainFragment.newInstance(manager.getTutteImmagini(), categoriaSelezionata);
                 }
-                else if(fragmentClass.equals(FavoriteFragment.class)) {
-                    fragment = FavoriteFragment.newInstance();
-                    shareButtonEnabled = false;
-                    invalidateOptionsMenu();
+                else if (categoriaSelezionata != null && categoriaSelezionata.equals(Categoria.CONSIGLIATE)){
+                    fragment = MainFragment.newInstance(manager.getBarzelletteConsigliate(), categoriaSelezionata);
+                }
+                else if (fragmentClass.equals(MainFragment.class)) {
+                    fragment = MainFragment.newInstance(tutteLeBarzellette, categoriaSelezionata);
+              //      shareButtonEnabled = true;
+              //      invalidateOptionsMenu();
+                }
+                else if(fragmentClass.equals(NewFavoriteFragment.class)) {
+                    fragment = new NewFavoriteFragment();
+               //    shareButtonEnabled = false;
+               //     invalidateOptionsMenu();
                 }
                 else {
                     fragment = (Fragment) fragmentClass.newInstance();
-                    shareButtonEnabled = true;
-                    invalidateOptionsMenu();
+                //    shareButtonEnabled = true;
+                //    invalidateOptionsMenu();
                 }
 
             } catch (Exception e) {
@@ -226,8 +254,8 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
 
             // Insert the fragment by replacing any existing fragment
 
-            FragmentManager fragmentManager = this.getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
             // Highlight the selected item, update the title, and close the drawer
             menuItem.setChecked(true);
@@ -236,18 +264,7 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         mDrawer.closeDrawers();
     }
 
-    private void share() {
-            Intent i = new Intent(android.content.Intent.ACTION_SEND);
-            i.setType("text/plain");
 
-        Map<String, String> dimensions = new HashMap<String, String>();
-        dimensions.put("id_barzelletta", Integer.toString(barzellettaToShare.getID()));
-        ParseAnalytics.trackEventInBackground("barzelletta_condivisa", dimensions);
-
-        
-            i.putExtra(android.content.Intent.EXTRA_TEXT, barzellettaToShare.toString() + "\n\n Presa da Barzellette a caso, scarica l'applicazione! " + this.getResources().getString(R.string.url_app_playstore));
-            startActivity(Intent.createChooser(i, getString(R.string.condividi_con)));
-    }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
@@ -328,11 +345,11 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         }
 
 
-        FragmentManager fragmentManager = this.getFragmentManager();
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
 
 
         if(nvDrawer.getMenu().getItem(1).isChecked()){
-            fragmentManager.beginTransaction().replace(R.id.flContent, FavoriteFragment.newInstance()).commit();
+//            fragmentManager.beginTransaction().replace(R.id.flContent, new NewFavoriteFragment()).commit();
         }
 
 
@@ -349,8 +366,29 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         setTitle(nvDrawer.getMenu().getItem(0).getTitle());
         categoriaSelezionata = null;
         fragment = MainFragment.newInstance(tutteLeBarzellette, categoriaSelezionata);
-        FragmentManager fragmentManager = this.getFragmentManager();
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
+
+
+
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivity =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connectivity == null) {
+            return false;
+        } else {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null) {
+                for (int i = 0; i < info.length; i++) {
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 
 }

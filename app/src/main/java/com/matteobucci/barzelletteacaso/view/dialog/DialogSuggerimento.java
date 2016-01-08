@@ -2,9 +2,9 @@ package com.matteobucci.barzelletteacaso.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +19,8 @@ import com.parse.ParseObject;
  */
 public class DialogSuggerimento extends DialogFragment {
 
+    private final String TAG = this.getClass().getSimpleName();
+
     private EditText editTextTestoSuggerimento;
     private EditText editTextRecapito;
 
@@ -30,7 +32,6 @@ public class DialogSuggerimento extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View v = inflater.inflate(R.layout.dialog_suggerimenti, null);
@@ -38,14 +39,14 @@ public class DialogSuggerimento extends DialogFragment {
         editTextTestoSuggerimento = (EditText) v.findViewById(R.id.input_suggerimento);
         editTextRecapito = (EditText) v.findViewById(R.id.input_recapito);
 
-        builder.setTitle("Suggerimento").setPositiveButton(R.string.proponi, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.suggerimento_title).setPositiveButton(R.string.proponi, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
                 String testo = editTextTestoSuggerimento.getText().toString();
                 String recapito = editTextRecapito.getText().toString();
                 String versione = getActivity().getString(R.string.application_version);
 
-                Log.i("SUGGERIMENTO", testo + "\n" + recapito + "\n" + versione);
+                Log.i(TAG, testo + "\n" + recapito + "\n" + versione);
 
                 if(!testo.isEmpty()) {
                     ParseObject richiesta = ParseObject.create(SUGGERIMENTO_OBJECT_KEY);
@@ -54,10 +55,10 @@ public class DialogSuggerimento extends DialogFragment {
                     richiesta.put(VERSIONE_KEY, versione);
                     richiesta.saveInBackground();
 
-                    Toast.makeText(getActivity(), "Suggerimento inviato. Grazie!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.suggerimento_inviato, Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(getActivity(), "Scrivi qualcosa per inviare una proposta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.no_testo_in_suggerimento, Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -65,10 +66,9 @@ public class DialogSuggerimento extends DialogFragment {
         })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
                     }
                 });
-        // Create the AlertDialog object and return it
+
         return builder.create();
     }
 

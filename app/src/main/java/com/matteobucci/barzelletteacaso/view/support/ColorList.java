@@ -51,9 +51,6 @@ public class ColorList {
             "#848D94"  // light gray
     };
 
-
-
-
     public int getColor(){
         currentColorIndex = gen.nextInt(mColors.length);
         return android.graphics.Color.parseColor(mColors[currentColorIndex]);

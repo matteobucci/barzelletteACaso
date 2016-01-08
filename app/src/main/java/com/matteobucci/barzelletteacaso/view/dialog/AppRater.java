@@ -2,14 +2,14 @@ package com.matteobucci.barzelletteacaso.view.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 
 import com.matteobucci.barzelletteacaso.R;
@@ -45,6 +45,7 @@ public class AppRater extends DialogFragment {
                 launches = sharedPreferences.getInt(LAUNCHES, 0) + 1;
             }
             catch(ClassCastException e){
+                //Siccome ogni tanto l'app crasha per questa eccezione, la cattura e la segnala a Parse
                 ParseObject richiesta = ParseObject.create("ClassCastException");
                 richiesta.put("versione", context.getResources().getString(R.string.application_version));
                 richiesta.saveInBackground();
@@ -103,12 +104,11 @@ public class AppRater extends DialogFragment {
         dialogSuggerimento.show(getFragmentManager(), "");
     }
 
-
     private void valutazione_positiva(Context context, final Activity activity){
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
-        builder.setTitle("Valutaci nel Play Store")
-                .setMessage("Siamo felici che l'applicazione ti piaccia. Perchè non ci lasci una valutazione positiva nel Play Store?")
-                .setPositiveButton("Va bene", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.valutaci_title)
+                .setMessage(R.string.valutaci_text)
+                .setPositiveButton(R.string.va_bene, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getSharedPreferences(activity).edit().putBoolean(DISABLED, true).commit();
@@ -116,7 +116,7 @@ public class AppRater extends DialogFragment {
                         dismiss();
                     }
                 })
-                .setNegativeButton("No, grazie.", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.no_grazie, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getSharedPreferences(activity).edit().putBoolean(DISABLED, true).commit();
@@ -124,7 +124,7 @@ public class AppRater extends DialogFragment {
 
                     }
                 })
-                .setNeutralButton("Più tardi", new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.piu_tardi, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getSharedPreferences(activity).edit().putLong(LAUNCHES, 0).commit();

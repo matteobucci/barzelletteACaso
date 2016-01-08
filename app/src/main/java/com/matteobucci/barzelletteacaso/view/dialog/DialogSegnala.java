@@ -2,10 +2,10 @@ package com.matteobucci.barzelletteacaso.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +20,8 @@ import com.parse.ParseObject;
  */
 public class DialogSegnala extends DialogFragment {
 
+    private final String TAG = this.getClass().getSimpleName();
+
     private EditText editTextIDBarzelletta;
     private EditText editTextRecapito;
     private EditText editTextMotivazione;
@@ -32,7 +34,7 @@ public class DialogSegnala extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View v = inflater.inflate(R.layout.dialog_segnala, null);
@@ -40,10 +42,10 @@ public class DialogSegnala extends DialogFragment {
         editTextIDBarzelletta = (EditText) v.findViewById(R.id.input_id);
         editTextRecapito = (EditText) v.findViewById(R.id.input_recapito);
         editTextMotivazione = (EditText) v.findViewById(R.id.input_motivo);
-        TextInputLayout layoutBarzelletta = (TextInputLayout) v.findViewById(R.id.input_layout_id);
+      //  TextInputLayout layoutBarzelletta = (TextInputLayout) v.findViewById(R.id.input_layout_id);
 
 
-        builder.setTitle("Segnala una barzelletta").setPositiveButton(R.string.segnala, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.segnala_barzelletta_title).setPositiveButton(R.string.segnala, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
                 String idBarzelletta  = editTextIDBarzelletta.getText().toString();
@@ -51,8 +53,9 @@ public class DialogSegnala extends DialogFragment {
                 String motivo = editTextMotivazione.getText().toString();
                 String versione = getActivity().getString(R.string.application_version);
 
-                Log.i("SEGNALA ", idBarzelletta + "\n" + motivo + "\n" + recapito + "\n" + versione);
+                Log.i(TAG, idBarzelletta + "\n" + motivo + "\n" + recapito + "\n" + versione);
                 if(!idBarzelletta.isEmpty()) {
+
                     ParseObject richiesta = ParseObject.create(SEGNALA_OBJECT_KEY);
                     richiesta.put(ID_KEY, idBarzelletta);
                     richiesta.put(MOTIVO_KEY, motivo);
@@ -60,20 +63,19 @@ public class DialogSegnala extends DialogFragment {
                     richiesta.put(VERSIONE_KEY, versione);
                     richiesta.saveInBackground();
 
-                    Toast.makeText(getActivity(), "Barzelletta segnalata", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.barzelletta_segnalata, Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(getActivity(), "Inserisci un ID per segnalare una barzelletta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.no_testo_barzelletta_segnalata, Toast.LENGTH_SHORT).show();
                 }
 
             }
         })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
                     }
                 });
-        // Create the AlertDialog object and return it
+
         return builder.create();
     }
 

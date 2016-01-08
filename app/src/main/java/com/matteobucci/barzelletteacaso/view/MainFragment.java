@@ -5,15 +5,24 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,8 +32,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,16 +48,26 @@ import com.matteobucci.barzelletteacaso.R;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
 import com.matteobucci.barzelletteacaso.model.Libro;
+import com.matteobucci.barzelletteacaso.model.Tipo;
+import com.matteobucci.barzelletteacaso.model.TouchImageView;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.matteobucci.barzelletteacaso.view.dialog.AppRater;
 import com.matteobucci.barzelletteacaso.view.dialog.DialogProponi;
+import com.matteobucci.barzelletteacaso.view.dialog.DialogScegliImmagini;
 import com.matteobucci.barzelletteacaso.view.dialog.DialogSegnala;
 import com.matteobucci.barzelletteacaso.view.dialog.DialogSuggerimento;
 import com.matteobucci.barzelletteacaso.view.support.ColorList;
 import com.parse.ParseAnalytics;
+import com.parse.ParseObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,35 +75,60 @@ import java.util.Map;
 
 public class MainFragment extends Fragment implements GestureDetector.OnGestureListener {
 
+    private static final String BARZELLETTA_CONDIVISA_OBJECT_KEY = "Condivisa";
+    private static final String ID_KEY = "id";
+    private static final String CATEGORIA_KEY = "categoria";
+    private static final String BARZELLETTA_PREFERITA_OBJECT_KEY = "Preferito";
+    private static final String VERSIONE_KEY = "versione";
     private final String TAG = this.getClass().getSimpleName();
+
+    private static int MODE_NEXT = 1;
+    private static int MODE_PREVIOUS = -1;
+
+    //Variabili del model
+    private Libro lista;
+    private Favorite favoriti;
+    private Categoria categoria;
+    private Barzelletta barzellettaAttuale = null;
+    private Bitmap immagineAttuale = null;
+    private boolean isActualFavorite;
+    private boolean inCaricamento = false;
+
+    //Variabili della UI
     private TextView  textView;
     private Button nextButton;
     private Button precedenteButton;
     private ImageButton favoriteButton;
     private RelativeLayout layoutBarzellette;
-    private Libro lista;
-    private Barzelletta barzellettaAttuale = null;
-    private Favorite favoriti;
-    private ColorList colors;
-    private boolean isActualFavorite;
-    private Context context;
-    private Categoria categoria;
-    private BarzellettaListener colorListener;
-    private boolean versionePro;
+    private LinearLayout layoutInferiore;
+    private RippleBackground rippleBackground;
+    private FrameLayout layoutImmagini;
+    private TouchImageView immagine;
+    private ProgressBar progressBar;
+
+    //Variabili della pubblicità
     private AdView mAdView;
     private AdRequest adRequest;
-    private LinearLayout layoutInferiore;
-    private GestureDetector myGestDetector;
+
+    //Variabili delle gesture
     private boolean swipeEnabled;
-    private boolean appenaAvviata=true;
+    private GestureDetector myGestDetector;
+    private static final int SWIPE_MIN_DISTANCE = 120;
+    private static final int SWIPE_MAX_OFF_PATH = 250;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+    //Variabili delle preferenze
     boolean sfondoChiaro = false;
-    static final int SWIPE_MIN_DISTANCE = 120;
-    static final int SWIPE_MAX_OFF_PATH = 250;
-    static final int SWIPE_THRESHOLD_VELOCITY = 200;
-    private RippleBackground rippleBackground;
-
-
     private int textSize;
+
+    //Altre variabili
+    private ColorList colors;
+    private Context context;
+    private BarzellettaListener colorListener;
+    private boolean versionePro;
+    private boolean appenaAvviata=true;
+    private boolean fallimentoCaricamento = false;
+
 
     public static MainFragment newInstance(List<Barzelletta> lista, Categoria categoria) {
 
@@ -104,8 +151,16 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         favoriti = Favorite.getInstance(context);
         favoriti.loadFavorite();
         AppRater.show(context, getFragmentManager());
+        scegliImmagini();
 
+    }
 
+    private void scegliImmagini() {
+        if(!PreferenceManager.getDefaultSharedPreferences(context).getBoolean("primoAvvio", false)){
+            DialogScegliImmagini dialogImmagini = new DialogScegliImmagini();
+            dialogImmagini.show(getFragmentManager(), "");
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("primoAvvio", true).apply();
+        }
     }
 
     @Override
@@ -124,6 +179,10 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
             proproni();
             return true;
         }
+        else if(id == R.id.action_share){
+            share();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -135,7 +194,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         View myInflatedView = inflater.inflate(R.layout.fragment_main, container, false);
         setUIVar(myInflatedView);
         setListeners();
-        setBarzelletta();
+        setBarzelletta(MODE_NEXT);
         return myInflatedView;
     }
 
@@ -194,6 +253,9 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         layoutBarzellette = (RelativeLayout) w.findViewById(R.id.layoutBarzellette);
         layoutInferiore = (LinearLayout) w.findViewById(R.id.layoutInferiore);
         rippleBackground=(RippleBackground)w.findViewById(R.id.content);
+        layoutImmagini = (FrameLayout)w.findViewById(R.id.layoutImmagini);
+        immagine = (TouchImageView)w.findViewById(R.id.imageViewBarzzellette);
+        progressBar = (ProgressBar)w.findViewById(R.id.progressBar);
         //ZONA PUBBLICITA
         mAdView = (AdView) w.findViewById(R.id.adView);
         //FINE ZONA
@@ -207,20 +269,32 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setBarzelletta();
+                setBarzelletta(MODE_NEXT);
             }
         });
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (barzellettaAttuale != null) {
+                if (barzellettaAttuale != null && !inCaricamento) {
                     if (favoriti.contains(barzellettaAttuale)) {
                         favoriti.remove(barzellettaAttuale);
+                        cancellaThumbnail();
                         Toast.makeText(context, "Preferito rimosso", Toast.LENGTH_SHORT).show();
                     } else {
                         rippleBackground.startRippleAnimation();
                         favoriti.add(barzellettaAttuale);
+                        if(barzellettaAttuale.getTipo().equals(Tipo.IMMAGINE)) {
+
+                            ParseObject richiesta = ParseObject.create(BARZELLETTA_PREFERITA_OBJECT_KEY);
+                            richiesta.put(ID_KEY, barzellettaAttuale.getID());
+                            richiesta.put(CATEGORIA_KEY, barzellettaAttuale.getCategoria().toString());
+                            richiesta.put(VERSIONE_KEY, getString(R.string.application_version));
+                            richiesta.saveInBackground();
+
+
+                            saveThumbnail(immagineAttuale);
+                        }
                         Toast.makeText(context, "Preferito aggiunto", Toast.LENGTH_SHORT).show();
                     }
                     checkBarzelletta();
@@ -231,35 +305,39 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         precedenteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setBarzellettaPrecendete();
+                setBarzelletta(MODE_PREVIOUS);
             }
         });
 
         myGestDetector = new GestureDetector(context, this);
 
-        textView.setOnTouchListener(new View.OnTouchListener() {
+        View.OnTouchListener gesturelistener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (swipeEnabled) {
+                if (swipeEnabled && immagine.getCurrentZoom() == 1.0) {
                     myGestDetector.onTouchEvent(event);
                 }
                 return false;
             }
-        });
+        };
+
+        textView.setOnTouchListener(gesturelistener);
+        immagine.setOnTouchListener(gesturelistener);
+
+
 
 
     }
 
     private void setBarzellettaPrecendete() {
-        barzellettaAttuale = lista.getBarzellettaPrima();
+
         isActualFavorite = favoriti.contains(barzellettaAttuale);
         textView.setText(barzellettaAttuale.toString());
         setColor();
-        textView.post(new Runnable(){
+        textView.post(new Runnable() {
 
             @Override
-            public void run()
-            {
+            public void run() {
                 textView.scrollTo(0, 0);
             }
         });
@@ -328,27 +406,55 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
 
     }
 
-    private void setBarzelletta() {
-        if(lista!=null) {
-            barzellettaAttuale = lista.getRandom();
-        }
-        else{
-            barzellettaAttuale = new Barzelletta(-1, "Impossibile caricare barzellette, prova a riavviare l'app", false, Categoria.UNDEFINED, false);
-        }
-        isActualFavorite = favoriti.contains(barzellettaAttuale);
-        textView.setText(barzellettaAttuale.toString());
-        setColor();
-        textView.post(new Runnable(){
+    private void setBarzelletta(int mode) {
+        immagine.resetZoom();
+        immagine.setImageBitmap(null);
 
-            @Override
-            public void run()
-            {
-                textView.scrollTo(0, 0);
+        if(mode == this.MODE_NEXT) {
+            if (lista != null) {
+                barzellettaAttuale = lista.getRandom();
+            } else {
+                barzellettaAttuale = new Barzelletta(-1, "Impossibile caricare barzellette, prova a riavviare l'app", false, Categoria.UNDEFINED, false, Tipo.UNDEFINED);
             }
-        });
+        }
+        else if(mode == this.MODE_PREVIOUS){
+            barzellettaAttuale = lista.getBarzellettaPrima();
+        }
+
+        isActualFavorite = favoriti.contains(barzellettaAttuale);
+        setColor();
+
+        if(barzellettaAttuale.getTipo().getID() == Tipo.TESTO.getID()){
+            textView.setVisibility(View.VISIBLE);
+            layoutImmagini.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+
+            textView.setText(barzellettaAttuale.toString());
+            textView.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    textView.scrollTo(0, 0);
+                }
+            });
+            fallimentoCaricamento = false;
+            inCaricamento=false;
+        }
+
+        else{
+            textView.setVisibility(View.GONE);
+            layoutImmagini.setVisibility(View.VISIBLE);
+
+            impostaImmagine();
+
+        }
+
+
         checkBarzelletta();
 
     }
+
+
 
     private void checkBarzelletta() {
         isActualFavorite=!favoriti.contains(barzellettaAttuale);
@@ -419,25 +525,25 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
 
     @Override
     public void onLongPress(MotionEvent e) {
-        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-        alertDialog.setTitle("Informazioni sulla barzelletta:");
-        StringBuilder sb = new StringBuilder();
-        sb.append("Categoria : " + barzellettaAttuale.getCategoria().toString().toLowerCase() + "\n");
-        if(barzellettaAttuale.isVM()){
-            sb.append("E' per adulti\n");
+        if(immagine.getCurrentZoom()==1.0) {
+            AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+            alertDialog.setTitle("Informazioni sulla barzelletta:");
+            StringBuilder sb = new StringBuilder();
+            sb.append("Categoria : " + barzellettaAttuale.getCategoria().toString().toLowerCase() + "\n");
+            if (barzellettaAttuale.isVM()) {
+                sb.append("E' per adulti\n");
+            } else {
+                sb.append("E' per tutti\n");
+            }
+            if (barzellettaAttuale.isLunga()) {
+                sb.append("E' lunga\nID: ");
+            } else {
+                sb.append("E' breve\nID: ");
+            }
+            sb.append(barzellettaAttuale.getID());
+            alertDialog.setMessage(sb.toString());
+            alertDialog.show();
         }
-        else{
-            sb.append("E' per tutti\n");
-        }
-        if(barzellettaAttuale.isLunga()){
-            sb.append("E' lunga\nID: ");
-        }
-        else{
-            sb.append("E' breve\nID: ");
-        }
-        sb.append(barzellettaAttuale.getID());
-        alertDialog.setMessage(sb.toString());
-        alertDialog.show();
     }
 
     @Override
@@ -450,25 +556,36 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
                 return false;
             }
             if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                        setBarzelletta();
+                        setBarzelletta(MODE_NEXT);
             }
             else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
                 if(lastIsPresent())
-                    setBarzellettaPrecendete();
+                    setBarzelletta(MODE_PREVIOUS);
             }
         }
         return false;
     }
 
     private static Libro filtra(List<Barzelletta> lista, Categoria categoria){
-        if(categoria == null)
-            return new Libro (lista);
-
+        List<Categoria> listaCategorie = new ArrayList<Categoria>();
         List<Barzelletta> result = new ArrayList<>();
-        for (Barzelletta attuale : lista){
-            if(attuale.getCategoria().equals(categoria))
-                result.add(attuale);
+
+       if(categoria != null && categoria.getID() >=0){
+            for (Barzelletta attuale : lista) {
+                if (attuale.getCategoria().equals(categoria))
+                    result.add(attuale);
+            }
         }
+
+       else {
+
+           for (Barzelletta attuale : lista){
+               if(!listaCategorie.contains(attuale.getCategoria())){
+                   result.add(attuale);
+               }
+           }
+
+       }
 
         return new Libro(result);
 
@@ -484,6 +601,171 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         dialogProponi.show(getFragmentManager(), "");
     }
 
+    private void impostaImmagine() {
 
+        progressBar.setVisibility(View.VISIBLE);
+        inCaricamento=true;
+        new DownloadImageTask(immagine)
+                .execute(barzellettaAttuale.toString());
+
+    }
+
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+        int idBarzellettaDaCaricare = barzellettaAttuale.getID();
+
+        public DownloadImageTask(ImageView bmImage) {
+
+            this.bmImage = bmImage;
+
+
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            if(result==null){
+                if(!fallimentoCaricamento) {
+                    fallimentoCaricamento = true;
+                    setBarzelletta(MODE_NEXT);
+                    Toast.makeText(context, "Impossibile caricare immagine. Controlla la connessione", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    immagine.setImageResource(R.drawable.ic_offline);
+                }
+            }
+            else {
+               if(idBarzellettaDaCaricare == barzellettaAttuale.getID()) {
+                   immagineAttuale = result;
+                   bmImage.setImageBitmap(immagineAttuale);
+                   inCaricamento=false;
+               }
+                fallimentoCaricamento = false;
+            }
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void share() {
+        Intent i = new Intent(android.content.Intent.ACTION_SEND);
+
+
+        ParseObject richiesta = ParseObject.create(BARZELLETTA_CONDIVISA_OBJECT_KEY);
+        richiesta.put(ID_KEY, barzellettaAttuale.getID());
+        richiesta.put(CATEGORIA_KEY, barzellettaAttuale.getCategoria().toString());
+        richiesta.put(VERSIONE_KEY, getString(R.string.application_version));
+        richiesta.saveInBackground();
+
+        if(barzellettaAttuale.getTipo().equals(Tipo.TESTO)) {
+            i.setType("text/plain");
+            i.putExtra(android.content.Intent.EXTRA_TEXT, barzellettaAttuale.toString() + "\n\n Presa da Barzellette a caso, scarica l'applicazione! " + this.getResources().getString(R.string.url_app_playstore));
+            startActivity(Intent.createChooser(i, getString(R.string.condividi_con)));
+        }
+        else{
+            OutputStream output;
+
+            // Retrieve the image from the res folder
+
+
+            // Find the SD Card path
+            File filepath = Environment.getExternalStorageDirectory();
+
+            // Create a new folder AndroidBegin in SD Card
+            File dir = new File(filepath.getAbsolutePath() + "/barzelletteAcaso/");
+            dir.mkdirs();
+
+            // Create a name for the saved image
+            File file = new File(dir, "immagine.png");
+
+
+            try {
+
+                // Share Intent
+                Intent share = new Intent(Intent.ACTION_SEND);
+
+                // Type of file to share
+                share.setType("image/jpeg");
+
+                output = new FileOutputStream(file);
+
+                // Compress into png format image from 0% - 100%
+                immagineAttuale.compress(Bitmap.CompressFormat.PNG, 100, output);
+                output.flush();
+                output.close();
+
+                // Locate the image to Share
+                Uri uri = Uri.fromFile(file);
+
+                // Pass the image into an Intnet
+                share.putExtra(Intent.EXTRA_STREAM, uri);
+
+                // Show the social share chooser list
+                startActivity(Intent.createChooser(share, "Condividi immagine con"));
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
+    private void saveThumbnail(Bitmap image){
+
+        int THUMBSIZE = 150;
+        // Create a new folder AndroidBegin in SD Card
+        // File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/barzelletteAcaso/thumbnail");
+           File dir = new File("/data/data/com.matteobucci.barzelletteacaso/thumbnail");
+
+
+        dir.mkdirs();
+        File file = new File(dir, Integer.toString(barzellettaAttuale.getID()) + ".png");
+        Bitmap thumbImage = ThumbnailUtils.extractThumbnail(image, THUMBSIZE, THUMBSIZE);
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+           thumbImage.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            Log.e("Thumbnail", file.getPath());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private void cancellaThumbnail(){
+        if(barzellettaAttuale.getTipo().equals(Tipo.IMMAGINE)){
+          //  File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/barzelletteAcaso/thumbnail" + Integer.toString(barzellettaAttuale.getID()) + ".png");
+            File file = new File("/data/data/com.matteobucci.barzelletteacaso/thumbnail/" + Integer.toString(barzellettaAttuale.getID()) + ".png");
+
+            boolean deleted = file.delete();
+
+        }
+    }
 
 }

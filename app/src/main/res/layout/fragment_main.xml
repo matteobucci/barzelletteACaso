@@ -11,7 +11,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingTop="0dp"
         tools:context=".MainBarzellette"
         android:id="@+id/layoutBarzellette">
 
@@ -29,7 +29,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="-155dp"
-            android:layout_marginBottom="-115dp"></com.example.matteo.rippleanimation.RippleBackground>
+            android:layout_marginBottom="-115dp"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -84,7 +84,6 @@
             android:layout_above="@id/layoutInferiore"
             tools:text="InizioQue sta è una barzelletta di prova anche se un po molto lunga\n\nUna linea di spazio\n\n\nAltrecosescritteacaso\nCavolo figo che bello \n\nFine"
             android:gravity="center"
-            android:nestedScrollingEnabled="false"
             android:textSize="20sp"
             android:text=""
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -92,15 +91,41 @@
             android:autoText="false"
             android:textColor="@color/abc_secondary_text_material_light" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/layoutInferiore"
+            android:id="@+id/layoutImmagini"
+            android:visibility="gone">
+
+            <com.matteobucci.barzelletteacaso.model.TouchImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/imageViewBarzzellette"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:scaleType="matrix"/>
+        </FrameLayout>
+
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/test_banner_ad_unit_id"
+            ads:adUnitId="@string/banner_ad_unit_id"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true">
         </com.google.android.gms.ads.AdView>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:visibility="visible"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="150dp" />
 
 
     </RelativeLayout>
