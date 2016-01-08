@@ -67,6 +67,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -670,6 +671,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         richiesta.put(VERSIONE_KEY, getString(R.string.application_version));
         richiesta.saveInBackground();
 
+
         if(barzellettaAttuale.getTipo().equals(Tipo.TESTO)) {
             i.setType("text/plain");
             i.putExtra(android.content.Intent.EXTRA_TEXT, barzellettaAttuale.toString() + "\n\n Presa da Barzellette a caso, scarica l'applicazione! " + this.getResources().getString(R.string.url_app_playstore));
@@ -678,34 +680,37 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         else{
             OutputStream output;
 
-            // Retrieve the image from the res folder
 
-
-            // Find the SD Card path
-            File filepath = Environment.getExternalStorageDirectory();
-
-            // Create a new folder AndroidBegin in SD Card
-            File dir = new File(filepath.getAbsolutePath() + "/barzelletteAcaso/");
-            dir.mkdirs();
 
             // Create a name for the saved image
-            File file = new File(dir, "immagine.png");
+            File file = new File(getContext().getExternalCacheDir() , "immagine.png");
 
 
             try {
-
                 // Share Intent
                 Intent share = new Intent(Intent.ACTION_SEND);
 
                 // Type of file to share
-                share.setType("image/jpeg");
+                share.setType("image/png");
 
-                output = new FileOutputStream(file);
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream(file);
+                    immagineAttuale.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                    // PNG is a lossless format, the compression factor (100) is ignored
+                } catch (Exception e) {
+                    Log.e("Thumbnail", file.getPath());
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (out != null) {
 
-                // Compress into png format image from 0% - 100%
-                immagineAttuale.compress(Bitmap.CompressFormat.PNG, 100, output);
-                output.flush();
-                output.close();
+                            out.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 // Locate the image to Share
                 Uri uri = Uri.fromFile(file);
@@ -730,9 +735,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         int THUMBSIZE = 150;
         // Create a new folder AndroidBegin in SD Card
         // File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/barzelletteAcaso/thumbnail");
-           File dir = new File("/data/data/com.matteobucci.barzelletteacaso/thumbnail");
-
-
+        File dir = new File("/data/data/com.matteobucci.barzelletteacaso/thumbnail");
         dir.mkdirs();
         File file = new File(dir, Integer.toString(barzellettaAttuale.getID()) + ".png");
         Bitmap thumbImage = ThumbnailUtils.extractThumbnail(image, THUMBSIZE, THUMBSIZE);

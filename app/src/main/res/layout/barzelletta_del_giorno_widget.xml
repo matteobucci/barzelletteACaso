@@ -8,7 +8,6 @@
         android:paddingTop="10dp"
         android:background="#a8009acc"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="15dp"
         android:id="@+id/relativeLayout">
         <TextView android:id="@+id/appwidget_text"
             android:layout_width="wrap_content"
@@ -26,7 +25,19 @@
             android:layout_centerInParent="true"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" /></RelativeLayout>
+            android:layout_marginRight="5dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_widget_share"
+            android:src="@drawable/ic_action_share_image"
+            android:background="#00ffffff"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:visibility="invisible" />
+    </RelativeLayout>
 
     <ImageView
         android:layout_width="50dp"

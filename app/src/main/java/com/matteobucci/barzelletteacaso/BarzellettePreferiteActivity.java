@@ -22,6 +22,7 @@ import com.parse.ParseAnalytics;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -114,50 +115,54 @@ public class BarzellettePreferiteActivity extends AppCompatActivity {
     private void share() {
         Intent i = new Intent(android.content.Intent.ACTION_SEND);
 
-            OutputStream output;
 
-            // Retrieve the image from the res folder
-
-
-            // Find the SD Card path
-            File filepath = Environment.getExternalStorageDirectory();
-
-            // Create a new folder AndroidBegin in SD Card
-            File dir = new File(filepath.getAbsolutePath() + "/barzelletteAcaso/");
-            dir.mkdirs();
-
-            // Create a name for the saved image
-            File file = new File(dir, "immagine.png");
+        OutputStream output;
 
 
+
+        // Create a name for the saved image
+        File file = new File(context.getExternalCacheDir() , "immagine.png");
+
+
+        try {
+            // Share Intent
+            Intent share = new Intent(Intent.ACTION_SEND);
+
+            // Type of file to share
+            share.setType("image/png");
+
+            FileOutputStream out = null;
             try {
-
-                // Share Intent
-                Intent share = new Intent(Intent.ACTION_SEND);
-
-                // Type of file to share
-                share.setType("image/jpeg");
-
-                output = new FileOutputStream(file);
-
-                // Compress into png format image from 0% - 100%
-                bitmapImmagine.compress(Bitmap.CompressFormat.PNG, 100, output);
-                output.flush();
-                output.close();
-
-                // Locate the image to Share
-                Uri uri = Uri.fromFile(file);
-
-                // Pass the image into an Intnet
-                share.putExtra(Intent.EXTRA_STREAM, uri);
-
-                // Show the social share chooser list
-                startActivity(Intent.createChooser(share, "Condividi immagine con"));
-
+                out = new FileOutputStream(file);
+                bitmapImmagine.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                // PNG is a lossless format, the compression factor (100) is ignored
             } catch (Exception e) {
-                // TODO Auto-generated catch block
+                Log.e("Thumbnail", file.getPath());
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (out != null) {
+
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
+            // Locate the image to Share
+            Uri uri = Uri.fromFile(file);
+
+            // Pass the image into an Intnet
+            share.putExtra(Intent.EXTRA_STREAM, uri);
+
+            // Show the social share chooser list
+            startActivity(Intent.createChooser(share, "Condividi immagine con"));
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         }
 
 

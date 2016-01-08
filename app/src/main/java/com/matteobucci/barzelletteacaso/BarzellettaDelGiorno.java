@@ -58,6 +58,7 @@ public class BarzellettaDelGiorno extends AppCompatActivity {
         }
         else{
             barzellettaDelGiorno = intent.getParcelableExtra("barzelletta");
+
         }
 
         favorite = Favorite.getInstance(this);
@@ -103,7 +104,7 @@ public class BarzellettaDelGiorno extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_barzellette, menu);
+        getMenuInflater().inflate(R.menu.menu_barzelletta_del_giorno, menu);
         return true;
     }
 

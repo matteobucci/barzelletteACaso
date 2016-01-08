@@ -47,7 +47,7 @@
     Novità della versione 1.6:\nAggiunta la possibilità di segnalare o proporre una barzelletta.\nCambiato il metodo in cui veniva richiesta la valutazione.\nAltri aggiustamenti vari\n
     Novità della versione 1.7:\nUn cuore animato! Ci voleva tanto a farlo?\nNessun più crash all\'avvio\nAnche se non interesserà a nessuno, ho dato una bella sistemata al codice :)
     Novità della versione 2.0:Incredibile! Delle immagini! Come richiesto da molti infatti, ho aggiunto (per iniziare) un centinaio di immagini divertenti pronte da condividere con tutti i vostri amici!</string>
-    <string name="application_version">v 2.0</string>
+    <string name="application_version">v 2.1</string>
     <string name="created_by">Creata da Matteo Bucci</string>
     <string name="appwidget_text">...</string>
     <string name="add_widget">Aggiugi widget</string>
