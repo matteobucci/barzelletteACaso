@@ -29,7 +29,7 @@ import android.widget.Toast;
 import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
-import com.matteobucci.barzelletteacaso.model.NewFavoriteFragment;
+import com.matteobucci.barzelletteacaso.view.NewFavoriteFragment;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.matteobucci.barzelletteacaso.view.MainFragment;
 import com.matteobucci.barzelletteacaso.view.SettingsActivity;

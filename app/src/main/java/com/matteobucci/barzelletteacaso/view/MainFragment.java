@@ -76,8 +76,9 @@ import java.util.Map;
 
 public class MainFragment extends Fragment implements GestureDetector.OnGestureListener {
 
-    private static final String BARZELLETTA_CONDIVISA_OBJECT_KEY = "Condivisa";
-    private static final String ID_KEY = "id";
+    private static final String BARZELLETTA_CONDIVISA_OBJECT_KEY = "Condivisa_Nuova";
+    private static final String ID_KEY = "id_barzelletta";
+    private static final String TESTO_KEY = "testo_barzelletta";
     private static final String CATEGORIA_KEY = "categoria";
     private static final String BARZELLETTA_PREFERITA_OBJECT_KEY = "Preferito";
     private static final String VERSIONE_KEY = "versione";
@@ -278,6 +279,14 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
             @Override
             public void onClick(View v) {
                 if (barzellettaAttuale != null && !inCaricamento) {
+
+                    ParseObject richiesta = ParseObject.create(BARZELLETTA_PREFERITA_OBJECT_KEY);
+                    richiesta.put(ID_KEY, barzellettaAttuale.getID());
+                    richiesta.put(CATEGORIA_KEY, barzellettaAttuale.getCategoria().toString());
+                    richiesta.put(VERSIONE_KEY, getString(R.string.application_version));
+                    richiesta.saveInBackground();
+
+
                     if (favoriti.contains(barzellettaAttuale)) {
                         favoriti.remove(barzellettaAttuale);
                         cancellaThumbnail();
@@ -286,14 +295,6 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
                         rippleBackground.startRippleAnimation();
                         favoriti.add(barzellettaAttuale);
                         if(barzellettaAttuale.getTipo().equals(Tipo.IMMAGINE)) {
-
-                            ParseObject richiesta = ParseObject.create(BARZELLETTA_PREFERITA_OBJECT_KEY);
-                            richiesta.put(ID_KEY, barzellettaAttuale.getID());
-                            richiesta.put(CATEGORIA_KEY, barzellettaAttuale.getCategoria().toString());
-                            richiesta.put(VERSIONE_KEY, getString(R.string.application_version));
-                            richiesta.saveInBackground();
-
-
                             saveThumbnail(immagineAttuale);
                         }
                         Toast.makeText(context, "Preferito aggiunto", Toast.LENGTH_SHORT).show();
@@ -454,8 +455,6 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         checkBarzelletta();
 
     }
-
-
 
     private void checkBarzelletta() {
         isActualFavorite=!favoriti.contains(barzellettaAttuale);
@@ -667,6 +666,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
 
         ParseObject richiesta = ParseObject.create(BARZELLETTA_CONDIVISA_OBJECT_KEY);
         richiesta.put(ID_KEY, barzellettaAttuale.getID());
+        richiesta.put(TESTO_KEY, barzellettaAttuale.toString());
         richiesta.put(CATEGORIA_KEY, barzellettaAttuale.getCategoria().toString());
         richiesta.put(VERSIONE_KEY, getString(R.string.application_version));
         richiesta.saveInBackground();

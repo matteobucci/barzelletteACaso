@@ -104,6 +104,9 @@
         <activity android:name=".BarzellettePreferiteActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize">
         </activity>
+
+
+
     </application>
 
 </manifest>
