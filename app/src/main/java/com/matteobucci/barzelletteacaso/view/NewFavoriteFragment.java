@@ -2,16 +2,22 @@ package com.matteobucci.barzelletteacaso.view;
 
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +26,20 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.matteobucci.barzelletteacaso.R;
+import com.matteobucci.barzelletteacaso.StatStr;
 import com.matteobucci.barzelletteacaso.model.Favorite;
+import com.matteobucci.barzelletteacaso.model.listener.AcquistoListener;
+import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.matteobucci.barzelletteacaso.view.FavoriteFragmentImmagini;
 import com.matteobucci.barzelletteacaso.view.FavoriteFragmentTesto;
+import com.matteobucci.barzelletteacaso.view.dialog.DialogPubblicita;
+import com.matteobucci.barzelletteacaso.view.dialog.DialogScegliImmagini;
 import com.parse.ParseObject;
+
+import java.util.Map;
+import java.util.Set;
+
+import static com.google.android.gms.internal.zzid.runOnUiThread;
 
 public class NewFavoriteFragment extends Fragment {
 
@@ -32,6 +48,9 @@ public class NewFavoriteFragment extends Fragment {
     private static final String NUMERO_BARZELLETTE_KEY = "numeroPreferiti";
     Fragment fragment1;
     Fragment fragment2;
+    boolean pubblicitàMostrata = false;
+
+    private AcquistoListener acquistoListener;
 
 
     InterstitialAd mInterstitialAd;
@@ -42,28 +61,49 @@ public class NewFavoriteFragment extends Fragment {
         super.onCreate(savedInstance);
 
 
-        mInterstitialAd = new InterstitialAd(getContext());
-        mInterstitialAd.setAdUnitId(getResources().getString(R.string.banner_ad_unit_id));
+        if (!PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getBoolean(StatStr.VERSIONE_PRO, false)) {
 
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitial();
-                //beginPlayingGame();
-            }
-        });
+            mInterstitialAd = new InterstitialAd(getContext());
+            mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_preferiti_ad_unit_id));
 
-        requestNewInterstitial();
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+
+                    if (getActivity().getSharedPreferences("", Context.MODE_PRIVATE).getBoolean(StatStr.RICHIESTA_RIMOZIONE_PUBBLICITA, true)) {
+
+                        DialogFragment loadingDialog = new DialogPubblicita();
+
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.add(loadingDialog, "loading");
+                        transaction.commitAllowingStateLoss();
 
 
+                        // DialogPubblicita dialogPubblicità = new DialogPubblicita();
+                        // dialogPubblicità.show(getFragmentManager(), "");
+                    }
 
+                }
 
+                @Override
+                public void onAdLoaded() {
+                    // Call displayInterstitial() function
+                    if (mInterstitialAd.isLoaded()) {
+                        mInterstitialAd.show();
+                    }
+                }
+
+            });
+
+            requestNewInterstitial();
+        }
     }
 
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
-              //  .addTestDevice("C7167A21A92007A61656EFD10B07F18B")
+                .addTestDevice("C7167A21A92007A61656EFD10B07F18B")
                 .build();
+
 
         mInterstitialAd.loadAd(adRequest);
     }
@@ -88,16 +128,6 @@ public class NewFavoriteFragment extends Fragment {
 
                 viewPager.setCurrentItem(tab.getPosition());
 
-                
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-
-
-
-                } else {
-
-                }
-
             }
 
             @Override
@@ -109,7 +139,6 @@ public class NewFavoriteFragment extends Fragment {
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-
 
 
         });
@@ -147,8 +176,10 @@ public class NewFavoriteFragment extends Fragment {
     }
 
 
+
     @Override
     public void onDetach(){
+
         super.onDetach();
         if(fragment1 != null && fragment2 != null) {
             int numeroPreferiti = Favorite.getInstance(getContext()).getNumeroFavoriti();
@@ -160,6 +191,7 @@ public class NewFavoriteFragment extends Fragment {
             fragment2.onDetach();
         }
     }
+
 }
 
 

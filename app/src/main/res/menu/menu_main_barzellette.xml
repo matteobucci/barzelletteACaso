@@ -4,7 +4,13 @@
 
 
 
+    <item android:id="@+id/action_dona" android:title="@string/label_dona"
 
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_dona_molto" android:title="@string/label_dona_molto"
+
+        android:orderInCategory="100" app:showAsAction="never" />
 
     <!--
     <item android:id="@+id/action_consiglia" android:title="Proproni o segnala una barzelletta"

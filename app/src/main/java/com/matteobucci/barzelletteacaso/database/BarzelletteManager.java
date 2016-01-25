@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.matteobucci.barzelletteacaso.MainActivity;
+import com.matteobucci.barzelletteacaso.StatStr;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
 import com.matteobucci.barzelletteacaso.model.Tipo;
@@ -74,7 +75,7 @@ public class BarzelletteManager {
         this.open();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         boolean immaginiPref = sharedPref.getBoolean(SettingsActivity.immagineString, true);
-        boolean networkPref = sharedPref.getBoolean(MainActivity.NETWORK_AVIABLE_KEY, true);
+        boolean networkPref = sharedPref.getBoolean(StatStr.NETWORK_AVIABLE_KEY, true);
 
         List<Barzelletta> result = new ArrayList<>();
 

@@ -21,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -29,6 +30,11 @@ import android.widget.Toast;
 import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
+import com.matteobucci.barzelletteacaso.model.listener.AcquistoListener;
+import com.matteobucci.barzelletteacaso.util.IabHelper;
+import com.matteobucci.barzelletteacaso.util.IabResult;
+import com.matteobucci.barzelletteacaso.util.Inventory;
+import com.matteobucci.barzelletteacaso.util.Purchase;
 import com.matteobucci.barzelletteacaso.view.NewFavoriteFragment;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.matteobucci.barzelletteacaso.view.MainFragment;
@@ -37,9 +43,9 @@ import com.parse.ParseAnalytics;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BarzellettaListener {
+public class MainActivity extends AppCompatActivity implements BarzellettaListener, IabHelper.OnIabPurchaseFinishedListener, AcquistoListener {
 
-    public static final String NETWORK_AVIABLE_KEY = "network";
+
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
@@ -50,11 +56,39 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
     private Fragment fragment;
     private boolean firstAvvioFragment = true;
 
-    private Barzelletta barzellettaToShare;
-    private boolean shareButtonEnabled = true;
 
     private BarzelletteManager manager;
     private List<Barzelletta> tutteLeBarzellette;
+    private boolean mIsPremium = false;
+    private  Menu myMenu;
+
+    IabHelper mHelper;
+
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener
+            = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result,
+                                             Inventory inventory) {
+
+            if (result.isFailure()) {
+                Log.e(StatStr.TAG_ACQUISTI, "IMPOSSIBILE VERIFICARE L'ACCOUNT");
+            }
+            else {
+                boolean dona = inventory.hasPurchase("account_premium_base");
+                boolean premium = inventory.hasPurchase("account_premium_donate");
+                mIsPremium = (dona || premium);
+
+                PreferenceManager.getDefaultSharedPreferences(getApplication()).edit().putBoolean(StatStr.VERSIONE_PRO, mIsPremium).apply();
+                Log.i(StatStr.TAG_ACQUISTI, "VERIFICA ACCOUNT EFFETTUATA, account premium: " + Boolean.toString(mIsPremium));
+
+
+
+                // update UI accordingly
+                //TODO:DIRE AL SISTEMA CHE L'ACCOUNT E' PREMIUM
+            }
+        }
+    };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +98,10 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
 
         if(!isNetworkAvailable(this)){
             Toast.makeText(this, "La rete non è disponibile, non verranno caricate le immagini", Toast.LENGTH_SHORT).show();
-            this.getSharedPreferences("main", MODE_PRIVATE).edit().putBoolean(NETWORK_AVIABLE_KEY, false).apply();
+            this.getSharedPreferences("main", MODE_PRIVATE).edit().putBoolean(StatStr.NETWORK_AVIABLE_KEY, false).apply();
         }
         else{
-            this.getSharedPreferences("main", MODE_PRIVATE).edit().putBoolean(NETWORK_AVIABLE_KEY, true).apply();
+            this.getSharedPreferences("main", MODE_PRIVATE).edit().putBoolean(StatStr.NETWORK_AVIABLE_KEY, true).apply();
 
         }
 
@@ -105,6 +139,22 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
 
 
 
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqwpA86+B8VyOTyHF91IiQC8ETurKFEp5CsbxJ9rrp/OGetdwwf8SSF2tRnoLr+CitJ1F25r+rne7ov2RtT5OHkBAFuJRjrOj85wsM6KwcIDbwSsRUkliIrGucqYjBOIB0tplDyGR6izpRksQFr1+d2ZGXKBatrcU3bbTCMJzI9tn+aZ5z4A3Jv4myMZNd6nfEd/ABJ0DJkDW1+R1jtwSRqCz2nu9qoHThgD2xr+WGdvg4nXXGhusLgbxPoDqoxMEjbUHhYKxZ0XUKOa6ahX4ealtHIco1Ej95dPZn8/KqYRWHHzUoGMj2Gpf6b+6xHWC6qGMwwXG3xxc4bbTNoLc/wIDAQAB";
+
+        // compute your public key and store it in base64EncodedPublicKey
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
+
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    // Oh noes, there was a problem.
+                    Log.d(StatStr.TAG_ACQUISTI, "Problem setting up In-app Billing: " + result);
+                }
+                mHelper.queryInventoryAsync(mGotInventoryListener);
+                // Hooray, IAB is fully set up!
+            }
+        });
+
     }
 
     @Override
@@ -120,7 +170,14 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
                 mDrawer.openDrawer(GravityCompat.START);
                 return true;
 
-
+            case R.id.action_dona:
+                    mHelper.launchPurchaseFlow(this, StatStr.ACQUISTO_BASE, 10001,
+                            this, "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
+                return true;
+            case R.id.action_dona_molto:
+                mHelper.launchPurchaseFlow(this, StatStr.ACQUISTO_PREMIUM, 10002,
+                        this, "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -128,8 +185,9 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main_barzellette, menu);
-//        menu.findItem(R.id.action_share).setVisible(shareButtonEnabled);
+        if(!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(StatStr.VERSIONE_PRO, false)) {
+            getMenuInflater().inflate(R.menu.menu_main_barzellette, menu);
+        }
         return true;
     }
 
@@ -139,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         drawerToggle.syncState();
     }
 
-    private void setupDrawerContent(NavigationView navigationView) {
+     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -152,8 +210,7 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
-        // Create a new fragment and specify the planet to show based on
-        // position
+
         if(menuItem.getItemId() == R.id.item_impostazioni){
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
@@ -233,18 +290,12 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
                 }
                 else if (fragmentClass.equals(MainFragment.class)) {
                     fragment = MainFragment.newInstance(tutteLeBarzellette, categoriaSelezionata);
-              //      shareButtonEnabled = true;
-              //      invalidateOptionsMenu();
                 }
                 else if(fragmentClass.equals(NewFavoriteFragment.class)) {
                     fragment = new NewFavoriteFragment();
-               //    shareButtonEnabled = false;
-               //     invalidateOptionsMenu();
                 }
                 else {
                     fragment = (Fragment) fragmentClass.newInstance();
-                //    shareButtonEnabled = true;
-                //    invalidateOptionsMenu();
                 }
 
             } catch (Exception e) {
@@ -252,12 +303,11 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
                 fragment = null;
             }
 
-            // Insert the fragment by replacing any existing fragment
-
+            //Inizia la transazione del fragment selezionato
             FragmentManager fragmentManager = this.getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
-            // Highlight the selected item, update the title, and close the drawer
+            // Seleziona la categoria selezionata, aggiorna il titolo e chiude il drawer
             menuItem.setChecked(true);
             setTitle(menuItem.getTitle());
         }
@@ -282,8 +332,6 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         if(header!=null) {
             header.setBackgroundColor(darkerColor);
         }
-
-        barzellettaToShare = barzelletta;
 
         if(firstAvvioFragment){
             firstAvvioFragment=false;
@@ -336,20 +384,12 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
     public void onResume(){
         super.onResume();
 
+        //TODO:ATTTIVARE QUESTA FUNZIONE PER FARLO FUNZIONARE
+
         if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsActivity.isChangedString, false)){
-        //    Toast.makeText(this, "Preferenze cambiate, si consiglia di riavviare l'applicazione", Toast.LENGTH_LONG).show();
             PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(SettingsActivity.isChangedString, false).apply();
             tutteLeBarzellette = manager.getAllBarzellette();
             applyChange();
-
-        }
-
-
-        FragmentManager fragmentManager = this.getSupportFragmentManager();
-
-
-        if(nvDrawer.getMenu().getItem(1).isChecked()){
-//            fragmentManager.beginTransaction().replace(R.id.flContent, new NewFavoriteFragment()).commit();
         }
 
 
@@ -358,7 +398,12 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
     @Override
     public void onDestroy(){
         super.onDestroy();
+
         PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(SettingsActivity.isChangedString, false).apply();
+
+        if (mHelper != null) mHelper.dispose();
+        mHelper = null;
+
     }
 
     private void applyChange(){
@@ -369,8 +414,6 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
-
-
 
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivity =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -391,4 +434,50 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
     }
 
 
+    @Override
+    public void onIabPurchaseFinished(IabResult result, Purchase info) {
+        if (result.isFailure()) {
+            Log.d(StatStr.TAG_ACQUISTI, "Error purchasing: " + result);
+            return;
+        }
+        else if (info.getSku().equals("account_premium_base")) {
+            Toast.makeText(this, "Grazie dell'acquisto, al prossimo avvio tutte le pubblicità saranno rimosse", Toast.LENGTH_LONG).show();
+            mIsPremium = true;
+            PreferenceManager.getDefaultSharedPreferences(getApplication()).edit().putBoolean(StatStr.VERSIONE_PRO, mIsPremium).apply();
+            Log.i(StatStr.TAG_ACQUISTI, "COMPRATO IL BASE");
+        }
+        else if (info.getSku().equals("account_premium_donate")) {
+            Toast.makeText(this, "Grazie dell'acquisto, al prossimo avvio tutte le pubblicità saranno rimosse", Toast.LENGTH_LONG).show();
+            mIsPremium = true;
+            PreferenceManager.getDefaultSharedPreferences(getApplication()).edit().putBoolean(StatStr.VERSIONE_PRO, mIsPremium).apply();
+            Log.i(StatStr.TAG_ACQUISTI, "COMPRATO IL PREMIUM");
+        }
+    }
+
+    @Override
+    public void onAcquisto(int ID_ACQUISTO) {
+        if(ID_ACQUISTO == StatStr.ID_ACQUISTO_BASE){
+            mHelper.launchPurchaseFlow(this, StatStr.ACQUISTO_BASE, 10001,
+                    this, "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
+        }
+        else if (ID_ACQUISTO == StatStr.ID_ACQUISTO_PREMIUM){
+            mHelper.launchPurchaseFlow(this, StatStr.ACQUISTO_PREMIUM, 10002,
+                    this, "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
+        }
+        else (Toast.makeText(this, "ID Acquisto non corrispondente", Toast.LENGTH_SHORT)).show();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(StatStr.TAG_ACQUISTI, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+
+        // Pass on the activity result to the helper for handling
+        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        else {
+            Log.i(StatStr.TAG_ACQUISTI, "onActivityResult handled by IABUtil.");
+        }
+    }
 }

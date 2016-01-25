@@ -66,7 +66,8 @@
     <string name="proposte_da_voi">Proposte da voi</string>
 
     <string name="title_activity_image_fullscreen">Visualizza immagine</string>
-
+    <string name="label_dona">Rimuovi pubblicità</string>
+    <string name="label_dona_molto">Supporta lo sviluppatore</string>
 
 
 </resources>

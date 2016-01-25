@@ -19,6 +19,8 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.matteobucci.barzelletteacaso.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
 
     <application
         android:name=".view.Application"

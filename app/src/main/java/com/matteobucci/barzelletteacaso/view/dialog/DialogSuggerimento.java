@@ -1,7 +1,9 @@
 package com.matteobucci.barzelletteacaso.view.dialog;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.matteobucci.barzelletteacaso.R;
+import com.matteobucci.barzelletteacaso.model.listener.AcquistoListener;
 import com.parse.ParseObject;
 
 /**
@@ -28,6 +31,7 @@ public class DialogSuggerimento extends DialogFragment {
     private static final String TESTO_KEY = "testo";
     private static final String RECAPITO_KEY= "recapito";
     private static final String VERSIONE_KEY = "versione" ;
+
 
 
     @Override
@@ -71,5 +75,7 @@ public class DialogSuggerimento extends DialogFragment {
 
         return builder.create();
     }
+
+
 
 }
