@@ -37,7 +37,7 @@ public class    AboutActivity extends AppCompatActivity {
 
         int i = 0;
         for(Categoria attuale: Categoria.values()){
-            if(i!=0)
+            if(i>0)
             sb.append(attuale.toString() + " : " + numOfBarze[i] + "\n");
             i++;
         }

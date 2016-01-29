@@ -14,9 +14,10 @@ import com.matteobucci.barzelletteacaso.StatStr;
 import com.matteobucci.barzelletteacaso.model.listener.MainListener;
 
 /**
- * Created by matteo on 25/01/16.
+ * Created by matteo on 26/01/16.
  */
-public class DialogPubblicita extends DialogFragment {
+public class DialogScegliDonazione extends DialogFragment {
+
 
     private final String TAG = this.getClass().getSimpleName();
     private MainListener mainListener;
@@ -27,22 +28,24 @@ public class DialogPubblicita extends DialogFragment {
         final SharedPreferences.Editor editor = getActivity().getSharedPreferences("", Context.MODE_PRIVATE).edit();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle("Vuoi rimuovere le pubblicità?").setMessage("Con un piccolo contributo non solo toglierai tutte le pubblicità, ma aiuterai l'autore a migliorare questa app e a pagarsi l'università." +
-                        "\n"
-        ).setPositiveButton("Rimuovi", new DialogInterface.OnClickListener() {
+        builder.setTitle("Vuoi rimuovere le pubblicità?").setMessage("" +
+                        "Con un piccolo contributo puoi rimuovere completamente ogni pubblicità presente nell'applicazione.\n" +
+                        "Se oltre a rimuovere la pubblicità vuoi supportare lo sviluppatore, e permettergli non solo di aggiungere nuove immagini, barzellette e funzioni, ma anche di pagarsi gli studi universitari" +
+                        " " +
+                        "puoi scegliere la seconda opzione e aggiungere un piccolo contributo. Grazie mille :) "
+        ).setPositiveButton("Solo pubblicità", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
                 if (mainListener != null) {
                     mainListener.onAzione(1);
-                    editor.putBoolean(StatStr.RICHIESTA_RIMOZIONE_PUBBLICITA, false).apply();
-                    Log.i("Inserito", Boolean.toString(getActivity().getSharedPreferences("", Context.MODE_PRIVATE).getBoolean(StatStr.RICHIESTA_RIMOZIONE_PUBBLICITA, true)));
                 }
             }
         })
-                .setNegativeButton("No, grazie", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Contributo aggiuntivo", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        editor.putBoolean(StatStr.RICHIESTA_RIMOZIONE_PUBBLICITA, false).apply();
-                        Log.i("Inserito", Boolean.toString(getActivity().getSharedPreferences("", Context.MODE_PRIVATE).getBoolean(StatStr.RICHIESTA_RIMOZIONE_PUBBLICITA, true)));
+                        if (mainListener != null) {
+                            mainListener.onAzione(2);
+                        }
                     }
                 });
 
@@ -60,5 +63,7 @@ public class DialogPubblicita extends DialogFragment {
         }
 
     }
+
+
 
 }

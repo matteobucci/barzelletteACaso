@@ -2,7 +2,6 @@ package com.matteobucci.barzelletteacaso.view;
 
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -17,7 +16,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,18 +26,9 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.matteobucci.barzelletteacaso.R;
 import com.matteobucci.barzelletteacaso.StatStr;
 import com.matteobucci.barzelletteacaso.model.Favorite;
-import com.matteobucci.barzelletteacaso.model.listener.AcquistoListener;
-import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
-import com.matteobucci.barzelletteacaso.view.FavoriteFragmentImmagini;
-import com.matteobucci.barzelletteacaso.view.FavoriteFragmentTesto;
+import com.matteobucci.barzelletteacaso.model.listener.MainListener;
 import com.matteobucci.barzelletteacaso.view.dialog.DialogPubblicita;
-import com.matteobucci.barzelletteacaso.view.dialog.DialogScegliImmagini;
 import com.parse.ParseObject;
-
-import java.util.Map;
-import java.util.Set;
-
-import static com.google.android.gms.internal.zzid.runOnUiThread;
 
 public class NewFavoriteFragment extends Fragment {
 
@@ -50,7 +39,7 @@ public class NewFavoriteFragment extends Fragment {
     Fragment fragment2;
     boolean pubblicitàMostrata = false;
 
-    private AcquistoListener acquistoListener;
+    private MainListener mainListener;
 
 
     InterstitialAd mInterstitialAd;
@@ -70,7 +59,7 @@ public class NewFavoriteFragment extends Fragment {
                 @Override
                 public void onAdClosed() {
 
-                    if (getActivity().getSharedPreferences("", Context.MODE_PRIVATE).getBoolean(StatStr.RICHIESTA_RIMOZIONE_PUBBLICITA, true)) {
+                    if (getActivity() != null && getActivity().getSharedPreferences("", Context.MODE_PRIVATE).getBoolean(StatStr.RICHIESTA_RIMOZIONE_PUBBLICITA, true)) {
 
                         DialogFragment loadingDialog = new DialogPubblicita();
 

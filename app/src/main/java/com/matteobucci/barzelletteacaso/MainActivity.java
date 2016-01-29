@@ -14,8 +14,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,7 +32,7 @@ import android.widget.Toast;
 import com.matteobucci.barzelletteacaso.database.BarzelletteManager;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
 import com.matteobucci.barzelletteacaso.model.Categoria;
-import com.matteobucci.barzelletteacaso.model.listener.AcquistoListener;
+import com.matteobucci.barzelletteacaso.model.listener.MainListener;
 import com.matteobucci.barzelletteacaso.util.IabHelper;
 import com.matteobucci.barzelletteacaso.util.IabResult;
 import com.matteobucci.barzelletteacaso.util.Inventory;
@@ -39,11 +41,13 @@ import com.matteobucci.barzelletteacaso.view.NewFavoriteFragment;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.matteobucci.barzelletteacaso.view.MainFragment;
 import com.matteobucci.barzelletteacaso.view.SettingsActivity;
+import com.matteobucci.barzelletteacaso.view.dialog.DialogPubblicita;
+import com.matteobucci.barzelletteacaso.view.dialog.DialogScegliDonazione;
 import com.parse.ParseAnalytics;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BarzellettaListener, IabHelper.OnIabPurchaseFinishedListener, AcquistoListener {
+public class MainActivity extends AppCompatActivity implements BarzellettaListener, IabHelper.OnIabPurchaseFinishedListener, MainListener {
 
 
     private DrawerLayout mDrawer;
@@ -75,15 +79,12 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
             else {
                 boolean dona = inventory.hasPurchase("account_premium_base");
                 boolean premium = inventory.hasPurchase("account_premium_donate");
+                Log.i(StatStr.TAG_ACQUISTI, Boolean.toString(dona) + Boolean.toString(premium));
                 mIsPremium = (dona || premium);
 
                 PreferenceManager.getDefaultSharedPreferences(getApplication()).edit().putBoolean(StatStr.VERSIONE_PRO, mIsPremium).apply();
                 Log.i(StatStr.TAG_ACQUISTI, "VERIFICA ACCOUNT EFFETTUATA, account premium: " + Boolean.toString(mIsPremium));
 
-
-
-                // update UI accordingly
-                //TODO:DIRE AL SISTEMA CHE L'ACCOUNT E' PREMIUM
             }
         }
     };
@@ -139,9 +140,10 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
 
 
 
-        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqwpA86+B8VyOTyHF91IiQC8ETurKFEp5CsbxJ9rrp/OGetdwwf8SSF2tRnoLr+CitJ1F25r+rne7ov2RtT5OHkBAFuJRjrOj85wsM6KwcIDbwSsRUkliIrGucqYjBOIB0tplDyGR6izpRksQFr1+d2ZGXKBatrcU3bbTCMJzI9tn+aZ5z4A3Jv4myMZNd6nfEd/ABJ0DJkDW1+R1jtwSRqCz2nu9qoHThgD2xr+WGdvg4nXXGhusLgbxPoDqoxMEjbUHhYKxZ0XUKOa6ahX4ealtHIco1Ej95dPZn8/KqYRWHHzUoGMj2Gpf6b+6xHWC6qGMwwXG3xxc4bbTNoLc/wIDAQAB";
-
+        String base64EncodedPublicKey = this.getResources().getString(R.string.codice_in_app_billing);
         // compute your public key and store it in base64EncodedPublicKey
+
+
         mHelper = new IabHelper(this, base64EncodedPublicKey);
 
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
@@ -171,12 +173,11 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
                 return true;
 
             case R.id.action_dona:
-                    mHelper.launchPurchaseFlow(this, StatStr.ACQUISTO_BASE, 10001,
-                            this, "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
-                return true;
-            case R.id.action_dona_molto:
-                mHelper.launchPurchaseFlow(this, StatStr.ACQUISTO_PREMIUM, 10002,
-                        this, "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
+                DialogFragment loadingDialog = new DialogScegliDonazione();
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.add(loadingDialog, "loading");
+                transaction.commitAllowingStateLoss();
                 return true;
         }
 
@@ -455,14 +456,18 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
     }
 
     @Override
-    public void onAcquisto(int ID_ACQUISTO) {
-        if(ID_ACQUISTO == StatStr.ID_ACQUISTO_BASE){
+    public void onAzione(int ID_AZIONE) {
+
+        if(ID_AZIONE == StatStr.ID_ACQUISTO_BASE){
             mHelper.launchPurchaseFlow(this, StatStr.ACQUISTO_BASE, 10001,
                     this, "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
         }
-        else if (ID_ACQUISTO == StatStr.ID_ACQUISTO_PREMIUM){
+        else if (ID_AZIONE == StatStr.ID_ACQUISTO_PREMIUM){
             mHelper.launchPurchaseFlow(this, StatStr.ACQUISTO_PREMIUM, 10002,
                     this, "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
+        }
+        else if (ID_AZIONE == StatStr.ID_MOSTRA_AD){
+            //TODO:ATTIVARE ADS
         }
         else (Toast.makeText(this, "ID Acquisto non corrispondente", Toast.LENGTH_SHORT)).show();
     }

@@ -8,6 +8,7 @@ public class StatStr {
     public static final String RICHIESTA_RIMOZIONE_PUBBLICITA = "rimozione_pubblicita";
     public static final int ID_ACQUISTO_PREMIUM = 2;
     public static final int ID_ACQUISTO_BASE = 1;
+    public static final int ID_MOSTRA_AD = 3;
     public static String ACQUISTO_BASE = "account_premium_base";
     public static String ACQUISTO_PREMIUM = "account_premium_donate";
     public static String PREFERENZA_PREMIUM = "account_premium";

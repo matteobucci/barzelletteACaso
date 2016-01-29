@@ -43,11 +43,9 @@
     <!--About Activity-->
     <string name="title_activity_about">AboutActivity</string>
     <string name="descrizione_finale">Spero proprio che l\'applicazione vi piaccia. Se avete qualche idea, suggerimento o critica non esitate a contattarmi via email e cercherò di accontentarvi. \n matteo.bucci.1995@gmail.com \n L\'icona dell\'app è stata ispirata da un set di emoticons trovato sul sito http://mooxidesign.com/ \n\n
-    Novità della versione 1.5:\nNuova categoira:Bambini!\nWidget con barzelletta del giorno!\nMigliorate le prestazioni.\nPiccoli miglioramenti vari.
-    Novità della versione 1.6:\nAggiunta la possibilità di segnalare o proporre una barzelletta.\nCambiato il metodo in cui veniva richiesta la valutazione.\nAltri aggiustamenti vari\n
     Novità della versione 1.7:\nUn cuore animato! Ci voleva tanto a farlo?\nNessun più crash all\'avvio\nAnche se non interesserà a nessuno, ho dato una bella sistemata al codice :)
     Novità della versione 2.0:Incredibile! Delle immagini! Come richiesto da molti infatti, ho aggiunto (per iniziare) un centinaio di immagini divertenti pronte da condividere con tutti i vostri amici!</string>
-    <string name="application_version">v 2.1</string>
+    <string name="application_version">v 2.4</string>
     <string name="created_by">Creata da Matteo Bucci</string>
     <string name="appwidget_text">...</string>
     <string name="add_widget">Aggiugi widget</string>

@@ -52,6 +52,7 @@ import com.matteobucci.barzelletteacaso.model.TouchImageView;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.matteobucci.barzelletteacaso.model.listener.MainListener;
 import com.matteobucci.barzelletteacaso.view.dialog.AppRater;
 import com.matteobucci.barzelletteacaso.view.dialog.DialogProponi;
 import com.matteobucci.barzelletteacaso.view.dialog.DialogScegliImmagini;
@@ -115,6 +116,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     private ColorList colors;
     private Context context;
     private BarzellettaListener colorListener;
+    private MainListener mainListener;
     private boolean versionePro;
     private boolean appenaAvviata=true;
     private boolean fallimentoCaricamento = false;
@@ -198,6 +200,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         context = activity;
         try {
             colorListener = (BarzellettaListener) activity;
+            mainListener = (MainListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString());
         }
@@ -516,7 +519,6 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
 
     private static Libro filtra(List<Barzelletta> lista, Categoria categoria){
         List<Categoria> listaCategorie = new ArrayList<Categoria>();
-        //TODO:Da implementare il filtro delle categorie nella pagina principale
         List<Barzelletta> result = new ArrayList<>();
 
        if(categoria != null && categoria.getID() >=0){
@@ -698,6 +700,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     private void preferitoParse() {
         ParseObject richiesta = ParseObject.create(StatStr.BARZELLETTA_PREFERITA_OBJECT_KEY);
         richiesta.put(StatStr.ID_KEY, barzellettaAttuale.getID());
+        richiesta.put(StatStr.TESTO_KEY, barzellettaAttuale.toString());
         richiesta.put(StatStr.CATEGORIA_KEY, barzellettaAttuale.getCategoria().toString());
         richiesta.put(StatStr.VERSIONE_KEY, getString(R.string.application_version));
         richiesta.saveInBackground();
