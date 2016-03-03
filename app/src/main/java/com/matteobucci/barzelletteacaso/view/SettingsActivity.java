@@ -9,7 +9,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
-import com.matteobucci.barzelletteacaso.DebugActivity;
 import com.matteobucci.barzelletteacaso.R;
 import com.matteobucci.barzelletteacaso.view.dialog.DialogSuggerimento;
 import com.matteobucci.barzelletteacaso.view.support.SliderDialog;
@@ -54,8 +53,7 @@ public class SettingsActivity extends Activity {
                     public boolean onPreferenceClick(Preference preference) {
 
                         Intent testIntent = new Intent(getActivity().getApplicationContext(), AboutActivity.class);
-                       // Intent testIntent = new Intent(getActivity().getApplicationContext(), DebugActivity.class);
-                        startActivity(testIntent);
+
 
                         return true;
                     }

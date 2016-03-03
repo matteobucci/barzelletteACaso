@@ -41,13 +41,14 @@ import com.matteobucci.barzelletteacaso.view.NewFavoriteFragment;
 import com.matteobucci.barzelletteacaso.model.listener.BarzellettaListener;
 import com.matteobucci.barzelletteacaso.view.MainFragment;
 import com.matteobucci.barzelletteacaso.view.SettingsActivity;
+import com.matteobucci.barzelletteacaso.view.TabelleBarzelletteFragment;
 import com.matteobucci.barzelletteacaso.view.dialog.DialogPubblicita;
 import com.matteobucci.barzelletteacaso.view.dialog.DialogScegliDonazione;
 import com.parse.ParseAnalytics;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BarzellettaListener, IabHelper.OnIabPurchaseFinishedListener, MainListener {
+public class MainActivity extends AppCompatActivity implements BarzellettaListener, IabHelper.OnIabPurchaseFinishedListener, MainListener , TabelleBarzelletteFragment.CategoriaOnlineScelta{
 
 
     private DrawerLayout mDrawer;
@@ -88,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
             }
         }
     };
-
 
 
     @Override
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
             startActivity(intent);
         }
 
-        else if(!menuItem.isChecked()) {
+        else if(!menuItem.isChecked() || menuItem.getItemId() == R.id.immagini_online) {
             firstAvvioFragment=true;
             fragment = null;
             Class fragmentClass;
@@ -270,6 +270,10 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
                     categoriaSelezionata = null;
                     fragmentClass = NewFavoriteFragment.class;
                     break;
+                case R.id.immagini_online:
+                    categoriaSelezionata = null;
+                    fragmentClass = TabelleBarzelletteFragment.class;
+                    break;
                 case R.id.categoria_immagini:
                     categoriaSelezionata = Categoria.getCategoria(-1);
                     fragmentClass = MainFragment.class;
@@ -294,6 +298,9 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
                 }
                 else if(fragmentClass.equals(NewFavoriteFragment.class)) {
                     fragment = new NewFavoriteFragment();
+                }
+                else if(fragmentClass.equals(TabelleBarzelletteFragment.class)) {
+                    fragment = new TabelleBarzelletteFragment();
                 }
                 else {
                     fragment = (Fragment) fragmentClass.newInstance();
@@ -405,6 +412,8 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         if (mHelper != null) mHelper.dispose();
         mHelper = null;
 
+
+
     }
 
     private void applyChange(){
@@ -455,7 +464,7 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         }
     }
 
-    @Override
+   @Override
     public void onAzione(int ID_AZIONE) {
 
         if(ID_AZIONE == StatStr.ID_ACQUISTO_BASE){
@@ -470,7 +479,10 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
             //TODO:ATTIVARE ADS
         }
         else (Toast.makeText(this, "ID Acquisto non corrispondente", Toast.LENGTH_SHORT)).show();
+
+
     }
+
 
 
     @Override
@@ -478,11 +490,22 @@ public class MainActivity extends AppCompatActivity implements BarzellettaListen
         Log.i(StatStr.TAG_ACQUISTI, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
 
         // Pass on the activity result to the helper for handling
-        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+       if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         }
         else {
             Log.i(StatStr.TAG_ACQUISTI, "onActivityResult handled by IABUtil.");
         }
+
+
+    }
+
+
+
+    @Override
+    public void onTabellaScelta(String tabella) {
+        fragment = MainFragment.newInstance(null, null, tabella);
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 }

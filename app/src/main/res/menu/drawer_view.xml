@@ -12,6 +12,10 @@
             android:icon="@drawable/ic_action_favorite_star"
             android:title="@string/label_preferiti" />
 
+        <item
+            android:id="@+id/immagini_online"
+            android:title="@string/barzellette_online"/>
+
 
 
         <!-- Lista delle categorie usate:
@@ -61,6 +65,7 @@
         <item
             android:id="@+id/categoria_immagini"
             android:title="@string/tutte_le_immagini"/>
+
         <item
             android:id="@+id/categoria_consigliate"
             android:title="@string/proposte_da_voi"/>

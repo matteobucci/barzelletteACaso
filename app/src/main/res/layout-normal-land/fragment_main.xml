@@ -15,29 +15,13 @@
         tools:context=".MainBarzellette"
         android:id="@+id/layoutBarzellette">
 
-        <com.example.matteo.rippleanimation.RippleBackground
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/content"
-            app:rb_color="#cc0000"
-            app:rb_radius="10dp"
-            app:rb_rippleAmount="1"
-            app:rb_duration="500"
-            app:rb_scale="20"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="0dp"
-            android:layout_marginBottom="-115dp"/>
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/layoutImmagini"
             android:visibility="visible"
             android:layout_above="@+id/layoutInferiore"
-            android:layout_marginBottom="-20dp">
+            android:layout_marginBottom="-40dp">
 
             <com.matteobucci.barzelletteacaso.model.TouchImageView
                 android:layout_width="fill_parent"
@@ -47,37 +31,41 @@
                 android:scaleType="matrix"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp" />
+
+            <com.example.matteo.rippleanimation.RippleBackground
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/content"
+                app:rb_color="#cc0000"
+                app:rb_radius="10dp"
+                app:rb_rippleAmount="1"
+                app:rb_duration="500"
+                app:rb_scale="20"
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="0dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="-200dp" />
         </FrameLayout>
 
         <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:id="@+id/layoutInferiore"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:layout_alignParentBottom="true"
             android:layout_above="@+id/adView"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:gravity="center_vertical|center_horizontal">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/button_precedente"
-                android:id="@+id/buttonPrecedente"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:visibility="visible"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:background="#b1ffffff" />
+            android:layout_marginBottom="20dp">
 
             <ImageButton
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:id="@+id/favoriteButton"
                 android:src="@drawable/favorite_heart_enabled"
                 android:adjustViewBounds="true"
@@ -91,13 +79,28 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/button_precedente"
+                android:id="@+id/buttonPrecedente"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:visibility="visible"
+                android:layout_gravity="bottom"
+                android:background="#bdffffff"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/button_next_text"
                 android:id="@+id/nextButton"
                 android:padding="20dp"
-                android:layout_alignParentTop="true"
+                android:layout_gravity="bottom"
+                android:background="#bdffffff"
+                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:background="#b1ffffff" />
+                android:layout_alignParentEnd="true" />
 
 
 

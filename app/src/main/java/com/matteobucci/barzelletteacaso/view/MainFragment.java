@@ -19,6 +19,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.Layout;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -42,6 +43,7 @@ import android.widget.Toast;
 
 import com.example.matteo.rippleanimation.RippleBackground;
 import com.matteobucci.barzelletteacaso.StatStr;
+import com.matteobucci.barzelletteacaso.database.GestoreOnline;
 import com.matteobucci.barzelletteacaso.model.Favorite;
 import com.matteobucci.barzelletteacaso.R;
 import com.matteobucci.barzelletteacaso.model.Barzelletta;
@@ -91,11 +93,13 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     private Button precedenteButton;
     private ImageButton favoriteButton;
     private RelativeLayout layoutBarzellette;
-    private LinearLayout layoutInferiore;
+    private RelativeLayout layoutInferiore;
     private RippleBackground rippleBackground;
     private FrameLayout layoutImmagini;
     private TouchImageView immagine;
     private ProgressBar progressBar;
+    private LinearLayout layoutErrore;
+    private Button buttonRicarica;
 
     //Variabili della pubblicità
     private AdView mAdView;
@@ -117,9 +121,13 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     private Context context;
     private BarzellettaListener colorListener;
     private MainListener mainListener;
+    private String nomeTabella = null;
     private boolean versionePro;
     private boolean appenaAvviata=true;
     private boolean fallimentoCaricamento = false;
+
+    private GestoreOnline gestore;
+    private boolean tabellaCaricata = false;
 
 
     public static MainFragment newInstance(List<Barzelletta> lista, Categoria categoria) {
@@ -127,6 +135,15 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         MainFragment fragment = new MainFragment();
         fragment.categoria = categoria;
         fragment.lista = MainFragment.filtra(lista, categoria);
+        return fragment;
+    }
+
+    public static MainFragment newInstance(List<Barzelletta> lista, Categoria categoria, String nomeTabella) {
+
+        MainFragment fragment = new MainFragment();
+        fragment.categoria = categoria;
+        fragment.lista = new Libro(new ArrayList<Barzelletta>()); //Viene crato il libro vuoto
+        fragment.nomeTabella = nomeTabella;
         return fragment;
     }
 
@@ -142,10 +159,35 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
 
         favoriti = Favorite.getInstance(context);
         favoriti.loadFavorite();
+        if(nomeTabella!=null) {
 
+            gestore = new GestoreOnline(getContext(), new GestoreOnline.ResultBarzelletteListener() {
+                @Override
+                public void onResult(List<Barzelletta> listaBarzellette) {
+                    if (listaBarzellette != null && lista != null) {
+                        lista.addBarzellette(listaBarzellette);
+                        setOnline();
+                        setBarzelletta(MODE_NEXT);
+                    }
+                    else{
+                        setErroreConnessione();
+                    }
+
+                }
+            });
+            gestore.setTabellaDatabase(nomeTabella);
+        }
         AppRater.show(context, getFragmentManager());
 
         scegliImmagini();
+
+    }
+
+    private void setErroreConnessione() {
+
+        layoutErrore.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+
 
     }
 
@@ -188,7 +230,14 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         View myInflatedView = inflater.inflate(R.layout.fragment_main, container, false);
         setUIVar(myInflatedView);
         setListeners();
-        setBarzelletta(MODE_NEXT);
+        if(nomeTabella == null) {
+            setBarzelletta(MODE_NEXT);
+        }
+        else{
+            setOffline();
+            gestore.getBarzellette(0,0);
+        }
+
         return myInflatedView;
     }
 
@@ -253,11 +302,13 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         precedenteButton = (Button) w.findViewById(R.id.buttonPrecedente); //Il bottone per la barzelletta precedente
         favoriteButton = (ImageButton) w.findViewById(R.id.favoriteButton); //Il bottone per impostare il preferito
         layoutBarzellette = (RelativeLayout) w.findViewById(R.id.layoutBarzellette); //IL layout che contiene il testo della barzelletta
-        layoutInferiore = (LinearLayout) w.findViewById(R.id.layoutInferiore); //Il layout che contiene i bottoni
+        layoutInferiore = (RelativeLayout) w.findViewById(R.id.layoutInferiore); //Il layout che contiene i bottoni
         rippleBackground=(RippleBackground)w.findViewById(R.id.content); //Il cerchio dell'animazione del cuore
         layoutImmagini = (FrameLayout)w.findViewById(R.id.layoutImmagini); //Il layout che ocntiene le immagini
         immagine = (TouchImageView)w.findViewById(R.id.imageViewBarzzellette); //L'immagine mostrata a schermo
         progressBar = (ProgressBar)w.findViewById(R.id.progressBar); //Il caricamento mostrato prima di un immagine
+        layoutErrore = (LinearLayout) w.findViewById(R.id.layoutErrore);
+        buttonRicarica = (Button) w.findViewById(R.id.buttonrICARICA);
         colors = new ColorList(); //La lista di colori che assumerà l'applicazione
 
         mAdView = (AdView) w.findViewById(R.id.adView); //La pubblicità
@@ -320,6 +371,15 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
 
         textView.setOnTouchListener(gesturelistener);
         immagine.setOnTouchListener(gesturelistener);
+
+        buttonRicarica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutErrore.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                gestore.getBarzellette(0,0);
+            }
+        });
     }
 
     private void setColor() {
@@ -457,9 +517,9 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
             return false;
     }
 
-    private void setAds(boolean isPro){
+    private void setAds(boolean isNotPro){
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)layoutInferiore.getLayoutParams();
-        if(isPro){
+        if(isNotPro){
         adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         params.addRule(RelativeLayout.ABOVE, R.id.adView);
@@ -532,7 +592,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
 
            for (Barzelletta attuale : lista){
                if(!listaCategorie.contains(attuale.getCategoria())){
-                   result.add(attuale);
+               result.add(attuale);
                }
            }
 
@@ -545,6 +605,7 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     private void segnala() {
         DialogSegnala dialogSegnala = new DialogSegnala();
         dialogSegnala.show(getFragmentManager(), "");
+
     }
 
     private void proproni() {
@@ -614,12 +675,12 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
 
         condivisoParse();
 
-        if(barzellettaAttuale.getTipo().equals(Tipo.TESTO)) {
+        if(barzellettaAttuale != null && barzellettaAttuale.getTipo().equals(Tipo.TESTO)) {
             i.setType("text/plain");
             i.putExtra(android.content.Intent.EXTRA_TEXT, barzellettaAttuale.toString() + "\n\n Presa da Barzellette a caso, scarica l'applicazione! " + this.getResources().getString(R.string.url_app_playstore));
             startActivity(Intent.createChooser(i, getString(R.string.condividi_con)));
         }
-        else if(barzellettaAttuale.getTipo().equals(Tipo.IMMAGINE)){
+        else if(barzellettaAttuale != null &&  barzellettaAttuale.getTipo().equals(Tipo.IMMAGINE)){
             OutputStream output;
             File file = new File(getContext().getExternalCacheDir() , "immagine.png");
 
@@ -715,6 +776,25 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
         richiesta.saveInBackground();
     }
 
+    private void setOffline(){
+        nextButton.setEnabled(false);
+        precedenteButton.setEnabled(false);
+        favoriteButton.setEnabled(false);
+        progressBar.setVisibility(View.VISIBLE);
+        textView.setVisibility(View.INVISIBLE);
+        setColor();
+    }
+
+    private void setOnline(){
+        nextButton.setEnabled(true);
+        precedenteButton.setEnabled(true);
+        favoriteButton.setEnabled(true);
+        progressBar.setVisibility(View.INVISIBLE);
+        textView.setVisibility(View.VISIBLE);
+    }
+
+
+
 
     @Override
     public boolean onDown(MotionEvent e) {
@@ -735,5 +815,9 @@ public class MainFragment extends Fragment implements GestureDetector.OnGestureL
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         return false;
     }
+
+
+
+
 
 }

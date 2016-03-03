@@ -3,7 +3,7 @@
 
     <!--Main Activity-->
     <string name="action_settings">Impostazioni</string>
-    <string name="button_next_text">La prossima!</string>
+    <string name="button_next_text">-></string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="app_icon_description">L\'icona dell\'applicazione</string>
@@ -44,8 +44,9 @@
     <string name="title_activity_about">AboutActivity</string>
     <string name="descrizione_finale">Spero proprio che l\'applicazione vi piaccia. Se avete qualche idea, suggerimento o critica non esitate a contattarmi via email e cercherò di accontentarvi. \n matteo.bucci.1995@gmail.com \n L\'icona dell\'app è stata ispirata da un set di emoticons trovato sul sito http://mooxidesign.com/ \n\n
     Novità della versione 1.7:\nUn cuore animato! Ci voleva tanto a farlo?\nNessun più crash all\'avvio\nAnche se non interesserà a nessuno, ho dato una bella sistemata al codice :)
-    Novità della versione 2.0:Incredibile! Delle immagini! Come richiesto da molti infatti, ho aggiunto (per iniziare) un centinaio di immagini divertenti pronte da condividere con tutti i vostri amici!</string>
-    <string name="application_version">v 2.4</string>
+    Novità della versione 2.0:Incredibile! Delle immagini! Come richiesto da molti infatti, ho aggiunto (per iniziare) un centinaio di immagini divertenti pronte da condividere con tutti i vostri amici!\n
+    Novità della versione 3.0:Tantissime nuove immagini e barzellette grazie ai database online! Accedi a centinaia di immagini divertenti in categorie speciali, quando sei connesso!</string>
+    <string name="application_version">v 3.0</string>
     <string name="created_by">Creata da Matteo Bucci</string>
     <string name="appwidget_text">...</string>
     <string name="add_widget">Aggiugi widget</string>
@@ -66,6 +67,8 @@
     <string name="title_activity_image_fullscreen">Visualizza immagine</string>
     <string name="label_dona">Rimuovi pubblicità</string>
     <string name="label_dona_molto">Supporta lo sviluppatore</string>
+    <string name="immagini_online">Immagini Online</string>
+    <string name="barzellette_online">Barzellette online</string>
 
 
 </resources>

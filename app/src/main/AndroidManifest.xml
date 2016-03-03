@@ -97,12 +97,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".DebugActivity"
-            android:label="@string/title_activity_debug"
-            android:theme="@style/AppTheme" >
-        </activity>
-
         <activity android:name=".BarzellettePreferiteActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize">
         </activity>

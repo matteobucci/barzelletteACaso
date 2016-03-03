@@ -28,7 +28,7 @@
             android:layout_height="400dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="0dp"
+            android:layout_marginLeft="-140dp"
             android:layout_marginBottom="-115dp"/>
 
         <FrameLayout
@@ -36,8 +36,7 @@
             android:layout_height="match_parent"
             android:id="@+id/layoutImmagini"
             android:visibility="visible"
-            android:layout_above="@+id/layoutInferiore"
-            android:layout_marginBottom="-20dp">
+            android:layout_above="@+id/layoutInferiore">
 
             <com.matteobucci.barzelletteacaso.model.TouchImageView
                 android:layout_width="fill_parent"
@@ -53,6 +52,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:id="@+id/layoutInferiore"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
@@ -60,7 +60,19 @@
             android:layout_above="@+id/adView"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
-            android:gravity="center_vertical|center_horizontal">
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp">
+
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/favoriteButton"
+                android:src="@drawable/favorite_heart_enabled"
+                android:adjustViewBounds="true"
+                android:background="#00ffffff"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/button_favorite_description"
+                android:cropToPadding="false" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -70,34 +82,21 @@
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
                 android:visibility="visible"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:background="#b1ffffff" />
-
-            <ImageButton
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:id="@+id/favoriteButton"
-                android:src="@drawable/favorite_heart_enabled"
-                android:adjustViewBounds="true"
-                android:background="#00ffffff"
-                android:scaleType="fitXY"
-                android:contentDescription="@string/button_favorite_description"
-                android:cropToPadding="false"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
+                android:background="#eaffffff"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/favoriteButton"
+                android:layout_toEndOf="@+id/favoriteButton" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/button_next_text"
                 android:id="@+id/nextButton"
-                android:padding="20dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:background="#b1ffffff" />
+                android:padding="30dp"
+                android:background="#eaffffff"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/buttonPrecedente"
+                android:layout_toRightOf="@+id/buttonPrecedente" />
 
 
 
@@ -123,7 +122,7 @@
             android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            ads:adSize="BANNER"
+            ads:adSize="LEADERBOARD"
             ads:adUnitId="@string/banner_ad_unit_id"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true">
